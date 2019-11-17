@@ -16,7 +16,10 @@ class RouterTest extends TestCase
         // Arrange
         $router = new Router();
         $routeController = new class() {
-            public function index() {}
+            public function index()
+            {
+                //
+            }
         };
         $route = new Route('get', '/', $routeController, 'index');
         $router->addRoute($route);
@@ -34,7 +37,10 @@ class RouterTest extends TestCase
     {
         // Arrange
         $routeController = new class() {
-            public function index() {}
+            public function index()
+            {
+                //
+            }
         };
         $route = new Route('get', '/', $routeController, 'index');
         $router = new Router();
@@ -53,10 +59,14 @@ class RouterTest extends TestCase
     {
         // Arrange
         $homeController = new class() {
-            public function index() {}
+            public function index()
+            {
+                //
+            }
         };
         $aboutController = new class() {
-            public function index() {
+            public function index()
+            {
                 return 'about';
             }
         };

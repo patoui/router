@@ -14,7 +14,8 @@ class RouteTest extends TestCase
     {
         // Arrange
         $routeController = new class() {
-            public function index() {
+            public function index()
+            {
                 return 'Route Controller';
             }
         };
