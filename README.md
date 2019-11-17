@@ -21,7 +21,26 @@ composer require patoui/router
 
 ## Usage
 
-TBD
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+use Patoui\Router\Route;
+use Patoui\Router\Router;
+
+$router = new Router();
+$homeController = new class {
+    public function index()
+    {
+        echo 'Hello World!';
+    }
+};
+
+$router->addRoute(new Route('get', '/foobar', $homeController, 'index'));
+
+$router->resolve($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
+```
 
 ### Testing
 
