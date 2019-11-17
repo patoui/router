@@ -15,7 +15,7 @@ class RouterTest extends TestCase
     {
         // Arrange
         $router = new Router();
-        $routeController = new class () {
+        $routeController = new class() {
             public function index() {}
         };
         $route = new Route('get', '/', $routeController, 'index');
@@ -33,7 +33,7 @@ class RouterTest extends TestCase
     public function can_add_route()
     {
         // Arrange
-        $routeController = new class () {
+        $routeController = new class() {
             public function index() {}
         };
         $route = new Route('get', '/', $routeController, 'index');
@@ -52,10 +52,10 @@ class RouterTest extends TestCase
     public function can_resolve_route()
     {
         // Arrange
-        $homeController = new class () {
+        $homeController = new class() {
             public function index() {}
         };
-        $aboutController = new class () {
+        $aboutController = new class() {
             public function index() {
                 return 'about';
             }

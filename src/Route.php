@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Patoui\Router;
 
 use InvalidArgumentException;
-use Prophecy\Exception\Doubler\ClassNotFoundException;
 use Prophecy\Exception\Doubler\MethodNotFoundException;
 
 class Route implements Routable

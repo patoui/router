@@ -13,7 +13,7 @@ class RouteTest extends TestCase
     public function can_resolve_route()
     {
         // Arrange
-        $routeController = new class () {
+        $routeController = new class() {
             public function index() {
                 return 'Route Controller';
             }
