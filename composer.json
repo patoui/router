@@ -1,17 +1,16 @@
 {
-    "name": "spatie/router",
+    "name": "patoui/router",
     "description": "",
     "keywords": [
-        "spatie",
+        "patoui",
         "router"
     ],
-    "homepage": "https://github.com/spatie/router",
+    "homepage": "https://github.com/patoui/router",
     "license": "MIT",
     "authors": [
         {
             "name": "Patrique Ouimet",
             "email": "patrique.ouimet@gmail.com",
-            "homepage": "https://spatie.be",
             "role": "Developer"
         }
     ],
