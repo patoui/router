@@ -27,8 +27,6 @@ class Router
      */
     public function resolve(string $httpVerb, string $path)
     {
-        $httpVerb = strtolower($httpVerb);
-
         /* @var $route Routable */
         foreach ($this->routes as $route) {
             if ($route->isHttpVerbAndPathAMatch($httpVerb, $path)) {
