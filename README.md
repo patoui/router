@@ -23,9 +23,6 @@ Updated your `composer.json` file with the follow:
             "url": "https://github.com/patoui/router"
         }
     ],
-    .
-    .
-    .
     "require": {
         "patoui/router": "dev-master"
     }
