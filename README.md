@@ -13,10 +13,29 @@ A simple HTTP router
 
 ## Installation
 
-You can install the package via composer:
+Updated your `composer.json` file with the follow:
+
+```json
+{
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/patoui/router"
+        }
+    ],
+    .
+    .
+    .
+    "require": {
+        "patoui/router": "dev-master"
+    }
+}
+```
+
+Then run the following command:
 
 ```bash
-composer require patoui/router
+composer update patoui/router
 ```
 
 ## Usage
