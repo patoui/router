@@ -77,7 +77,7 @@ class RouterTest extends TestCase
         $router->addRoute($aboutRoute);
 
         // Act
-        $resolvedRoute = $router->resolve(new ServerRequest());
+        $resolvedRoute = $router->resolve('get', '/about');
 
         // Assert
         $routes = $router->getRoutes();
