@@ -67,7 +67,7 @@ class ServerRequestTest extends TestCase
         $this->assertTrue($hasHeader);
     }
 
-    /** @ test */
+    /** @test */
     public function test_get_header() : void
     {
         // Arrange
