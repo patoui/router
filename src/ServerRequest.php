@@ -16,6 +16,12 @@ class ServerRequest implements ServerRequestInterface
      */
     private $version;
 
+    /**
+     * @var array Contains header by key and array.
+     * e.g. ['content-type' => ['application/json']]
+     */
+    private $headers;
+
     public function __construct(string $version = '1.1', $headers = [])
     {
         $this->validateProtocolVersion($version);
