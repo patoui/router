@@ -73,14 +73,15 @@ class RouterTest extends TestCase
         $homeRoute = new Route('get', '/', $homeController, 'index');
         $aboutRoute = new Route('get', '/about', $aboutController, 'index');
         $router = new Router();
-
-        // Act
         $router->addRoute($homeRoute);
         $router->addRoute($aboutRoute);
+
+        // Act
+        $resolvedRoute = $router->resolve(new ServerRequest());
 
         // Assert
         $routes = $router->getRoutes();
         $this->assertEquals(2, count($routes));
-        $this->assertEquals('about', $router->resolve('get', '/about'));
+        $this->assertEquals('about', $resolvedRoute);
     }
 }
