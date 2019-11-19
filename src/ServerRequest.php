@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Patoui\Router;
 
+use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
-use InvalidArgumentException;
 
 class ServerRequest implements ServerRequestInterface
 {
@@ -64,7 +64,7 @@ class ServerRequest implements ServerRequestInterface
     }
 
     /**
-     * Verifies the protocol version
+     * Verifies the protocol version.
      *
      * @throws InvalidArgumentException
      * @param  string  $version The version string MUST contain only the HTTP
@@ -232,14 +232,14 @@ class ServerRequest implements ServerRequestInterface
     }
 
     /**
-     * Verifies the headers are valid
+     * Verifies the headers are valid.
      *
      * @throws InvalidArgumentException
      * @param  array  $headers Headers for the incoming request
      */
     private function validateHeaders(array $headers) : void
     {
-        $exceptionMessage = "Invalid headers: " . json_encode($headers);
+        $exceptionMessage = 'Invalid headers: '.json_encode($headers);
 
         if (empty($headers)) {
             return;
@@ -262,8 +262,6 @@ class ServerRequest implements ServerRequestInterface
                 throw new InvalidArgumentException($exceptionMessage);
             }
         }
-
-        return;
     }
 
     /**
@@ -611,21 +609,23 @@ class ServerRequest implements ServerRequestInterface
     public function getAttributes()
     {
         // TODO: Implement getAttributes() method.
-    }/**
- * Retrieve a single derived request attribute.
- *
- * Retrieves a single derived request attribute as described in
- * getAttributes(). If the attribute has not been previously set, returns
- * the default value as provided.
- *
- * This method obviates the need for a hasAttribute() method, as it allows
- * specifying a default value to return if the attribute is not found.
- *
- * @param  string  $name  The attribute name.
- * @param  mixed  $default  Default value to return if the attribute does not exist.
- * @return mixed
- * @see getAttributes()
- */
+    }
+
+    /**
+    * Retrieve a single derived request attribute.
+    *
+    * Retrieves a single derived request attribute as described in
+    * getAttributes(). If the attribute has not been previously set, returns
+    * the default value as provided.
+    *
+    * This method obviates the need for a hasAttribute() method, as it allows
+    * specifying a default value to return if the attribute is not found.
+    *
+    * @param  string  $name  The attribute name.
+    * @param  mixed  $default  Default value to return if the attribute does not exist.
+    * @return mixed
+    * @see getAttributes()
+    */
     public function getAttribute($name, $default = null)
     {
         // TODO: Implement getAttribute() method.
