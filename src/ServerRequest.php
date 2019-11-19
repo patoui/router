@@ -612,20 +612,20 @@ class ServerRequest implements ServerRequestInterface
     }
 
     /**
-    * Retrieve a single derived request attribute.
-    *
-    * Retrieves a single derived request attribute as described in
-    * getAttributes(). If the attribute has not been previously set, returns
-    * the default value as provided.
-    *
-    * This method obviates the need for a hasAttribute() method, as it allows
-    * specifying a default value to return if the attribute is not found.
-    *
-    * @param  string  $name  The attribute name.
-    * @param  mixed  $default  Default value to return if the attribute does not exist.
-    * @return mixed
-    * @see getAttributes()
-    */
+     * Retrieve a single derived request attribute.
+     *
+     * Retrieves a single derived request attribute as described in
+     * getAttributes(). If the attribute has not been previously set, returns
+     * the default value as provided.
+     *
+     * This method obviates the need for a hasAttribute() method, as it allows
+     * specifying a default value to return if the attribute is not found.
+     *
+     * @param  string  $name  The attribute name.
+     * @param  mixed  $default  Default value to return if the attribute does not exist.
+     * @return mixed
+     * @see getAttributes()
+     */
     public function getAttribute($name, $default = null)
     {
         // TODO: Implement getAttribute() method.
