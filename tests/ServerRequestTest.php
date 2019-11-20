@@ -125,4 +125,26 @@ class ServerRequestTest extends TestCase
             $newServerRequestStatic->getHeader('content-type')
         );
     }
+
+    /** @test */
+    public function test_without_header() : void
+    {
+        // Arrange
+        $serverRequest = new ServerRequest(
+            '1.1',
+            [
+                'content-type' => ['application/json'],
+                'content-encoding' => ['gzip']
+            ]
+        );
+
+        // Act
+        $newServerRequestStatic = $serverRequest->withoutHeader('content-encoding');
+
+        // Assert
+        $this->assertEquals(
+            ['content-type' => ['application/json']],
+            $newServerRequestStatic->getHeaders()
+        );
+    }
 }

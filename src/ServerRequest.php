@@ -244,7 +244,13 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withoutHeader($name)
     {
-        // TODO: Implement withoutHeader() method.
+        $newHeaders = $this->getHeaders();
+        unset($newHeaders[$name]);
+
+        return new static(
+            $this->getProtocolVersion(),
+            $newHeaders
+        );
     }
 
     /**
