@@ -190,7 +190,12 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withHeader($name, $value)
     {
-        // TODO: Implement withHeader() method.
+        $newHeaders = array_merge($this->getHeaders(), [$name => [$value]]);
+
+        return new static(
+            $this->getProtocolVersion(),
+            $newHeaders
+        );
     }
 
     /**
