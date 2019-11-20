@@ -77,7 +77,7 @@ class ServerRequestTest extends TestCase
         // Arrange
         $serverRequest = new ServerRequest('1.1', ['content-type' => ['application/json']]);
 
-        // Arrange & Act
+        // Act
         $header = $serverRequest->getHeader('content-TYPE');
 
         // Assert
@@ -90,7 +90,7 @@ class ServerRequestTest extends TestCase
         // Arrange
         $serverRequest = new ServerRequest('1.1', ['content-type' => ['text/csv', 'application/json']]);
 
-        // Arrange & Act
+        // Act
         $headerLine = $serverRequest->getHeaderLine('content-TYPE');
 
         // Assert
@@ -103,10 +103,26 @@ class ServerRequestTest extends TestCase
         // Arrange
         $serverRequest = new ServerRequest('1.1', ['content-type' => ['text/csv', 'application/json']]);
 
-        // Arrange & Act
+        // Act
         $newServerRequestStatic = $serverRequest->withHeader('content-type', 'text/html');
 
         // Assert
         $this->assertEquals('text/html', $newServerRequestStatic->getHeaderLine('content-type'));
+    }
+
+    /** @test */
+    public function test_with_added_header() : void
+    {
+        // Arrange
+        $serverRequest = new ServerRequest('1.1', ['content-type' => ['application/json']]);
+
+        // Act
+        $newServerRequestStatic = $serverRequest->withAddedHeader('content-type', 'text/csv');
+
+        // Assert
+        $this->assertEquals(
+            ['application/json', 'text/csv'],
+            $newServerRequestStatic->getHeader('content-type')
+        );
     }
 }

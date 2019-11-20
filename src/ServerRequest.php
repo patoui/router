@@ -219,7 +219,15 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withAddedHeader($name, $value)
     {
-        // TODO: Implement withAddedHeader() method.
+        $newHeaders = $this->getHeaders();
+        $headerToUpdate = $this->getHeader($name);
+        $headerToUpdate[] = $value;
+        $newHeaders[$name] = $headerToUpdate;
+
+        return new static(
+            $this->getProtocolVersion(),
+            $newHeaders
+        );
     }
 
     /**
