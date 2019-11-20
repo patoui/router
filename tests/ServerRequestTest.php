@@ -134,7 +134,7 @@ class ServerRequestTest extends TestCase
             '1.1',
             [
                 'content-type' => ['application/json'],
-                'content-encoding' => ['gzip']
+                'content-encoding' => ['gzip'],
             ]
         );
 
