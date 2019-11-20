@@ -60,7 +60,10 @@ class ServerRequest implements ServerRequestInterface
     {
         $this->validateProtocolVersion($version);
 
-        return new static($version);
+        return new static(
+            $version,
+            $this->getHeaders()
+        );
     }
 
     /**

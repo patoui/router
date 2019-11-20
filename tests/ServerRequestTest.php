@@ -26,11 +26,15 @@ class ServerRequestTest extends TestCase
     /** @test */
     public function test_with_protocol_version() : void
     {
-        // Arrange & Act
-        $serverRequest = (new ServerRequest)->withProtocolVersion('1.1');
+        // Arrange
+        $serverRequest = new ServerRequest('2.0', ['content-type' => ['text/html']]);
+
+        // Act
+        $serverRequest = $serverRequest->withProtocolVersion('1.1');
 
         // Assert
         $this->assertEquals('1.1', $serverRequest->getProtocolVersion());
+        $this->assertEquals('text/html', $serverRequest->getHeaderLine('content-type'));
     }
 
     /** @test */
