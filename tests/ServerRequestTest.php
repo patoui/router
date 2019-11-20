@@ -79,4 +79,17 @@ class ServerRequestTest extends TestCase
         // Assert
         $this->assertEquals(['application/json'], $header);
     }
+
+    /** @test */
+    public function test_get_header_line() : void
+    {
+        // Arrange
+        $serverRequest = new ServerRequest('1.1', ['content-type' => ['text/csv', 'application/json']]);
+
+        // Arrange & Act
+        $headerLine = $serverRequest->getHeaderLine('content-TYPE');
+
+        // Assert
+        $this->assertEquals('text/csv,application/json', $headerLine);
+    }
 }

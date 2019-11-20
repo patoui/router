@@ -170,7 +170,7 @@ class ServerRequest implements ServerRequestInterface
      */
     public function getHeaderLine($name)
     {
-        // TODO: Implement getHeaderLine() method.
+        return implode(',', $this->getHeader($name));
     }
 
     /**
@@ -258,7 +258,7 @@ class ServerRequest implements ServerRequestInterface
                 return is_string($headerValue);
             });
 
-            if (count($headers) !== count($headerWithStringValuesOnly)) {
+            if (count($header) !== count($headerWithStringValuesOnly)) {
                 throw new InvalidArgumentException($exceptionMessage);
             }
         }
