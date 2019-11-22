@@ -253,4 +253,17 @@ class ServerRequestTest extends TestCase
 
         $this->getStubServerRequest(['method' => 'foobar']);
     }
+
+    /** @test */
+    public function test_with_method() : void
+    {
+        // Arrange
+        $serverRequest = $this->getStubServerRequest(['method' => 'get']);
+
+        // Act
+        $newServerRequestStatic = $serverRequest->withMethod('post');
+
+        // Assert
+        $this->assertEquals('post', $newServerRequestStatic->getMethod());
+    }
 }

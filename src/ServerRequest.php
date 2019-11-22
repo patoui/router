@@ -439,7 +439,15 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withMethod($method)
     {
-        // TODO: Implement withMethod() method.
+        $this->validateMethod($method);
+
+        return new static(
+            $this->getProtocolVersion(),
+            $this->getHeaders(),
+            $this->getBody(),
+            $this->getRequestTarget(),
+            $method
+        );
     }
 
     /**
