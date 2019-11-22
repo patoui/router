@@ -41,7 +41,7 @@ class ServerRequestTest extends TestCase
         // Arrange
         $serverRequest = $this->getStubServerRequest([
             'protocol' => '2.0',
-            'headers' => ['content-type' => ['text/html']]
+            'headers' => ['content-type' => ['text/html']],
         ]);
 
         // Act
@@ -58,7 +58,7 @@ class ServerRequestTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
 
         $this->getStubServerRequest([
-            'headers' => ['content-type' => 'application/json']
+            'headers' => ['content-type' => 'application/json'],
         ]);
     }
 
