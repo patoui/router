@@ -22,13 +22,17 @@ class ServerRequest implements ServerRequestInterface
      */
     private $headers;
 
-    public function __construct(string $version = '1.1', $headers = [])
-    {
+    public function __construct(
+        string $version = '1.1',
+        array $headers = [],
+        string $body = ''
+    ) {
         $this->validateProtocolVersion($version);
         $this->validateHeaders($headers);
 
         $this->version = $version;
         $this->headers = $headers;
+        $this->body = $body;
     }
 
     /**
@@ -293,7 +297,7 @@ class ServerRequest implements ServerRequestInterface
      */
     public function getBody()
     {
-        // TODO: Implement getBody() method.
+        return new Stream($this->body);
     }
 
     /**

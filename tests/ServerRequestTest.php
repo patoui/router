@@ -6,6 +6,7 @@ namespace Patoui\Router\Tests;
 
 use Patoui\Router\ServerRequest;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\StreamInterface;
 
 class ServerRequestTest extends TestCase
 {
@@ -145,6 +146,19 @@ class ServerRequestTest extends TestCase
         $this->assertEquals(
             ['content-type' => ['application/json']],
             $newServerRequestStatic->getHeaders()
+        );
+    }
+
+    /** @test */
+    public function test_get_body() : void
+    {
+        // Arrange
+        $serverRequest = new ServerRequest('1.1', [], 'Request Body');
+
+        // Act && Assert
+        $this->assertInstanceOf(
+            StreamInterface::class,
+            $serverRequest->getBody()
         );
     }
 }
