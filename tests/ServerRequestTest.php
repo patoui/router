@@ -67,7 +67,7 @@ class ServerRequestTest extends TestCase
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest([
-            'headers' => ['content-type' => ['application/json']]
+            'headers' => ['content-type' => ['application/json']],
         ]);
 
         // Act
@@ -82,7 +82,7 @@ class ServerRequestTest extends TestCase
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest([
-            'headers' => ['content-type' => ['application/json']]
+            'headers' => ['content-type' => ['application/json']],
         ]);
 
         // Act
@@ -97,7 +97,7 @@ class ServerRequestTest extends TestCase
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest([
-            'headers' => ['content-type' => ['application/json']]
+            'headers' => ['content-type' => ['application/json']],
         ]);
 
         // Act
@@ -111,7 +111,9 @@ class ServerRequestTest extends TestCase
     public function test_get_header_line() : void
     {
         // Arrange
-        $serverRequest = $this->getStubServerRequest(['headers' => ['content-type' => ['text/csv', 'application/json']]]);
+        $serverRequest = $this->getStubServerRequest([
+            'headers' => ['content-type' => ['text/csv', 'application/json']],
+        ]);
 
         // Act
         $headerLine = $serverRequest->getHeaderLine('content-TYPE');
@@ -125,7 +127,7 @@ class ServerRequestTest extends TestCase
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest([
-            'headers' => ['content-type' => ['text/csv', 'application/json']]
+            'headers' => ['content-type' => ['text/csv', 'application/json']],
         ]);
 
         // Act
@@ -140,7 +142,7 @@ class ServerRequestTest extends TestCase
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest([
-            'headers' => ['content-type' => ['application/json']]
+            'headers' => ['content-type' => ['application/json']],
         ]);
 
         // Act
@@ -161,7 +163,7 @@ class ServerRequestTest extends TestCase
             'headers' => [
                 'content-type' => ['application/json'],
                 'content-encoding' => ['gzip'],
-            ]
+            ],
         ]);
 
         // Act
@@ -192,7 +194,7 @@ class ServerRequestTest extends TestCase
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest([
-            'body' => new Stream('Request Body')
+            'body' => new Stream('Request Body'),
         ]);
         $newStream = new Stream('New Body');
 
