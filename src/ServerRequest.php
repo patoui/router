@@ -25,10 +25,14 @@ class ServerRequest implements ServerRequestInterface
     /** @var StreamInterface */
     private $body;
 
+    /** @var string */
+    private $requestTarget;
+
     public function __construct(
         string $version,
         array $headers,
-        StreamInterface $body
+        StreamInterface $body,
+        string $requestTarget
     ) {
         $this->validateProtocolVersion($version);
         $this->validateHeaders($headers);
@@ -36,6 +40,7 @@ class ServerRequest implements ServerRequestInterface
         $this->version = $version;
         $this->headers = $headers;
         $this->body = $body;
+        $this->requestTarget = $requestTarget;
     }
 
     /**
@@ -347,7 +352,7 @@ class ServerRequest implements ServerRequestInterface
      */
     public function getRequestTarget()
     {
-        // TODO: Implement getRequestTarget() method.
+        return $this->requestTarget;
     }
 
     /**

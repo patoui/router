@@ -17,6 +17,7 @@ class ServerRequestTest extends TestCase
             'protocol' => '1.1',
             'headers' => ['content-type' => ['application/json']],
             'body' => new Stream('Request Body'),
+            'request_target' => '/',
         ], $propertyOverrides);
 
         return new ServerRequest(...array_values($properties));
@@ -203,5 +204,17 @@ class ServerRequestTest extends TestCase
 
         // Assert
         $this->assertEquals($newStream, $newServerRequestStatic->getBody());
+    }
+
+    /** @test */
+    public function test_get_request_target() : void
+    {
+        // Arrange
+        $serverRequest = $this->getStubServerRequest([
+            'request_target' => '/blog',
+        ]);
+
+        // Act && Assert
+        $this->assertEquals('/blog', $serverRequest->getRequestTarget());
     }
 }
