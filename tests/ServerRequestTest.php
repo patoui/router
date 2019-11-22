@@ -6,6 +6,7 @@ namespace Patoui\Router\Tests;
 
 use Patoui\Router\ServerRequest;
 use Patoui\Router\Stream;
+use Patoui\Router\Uri;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
 
@@ -19,6 +20,7 @@ class ServerRequestTest extends TestCase
             'body' => new Stream('Request Body'),
             'request_target' => '/',
             'method' => 'get',
+            'uri' => new Uri('/'),
         ], $propertyOverrides);
 
         return new ServerRequest(...array_values($properties));
@@ -265,5 +267,16 @@ class ServerRequestTest extends TestCase
 
         // Assert
         $this->assertEquals('post', $newServerRequestStatic->getMethod());
+    }
+
+    /** @test */
+    public function test_get_uri() : void
+    {
+        // Arrange
+        $uri = new Uri('/blog?q=new');
+        $serverRequest = $this->getStubServerRequest(['uri' => $uri]);
+
+        // Act && Assert
+        $this->assertEquals($uri, $serverRequest->getUri());
     }
 }

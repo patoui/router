@@ -31,12 +31,16 @@ class ServerRequest implements ServerRequestInterface
     /** @var string */
     private $method;
 
+    /** @var UriInterface */
+    private $uri;
+
     public function __construct(
         string $version,
         array $headers,
         StreamInterface $body,
         string $requestTarget,
-        string $method
+        string $method,
+        UriInterface $uri
     ) {
         $this->validateProtocolVersion($version);
         $this->validateHeaders($headers);
@@ -47,6 +51,7 @@ class ServerRequest implements ServerRequestInterface
         $this->body = $body;
         $this->requestTarget = $requestTarget;
         $this->method = $method;
+        $this->uri = $uri;
     }
 
     /**
@@ -83,7 +88,8 @@ class ServerRequest implements ServerRequestInterface
             $this->getHeaders(),
             $this->getBody(),
             $this->getRequestTarget(),
-            $this->getMethod()
+            $this->getMethod(),
+            $this->getUri()
         );
     }
 
@@ -221,7 +227,8 @@ class ServerRequest implements ServerRequestInterface
             $newHeaders,
             $this->getBody(),
             $this->getRequestTarget(),
-            $this->getMethod()
+            $this->getMethod(),
+            $this->getUri()
         );
     }
 
@@ -253,7 +260,8 @@ class ServerRequest implements ServerRequestInterface
             $newHeaders,
             $this->getBody(),
             $this->getRequestTarget(),
-            $this->getMethod()
+            $this->getMethod(),
+            $this->getUri()
         );
     }
 
@@ -279,7 +287,8 @@ class ServerRequest implements ServerRequestInterface
             $newHeaders,
             $this->getBody(),
             $this->getRequestTarget(),
-            $this->getMethod()
+            $this->getMethod(),
+            $this->getUri()
         );
     }
 
@@ -346,7 +355,8 @@ class ServerRequest implements ServerRequestInterface
             $this->getHeaders(),
             $body,
             $this->getRequestTarget(),
-            $this->getMethod()
+            $this->getMethod(),
+            $this->getUri()
         );
     }
 
@@ -395,7 +405,8 @@ class ServerRequest implements ServerRequestInterface
             $this->getHeaders(),
             $this->getBody(),
             $requestTarget,
-            $this->getMethod()
+            $this->getMethod(),
+            $this->getUri()
         );
     }
 
@@ -446,7 +457,8 @@ class ServerRequest implements ServerRequestInterface
             $this->getHeaders(),
             $this->getBody(),
             $this->getRequestTarget(),
-            $method
+            $method,
+            $this->getUri()
         );
     }
 
@@ -461,7 +473,7 @@ class ServerRequest implements ServerRequestInterface
      */
     public function getUri()
     {
-        // TODO: Implement getUri() method.
+        return $this->uri;
     }
 
     /**
