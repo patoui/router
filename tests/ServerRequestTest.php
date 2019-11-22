@@ -5,17 +5,28 @@ declare(strict_types=1);
 namespace Patoui\Router\Tests;
 
 use Patoui\Router\ServerRequest;
+use Patoui\Router\Stream;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
 
 class ServerRequestTest extends TestCase
 {
+    private function getStubServerRequest(array $propertyOverrides = []) : ServerRequest
+    {
+        $properties = array_merge([
+            'protocol' => '1.1',
+            'headers' => ['content-type' => ['application/json']],
+            'body' => new Stream('Request Body'),
+        ], $propertyOverrides);
+
+        return new ServerRequest(...array_values($properties));
+    }
+
     /** @test */
     public function test_get_protocol_version() : void
     {
         // Arrange
-        $serverRequest = new ServerRequest();
-        $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.1';
+        $serverRequest = $this->getStubServerRequest();
 
         // Act
         $protocolVersion = $serverRequest->getProtocolVersion();
@@ -28,7 +39,10 @@ class ServerRequestTest extends TestCase
     public function test_with_protocol_version() : void
     {
         // Arrange
-        $serverRequest = new ServerRequest('2.0', ['content-type' => ['text/html']]);
+        $serverRequest = $this->getStubServerRequest([
+            'protocol' => '2.0',
+            'headers' => ['content-type' => ['text/html']]
+        ]);
 
         // Act
         $serverRequest = $serverRequest->withProtocolVersion('1.1');
@@ -39,18 +53,22 @@ class ServerRequestTest extends TestCase
     }
 
     /** @test */
-    public function test_invalid_headers_throws_exception()
+    public function test_invalid_headers_throws_exception() : void
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        new ServerRequest('1.1', ['content-type' => 'application/json']);
+        $this->getStubServerRequest([
+            'headers' => ['content-type' => 'application/json']
+        ]);
     }
 
     /** @test */
     public function test_get_headers() : void
     {
         // Arrange
-        $serverRequest = new ServerRequest('1.1', ['content-type' => ['application/json']]);
+        $serverRequest = $this->getStubServerRequest([
+            'headers' => ['content-type' => ['application/json']]
+        ]);
 
         // Act
         $headers = $serverRequest->getHeaders();
@@ -63,7 +81,9 @@ class ServerRequestTest extends TestCase
     public function test_has_header() : void
     {
         // Arrange
-        $serverRequest = new ServerRequest('1.1', ['content-type' => ['application/json']]);
+        $serverRequest = $this->getStubServerRequest([
+            'headers' => ['content-type' => ['application/json']]
+        ]);
 
         // Act
         $hasHeader = $serverRequest->hasHeader('CONTENT-type');
@@ -76,7 +96,9 @@ class ServerRequestTest extends TestCase
     public function test_get_header() : void
     {
         // Arrange
-        $serverRequest = new ServerRequest('1.1', ['content-type' => ['application/json']]);
+        $serverRequest = $this->getStubServerRequest([
+            'headers' => ['content-type' => ['application/json']]
+        ]);
 
         // Act
         $header = $serverRequest->getHeader('content-TYPE');
@@ -89,7 +111,7 @@ class ServerRequestTest extends TestCase
     public function test_get_header_line() : void
     {
         // Arrange
-        $serverRequest = new ServerRequest('1.1', ['content-type' => ['text/csv', 'application/json']]);
+        $serverRequest = $this->getStubServerRequest(['headers' => ['content-type' => ['text/csv', 'application/json']]]);
 
         // Act
         $headerLine = $serverRequest->getHeaderLine('content-TYPE');
@@ -102,7 +124,9 @@ class ServerRequestTest extends TestCase
     public function test_with_header() : void
     {
         // Arrange
-        $serverRequest = new ServerRequest('1.1', ['content-type' => ['text/csv', 'application/json']]);
+        $serverRequest = $this->getStubServerRequest([
+            'headers' => ['content-type' => ['text/csv', 'application/json']]
+        ]);
 
         // Act
         $newServerRequestStatic = $serverRequest->withHeader('content-type', 'text/html');
@@ -115,7 +139,9 @@ class ServerRequestTest extends TestCase
     public function test_with_added_header() : void
     {
         // Arrange
-        $serverRequest = new ServerRequest('1.1', ['content-type' => ['application/json']]);
+        $serverRequest = $this->getStubServerRequest([
+            'headers' => ['content-type' => ['application/json']]
+        ]);
 
         // Act
         $newServerRequestStatic = $serverRequest->withAddedHeader('content-type', 'text/csv');
@@ -131,13 +157,12 @@ class ServerRequestTest extends TestCase
     public function test_without_header() : void
     {
         // Arrange
-        $serverRequest = new ServerRequest(
-            '1.1',
-            [
+        $serverRequest = $this->getStubServerRequest([
+            'headers' => [
                 'content-type' => ['application/json'],
                 'content-encoding' => ['gzip'],
             ]
-        );
+        ]);
 
         // Act
         $newServerRequestStatic = $serverRequest->withoutHeader('content-encoding');
@@ -153,12 +178,28 @@ class ServerRequestTest extends TestCase
     public function test_get_body() : void
     {
         // Arrange
-        $serverRequest = new ServerRequest('1.1', [], 'Request Body');
+        $serverRequest = $this->getStubServerRequest();
 
         // Act && Assert
         $this->assertInstanceOf(
             StreamInterface::class,
             $serverRequest->getBody()
         );
+    }
+
+    /** @test */
+    public function test_with_body() : void
+    {
+        // Arrange
+        $serverRequest = $this->getStubServerRequest([
+            'body' => new Stream('Request Body')
+        ]);
+        $newStream = new Stream('New Body');
+
+        // Act
+        $newServerRequestStatic = $serverRequest->withBody($newStream);
+
+        // Assert
+        $this->assertEquals($newStream, $newServerRequestStatic->getBody());
     }
 }

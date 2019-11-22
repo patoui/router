@@ -22,10 +22,13 @@ class ServerRequest implements ServerRequestInterface
      */
     private $headers;
 
+    /** @var StreamInterface */
+    private $body;
+
     public function __construct(
-        string $version = '1.1',
-        array $headers = [],
-        string $body = ''
+        string $version,
+        array $headers,
+        StreamInterface $body
     ) {
         $this->validateProtocolVersion($version);
         $this->validateHeaders($headers);
@@ -66,7 +69,8 @@ class ServerRequest implements ServerRequestInterface
 
         return new static(
             $version,
-            $this->getHeaders()
+            $this->getHeaders(),
+            $this->getBody()
         );
     }
 
@@ -201,7 +205,8 @@ class ServerRequest implements ServerRequestInterface
 
         return new static(
             $this->getProtocolVersion(),
-            $newHeaders
+            $newHeaders,
+            $this->getBody()
         );
     }
 
@@ -230,7 +235,8 @@ class ServerRequest implements ServerRequestInterface
 
         return new static(
             $this->getProtocolVersion(),
-            $newHeaders
+            $newHeaders,
+            $this->getBody()
         );
     }
 
@@ -253,7 +259,8 @@ class ServerRequest implements ServerRequestInterface
 
         return new static(
             $this->getProtocolVersion(),
-            $newHeaders
+            $newHeaders,
+            $this->getBody()
         );
     }
 
@@ -297,7 +304,7 @@ class ServerRequest implements ServerRequestInterface
      */
     public function getBody()
     {
-        return new Stream($this->body);
+        return $this->body;
     }
 
     /**
@@ -315,7 +322,11 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withBody(StreamInterface $body)
     {
-        // TODO: Implement withBody() method.
+        return new static(
+            $this->getProtocolVersion(),
+            $this->getHeaders(),
+            $body
+        );
     }
 
     /**
