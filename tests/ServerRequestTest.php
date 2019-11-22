@@ -18,6 +18,7 @@ class ServerRequestTest extends TestCase
             'headers' => ['content-type' => ['application/json']],
             'body' => new Stream('Request Body'),
             'request_target' => '/',
+            'method' => 'get',
         ], $propertyOverrides);
 
         return new ServerRequest(...array_values($properties));
@@ -231,5 +232,25 @@ class ServerRequestTest extends TestCase
 
         // Assert
         $this->assertEquals('/post', $newServerRequestStatic->getRequestTarget());
+    }
+
+    /** @test */
+    public function test_get_method() : void
+    {
+        // Arrange
+        $serverRequest = $this->getStubServerRequest([
+            'method' => 'post',
+        ]);
+
+        // Act && Assert
+        $this->assertEquals('post', $serverRequest->getMethod());
+    }
+
+    /** @test */
+    public function test_invalid_method_throws_exception() : void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $this->getStubServerRequest(['method' => 'foobar']);
     }
 }

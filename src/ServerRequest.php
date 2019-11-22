@@ -28,19 +28,25 @@ class ServerRequest implements ServerRequestInterface
     /** @var string */
     private $requestTarget;
 
+    /** @var string */
+    private $method;
+
     public function __construct(
         string $version,
         array $headers,
         StreamInterface $body,
-        string $requestTarget
+        string $requestTarget,
+        string $method
     ) {
         $this->validateProtocolVersion($version);
         $this->validateHeaders($headers);
+        $this->validateMethod($method);
 
         $this->version = $version;
         $this->headers = $headers;
         $this->body = $body;
         $this->requestTarget = $requestTarget;
+        $this->method = $method;
     }
 
     /**
@@ -378,8 +384,22 @@ class ServerRequest implements ServerRequestInterface
             $this->getProtocolVersion(),
             $this->getHeaders(),
             $this->getBody(),
-            $requestTarget
+            $requestTarget,
+            $this->getMethod()
         );
+    }
+
+    /**
+     * Verifies the HTTP method is valid.
+     *
+     * @throws InvalidArgumentException
+     * @param  string  $method HTTP method for the incoming request
+     */
+    private function validateMethod(string $method) : void
+    {
+        if (! in_array(strtoupper($method), ['POST', 'GET', 'OPTIONS'])) {
+            throw new InvalidArgumentException("Invalid HTTP method: {$method}");
+        }
     }
 
     /**
@@ -389,7 +409,7 @@ class ServerRequest implements ServerRequestInterface
      */
     public function getMethod()
     {
-        // TODO: Implement getMethod() method.
+        return $this->method;
     }
 
     /**
