@@ -508,7 +508,21 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withUri(UriInterface $uri, $preserveHost = false)
     {
-        // TODO: Implement withUri() method.
+        $headers = $this->getHeaders();
+        $currentUriHost = $this->uri->getHost();
+
+        if ($preserveHost && $currentUriHost) {
+            $headers['HTTP_HOST'] = [$currentUriHost];
+        }
+
+        return new static(
+            $this->getProtocolVersion(),
+            $headers,
+            $this->getBody(),
+            $this->getRequestTarget(),
+            $this->getMethod(),
+            $uri
+        );
     }
 
     /**

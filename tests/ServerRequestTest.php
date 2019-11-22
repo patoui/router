@@ -279,4 +279,35 @@ class ServerRequestTest extends TestCase
         // Act && Assert
         $this->assertEquals($uri, $serverRequest->getUri());
     }
+
+    /** @test */
+    public function test_with_uri() : void
+    {
+        // Arrange
+        $serverRequest = $this->getStubServerRequest();
+        $newUri = new Uri('/blog?q=new');
+
+        // Act
+        $newServerRequestStatic = $serverRequest->withUri($newUri);
+
+        // Assert
+        $this->assertEquals($newUri, $newServerRequestStatic->getUri());
+    }
+
+    /** @test */
+    public function test_with_uri_with_preserve_host() : void
+    {
+        // Arrange
+        $serverRequest = $this->getStubServerRequest([
+            'uri' => new Uri('https://otherhost.com/blog'),
+        ]);
+        $newUri = new Uri('https://example.com/blog?q=new');
+
+        // Act
+        $newServerRequestStatic = $serverRequest->withUri($newUri, true);
+
+        // Assert
+        $this->assertEquals($newUri, $newServerRequestStatic->getUri());
+        $this->assertEquals('otherhost.com', $newServerRequestStatic->getHeaderLine('http_host'));
+    }
 }

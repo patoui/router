@@ -11,9 +11,42 @@ class Uri implements UriInterface
     /** @var string */
     private $uri;
 
+    /** @var string */
+    private $scheme;
+
+    /** @var string */
+    private $host;
+
+    /** @var string */
+    private $port;
+
+    /** @var string */
+    private $user;
+
+    /** @var string */
+    private $path;
+
+    /** @var string */
+    private $query;
+
+    /** @var string */
+    private $fragment;
+
     public function __construct(string $uri)
     {
-        $this->uri = $uri;
+        $parsedUri = parse_url($uri);
+
+        if ($parsedUri === false) {
+            throw new \InvalidArgumentException("Invalid URI: {$uri}");
+        }
+
+        $this->scheme = isset($parsedUri['scheme']) ? $parsedUri['scheme'] : '';
+        $this->host = isset($parsedUri['host']) ? $parsedUri['host'] : '';
+        $this->port = isset($parsedUri['port']) ? $parsedUri['port'] : '';
+        $this->user = isset($parsedUri['user']) ? $parsedUri['user'] : '';
+        $this->path = isset($parsedUri['path']) ? $parsedUri['path'] : '';
+        $this->query = isset($parsedUri['query']) ? $parsedUri['query'] : '';
+        $this->fragment = isset($parsedUri['fragment']) ? $parsedUri['fragment'] : '';
     }
 
     /**
@@ -91,7 +124,7 @@ class Uri implements UriInterface
      */
     public function getHost()
     {
-        // TODO: Implement getHost() method.
+        return $this->host;
     }
 
     /**
