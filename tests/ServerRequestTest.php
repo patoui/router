@@ -217,4 +217,19 @@ class ServerRequestTest extends TestCase
         // Act && Assert
         $this->assertEquals('/blog', $serverRequest->getRequestTarget());
     }
+
+    /** @test */
+    public function test_with_request_target() : void
+    {
+        // Arrange
+        $serverRequest = $this->getStubServerRequest([
+            'request_target' => '/blog',
+        ]);
+
+        // Act
+        $newServerRequestStatic = $serverRequest->withRequestTarget('/post');
+
+        // Assert
+        $this->assertEquals('/post', $newServerRequestStatic->getRequestTarget());
+    }
 }

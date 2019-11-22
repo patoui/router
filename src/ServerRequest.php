@@ -374,7 +374,12 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withRequestTarget($requestTarget)
     {
-        // TODO: Implement withRequestTarget() method.
+        return new static(
+            $this->getProtocolVersion(),
+            $this->getHeaders(),
+            $this->getBody(),
+            $requestTarget
+        );
     }
 
     /**
