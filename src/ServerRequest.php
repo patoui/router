@@ -81,7 +81,9 @@ class ServerRequest implements ServerRequestInterface
         return new static(
             $version,
             $this->getHeaders(),
-            $this->getBody()
+            $this->getBody(),
+            $this->getRequestTarget(),
+            $this->getMethod()
         );
     }
 
@@ -217,7 +219,9 @@ class ServerRequest implements ServerRequestInterface
         return new static(
             $this->getProtocolVersion(),
             $newHeaders,
-            $this->getBody()
+            $this->getBody(),
+            $this->getRequestTarget(),
+            $this->getMethod()
         );
     }
 
@@ -247,7 +251,9 @@ class ServerRequest implements ServerRequestInterface
         return new static(
             $this->getProtocolVersion(),
             $newHeaders,
-            $this->getBody()
+            $this->getBody(),
+            $this->getRequestTarget(),
+            $this->getMethod()
         );
     }
 
@@ -271,7 +277,9 @@ class ServerRequest implements ServerRequestInterface
         return new static(
             $this->getProtocolVersion(),
             $newHeaders,
-            $this->getBody()
+            $this->getBody(),
+            $this->getRequestTarget(),
+            $this->getMethod()
         );
     }
 
@@ -336,7 +344,9 @@ class ServerRequest implements ServerRequestInterface
         return new static(
             $this->getProtocolVersion(),
             $this->getHeaders(),
-            $body
+            $body,
+            $this->getRequestTarget(),
+            $this->getMethod()
         );
     }
 
