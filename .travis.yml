@@ -14,6 +14,7 @@ before_script:
 
 script:
   - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
+  - vendor/bin/psalm
 
 after_script:
   - php vendor/bin/ocular code-coverage:upload --format=php-clover coverage.clover
