@@ -467,7 +467,7 @@ class ServerRequestTest extends TestCase
 
         // Act
         $newServerRequestStatic = $serverRequest->withUploadedFiles([
-            $uploadedFile
+            $uploadedFile,
         ]);
 
         // Assert
