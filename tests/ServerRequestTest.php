@@ -319,7 +319,7 @@ class ServerRequestTest extends TestCase
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest([
-            'server_params' => ['PATH_INFO' => '/foobar']
+            'server_params' => ['PATH_INFO' => '/foobar'],
         ]);
 
         // Act && Assert
