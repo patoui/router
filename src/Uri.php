@@ -33,7 +33,8 @@ class Uri implements UriInterface
     {
         $scheme = parse_url($uri, PHP_URL_SCHEME);
         $host = parse_url($uri, PHP_URL_HOST);
-        $port = strval(parse_url($uri, PHP_URL_PORT));
+        $port = parse_url($uri, PHP_URL_PORT);
+        $port = $port ? strval($port) : '80';
         $user = parse_url($uri, PHP_URL_USER);
         $path = parse_url($uri, PHP_URL_PASS);
         $query = parse_url($uri, PHP_URL_QUERY);
