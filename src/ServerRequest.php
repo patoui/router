@@ -396,7 +396,7 @@ class ServerRequest implements ServerRequestInterface
     public function withRequestTarget($requestTarget)
     {
         $instance = clone $this;
-        $instance->requestTarget = $requestTarget;
+        $instance->requestTarget = (string) $requestTarget;
 
         return $instance;
     }
