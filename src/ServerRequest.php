@@ -99,7 +99,9 @@ class ServerRequest implements ServerRequestInterface
             $this->getBody(),
             $this->getRequestTarget(),
             $this->getMethod(),
-            $this->getUri()
+            $this->getUri(),
+            $this->getServerParams(),
+            $this->getCookieParams()
         );
     }
 
@@ -238,7 +240,9 @@ class ServerRequest implements ServerRequestInterface
             $this->getBody(),
             $this->getRequestTarget(),
             $this->getMethod(),
-            $this->getUri()
+            $this->getUri(),
+            $this->getServerParams(),
+            $this->getCookieParams()
         );
     }
 
@@ -271,7 +275,9 @@ class ServerRequest implements ServerRequestInterface
             $this->getBody(),
             $this->getRequestTarget(),
             $this->getMethod(),
-            $this->getUri()
+            $this->getUri(),
+            $this->getServerParams(),
+            $this->getCookieParams()
         );
     }
 
@@ -298,7 +304,9 @@ class ServerRequest implements ServerRequestInterface
             $this->getBody(),
             $this->getRequestTarget(),
             $this->getMethod(),
-            $this->getUri()
+            $this->getUri(),
+            $this->getServerParams(),
+            $this->getCookieParams()
         );
     }
 
@@ -366,7 +374,9 @@ class ServerRequest implements ServerRequestInterface
             $body,
             $this->getRequestTarget(),
             $this->getMethod(),
-            $this->getUri()
+            $this->getUri(),
+            $this->getServerParams(),
+            $this->getCookieParams()
         );
     }
 
@@ -416,7 +426,9 @@ class ServerRequest implements ServerRequestInterface
             $this->getBody(),
             $requestTarget,
             $this->getMethod(),
-            $this->getUri()
+            $this->getUri(),
+            $this->getServerParams(),
+            $this->getCookieParams()
         );
     }
 
@@ -468,7 +480,9 @@ class ServerRequest implements ServerRequestInterface
             $this->getBody(),
             $this->getRequestTarget(),
             $method,
-            $this->getUri()
+            $this->getUri(),
+            $this->getServerParams(),
+            $this->getCookieParams()
         );
     }
 
@@ -531,7 +545,9 @@ class ServerRequest implements ServerRequestInterface
             $this->getBody(),
             $this->getRequestTarget(),
             $this->getMethod(),
-            $uri
+            $uri,
+            $this->getServerParams(),
+            $this->getCookieParams()
         );
     }
 
