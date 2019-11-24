@@ -9,9 +9,6 @@ use Psr\Http\Message\UriInterface;
 class Uri implements UriInterface
 {
     /** @var string */
-    private $uri;
-
-    /** @var string */
     private $scheme;
 
     /** @var string */
@@ -34,19 +31,13 @@ class Uri implements UriInterface
 
     public function __construct(string $uri)
     {
-        $parsedUri = parse_url($uri);
-
-        if ($parsedUri === false) {
-            throw new \InvalidArgumentException("Invalid URI: {$uri}");
-        }
-
-        $this->scheme = isset($parsedUri['scheme']) ? $parsedUri['scheme'] : '';
-        $this->host = isset($parsedUri['host']) ? $parsedUri['host'] : '';
-        $this->port = isset($parsedUri['port']) ? $parsedUri['port'] : '';
-        $this->user = isset($parsedUri['user']) ? $parsedUri['user'] : '';
-        $this->path = isset($parsedUri['path']) ? $parsedUri['path'] : '';
-        $this->query = isset($parsedUri['query']) ? $parsedUri['query'] : '';
-        $this->fragment = isset($parsedUri['fragment']) ? $parsedUri['fragment'] : '';
+        $this->scheme = parse_url($uri, PHP_URL_SCHEME);
+        $this->host = parse_url($uri, PHP_URL_HOST);
+        $this->port = (int) parse_url($uri, PHP_URL_PORT);
+        $this->user = parse_url($uri, PHP_URL_USER);
+        $this->path = parse_url($uri, PHP_URL_PASS);
+        $this->query = parse_url($uri, PHP_URL_QUERY);
+        $this->fragment = parse_url($uri, PHP_URL_FRAGMENT);
     }
 
     /**
