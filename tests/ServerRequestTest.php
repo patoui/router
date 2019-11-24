@@ -22,6 +22,7 @@ class ServerRequestTest extends TestCase
             'method' => 'get',
             'uri' => new Uri('/'),
             'server_params' => [],
+            'cookie_params' => [],
         ], $propertyOverrides);
 
         return new ServerRequest(...array_values($properties));
@@ -322,5 +323,17 @@ class ServerRequestTest extends TestCase
 
         // Act && Assert
         $this->assertEquals(['PATH_INFO' => '/foobar'], $serverRequest->getServerParams());
+    }
+
+    /** @test */
+    public function test_get_cookie_params() : void
+    {
+        // Arrange
+        $serverRequest = $this->getStubServerRequest([
+            'cookie_params' => ['my_app_user_session' => 'abc123']
+        ]);
+
+        // Act && Assert
+        $this->assertEquals(['my_app_user_session' => 'abc123'], $serverRequest->getCookieParams());
     }
 }
