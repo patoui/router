@@ -680,7 +680,21 @@ class ServerRequest implements ServerRequestInterface
      */
     public function getParsedBody()
     {
-        // TODO: Implement getParsedBody() method.
+        $contentTypes = $this->getHeader('content-type');
+        $shouldUsePost = false;
+
+        foreach ($contentTypes as $contentType) {
+            if ($contentType === 'application/x-www-form-urlencoded' ||
+                $contentType === 'multipart/form-data') {
+                $shouldUsePost = true;
+            }
+        }
+
+        if ($shouldUsePost) {
+            return $_POST;
+        }
+
+        return $this->body;
     }
 
     /**

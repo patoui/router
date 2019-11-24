@@ -487,4 +487,29 @@ class ServerRequestTest extends TestCase
         // Act && Assert
         $serverRequest->withUploadedFiles(['not an uploaded file']);
     }
+
+    /** @test */
+    public function test_get_parsed_body() : void
+    {
+        // Arrange
+        $request = new Stream('A New Request Body');
+        $serverRequest = $this->getStubServerRequest(['body' => $request]);
+
+        // Act && Assert
+        $this->assertEquals($request, $serverRequest->getParsedBody());
+    }
+
+    /** @test */
+    public function test_get_parsed_body_with_content_type_multipart() : void
+    {
+        // Arrange
+        $_POST['foo'] = 'bar';
+        $serverRequest = $this->getStubServerRequest([
+            'method' => 'post',
+            'headers' => ['content-type' => ['multipart/form-data']],
+        ]);
+
+        // Act && Assert
+        $this->assertEquals(['foo' => 'bar'], $serverRequest->getParsedBody());
+    }
 }
