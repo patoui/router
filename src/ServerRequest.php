@@ -666,7 +666,17 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withQueryParams(array $query)
     {
-        // TODO: Implement withQueryParams() method.
+        return new static(
+            $this->getProtocolVersion(),
+            $this->getHeaders(),
+            $this->getBody(),
+            $this->getRequestTarget(),
+            $this->getMethod(),
+            $this->getUri(),
+            $this->getServerParams(),
+            $this->getCookieParams(),
+            array_merge($this->getQueryParams(), $query)
+        );
     }
 
     /**

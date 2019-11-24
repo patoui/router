@@ -366,4 +366,19 @@ class ServerRequestTest extends TestCase
         // Act && Assert
         $this->assertEquals(['search' => 'John'], $serverRequest->getQueryParams());
     }
+
+    /** @test */
+    public function test_with_query_params() : void
+    {
+        // Arrange
+        $serverRequest = $this->getStubServerRequest();
+
+        // Act
+        $newServerRequestStatic = $serverRequest->withQueryParams([
+            'search' => 'Doe',
+        ]);
+
+        // Assert
+        $this->assertEquals(['search' => 'Doe'], $newServerRequestStatic->getQueryParams());
+    }
 }
