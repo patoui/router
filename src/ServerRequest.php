@@ -7,6 +7,7 @@ namespace Patoui\Router;
 use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriInterface;
 
 class ServerRequest implements ServerRequestInterface
@@ -645,7 +646,19 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withUploadedFiles(array $uploadedFiles)
     {
-        // TODO: Implement withUploadedFiles() method.
+        foreach ($uploadedFiles as $uploadedFile) {
+            if (! $uploadedFile instanceof UploadedFileInterface) {
+                throw new InvalidArgumentException(
+                    'Must be an array with instances of '
+                        .UploadedFileInterface::class
+                );
+            }
+        }
+
+        $instance = clone $this;
+        $instance->uploadedFiles = $uploadedFiles;
+
+        return $instance;
     }
 
     /**

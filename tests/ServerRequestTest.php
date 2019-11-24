@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Patoui\Router\Tests;
 
+use InvalidArgumentException;
 use Patoui\Router\ServerRequest;
 use Patoui\Router\Stream;
 use Patoui\Router\Uri;
@@ -64,7 +65,7 @@ class ServerRequestTest extends TestCase
     /** @test */
     public function test_invalid_headers_throws_exception() : void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $this->getStubServerRequest([
             'headers' => ['content-type' => 'application/json'],
@@ -256,7 +257,7 @@ class ServerRequestTest extends TestCase
     /** @test */
     public function test_invalid_method_throws_exception() : void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $this->getStubServerRequest(['method' => 'foobar']);
     }
@@ -425,5 +426,65 @@ class ServerRequestTest extends TestCase
 
         // Act && Assert
         $this->assertEquals([$uploadedFile], $serverRequest->getUploadedFiles());
+    }
+
+    /** @test */
+    public function test_with_uploaded_files() : void
+    {
+        // Arrange
+        $uploadedFile = new class implements UploadedFileInterface {
+            public function getStream()
+            {
+                // TODO: Implement getStream() method.
+            }
+
+            public function moveTo($targetPath)
+            {
+                // TODO: Implement moveTo() method.
+            }
+
+            public function getSize()
+            {
+                // TODO: Implement getSize() method.
+            }
+
+            public function getError()
+            {
+                // TODO: Implement getError() method.
+            }
+
+            public function getClientFilename()
+            {
+                // TODO: Implement getClientFilename() method.
+            }
+
+            public function getClientMediaType()
+            {
+                // TODO: Implement getClientMediaType() method.
+            }
+        };
+        $serverRequest = $this->getStubServerRequest();
+
+        // Act
+        $newServerRequestStatic = $serverRequest->withUploadedFiles([
+            $uploadedFile
+        ]);
+
+        // Assert
+        $this->assertEquals(
+            [$uploadedFile],
+            $newServerRequestStatic->getUploadedFiles()
+        );
+    }
+
+    /** @test */
+    public function test_with_uploaded_files_invalid_type_throws_exception() : void
+    {
+        // Arrange
+        $this->expectException(InvalidArgumentException::class);
+        $serverRequest = $this->getStubServerRequest();
+
+        // Act && Assert
+        $serverRequest->withUploadedFiles(['not an uploaded file']);
     }
 }
