@@ -98,17 +98,10 @@ class ServerRequest implements ServerRequestInterface
     {
         $this->validateProtocolVersion($version);
 
-        return new static(
-            $version,
-            $this->getHeaders(),
-            $this->getBody(),
-            $this->getRequestTarget(),
-            $this->getMethod(),
-            $this->getUri(),
-            $this->getServerParams(),
-            $this->getCookieParams(),
-            $this->getQueryParams()
-        );
+        $instance = clone $this;
+        $instance->version = $version;
+
+        return $instance;
     }
 
     /**
@@ -240,17 +233,10 @@ class ServerRequest implements ServerRequestInterface
     {
         $newHeaders = array_merge($this->getHeaders(), [$name => [$value]]);
 
-        return new static(
-            $this->getProtocolVersion(),
-            $newHeaders,
-            $this->getBody(),
-            $this->getRequestTarget(),
-            $this->getMethod(),
-            $this->getUri(),
-            $this->getServerParams(),
-            $this->getCookieParams(),
-            $this->getQueryParams()
-        );
+        $instance = clone $this;
+        $instance->headers = $newHeaders;
+
+        return $instance;
     }
 
     /**
@@ -276,17 +262,10 @@ class ServerRequest implements ServerRequestInterface
         $headerToUpdate[] = $value;
         $newHeaders[$name] = $headerToUpdate;
 
-        return new static(
-            $this->getProtocolVersion(),
-            $newHeaders,
-            $this->getBody(),
-            $this->getRequestTarget(),
-            $this->getMethod(),
-            $this->getUri(),
-            $this->getServerParams(),
-            $this->getCookieParams(),
-            $this->getQueryParams()
-        );
+        $instance = clone $this;
+        $instance->headers = $newHeaders;
+
+        return $instance;
     }
 
     /**
@@ -306,17 +285,10 @@ class ServerRequest implements ServerRequestInterface
         $newHeaders = $this->getHeaders();
         unset($newHeaders[$name]);
 
-        return new static(
-            $this->getProtocolVersion(),
-            $newHeaders,
-            $this->getBody(),
-            $this->getRequestTarget(),
-            $this->getMethod(),
-            $this->getUri(),
-            $this->getServerParams(),
-            $this->getCookieParams(),
-            $this->getQueryParams()
-        );
+        $instance = clone $this;
+        $instance->headers = $newHeaders;
+
+        return $instance;
     }
 
     /**
@@ -377,17 +349,11 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withBody(StreamInterface $body)
     {
-        return new static(
-            $this->getProtocolVersion(),
-            $this->getHeaders(),
-            $body,
-            $this->getRequestTarget(),
-            $this->getMethod(),
-            $this->getUri(),
-            $this->getServerParams(),
-            $this->getCookieParams(),
-            $this->getQueryParams()
-        );
+
+        $instance = clone $this;
+        $instance->body = $body;
+
+        return $instance;
     }
 
     /**
@@ -430,17 +396,10 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withRequestTarget($requestTarget)
     {
-        return new static(
-            $this->getProtocolVersion(),
-            $this->getHeaders(),
-            $this->getBody(),
-            $requestTarget,
-            $this->getMethod(),
-            $this->getUri(),
-            $this->getServerParams(),
-            $this->getCookieParams(),
-            $this->getQueryParams()
-        );
+        $instance = clone $this;
+        $instance->requestTarget = $requestTarget;
+
+        return $instance;
     }
 
     /**
@@ -485,17 +444,10 @@ class ServerRequest implements ServerRequestInterface
     {
         $this->validateMethod($method);
 
-        return new static(
-            $this->getProtocolVersion(),
-            $this->getHeaders(),
-            $this->getBody(),
-            $this->getRequestTarget(),
-            $method,
-            $this->getUri(),
-            $this->getServerParams(),
-            $this->getCookieParams(),
-            $this->getQueryParams()
-        );
+        $instance = clone $this;
+        $instance->method = $method;
+
+        return $instance;
     }
 
     /**
@@ -551,17 +503,11 @@ class ServerRequest implements ServerRequestInterface
             $headers['HTTP_HOST'] = [$currentUriHost];
         }
 
-        return new static(
-            $this->getProtocolVersion(),
-            $headers,
-            $this->getBody(),
-            $this->getRequestTarget(),
-            $this->getMethod(),
-            $uri,
-            $this->getServerParams(),
-            $this->getCookieParams(),
-            $this->getQueryParams()
-        );
+        $instance = clone $this;
+        $instance->headers = $headers;
+        $instance->uri = $uri;
+
+        return $instance;
     }
 
     /**
@@ -612,17 +558,10 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withCookieParams(array $cookies)
     {
-        return new static(
-            $this->getProtocolVersion(),
-            $this->getHeaders(),
-            $this->getBody(),
-            $this->getRequestTarget(),
-            $this->getMethod(),
-            $this->getUri(),
-            $this->getServerParams(),
-            array_merge($this->getCookieParams(), $cookies),
-            $this->getQueryParams()
-        );
+        $instance = clone $this;
+        $instance->cookieParams = $cookies;
+
+        return $instance;
     }
 
     /**
@@ -666,17 +605,10 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withQueryParams(array $query)
     {
-        return new static(
-            $this->getProtocolVersion(),
-            $this->getHeaders(),
-            $this->getBody(),
-            $this->getRequestTarget(),
-            $this->getMethod(),
-            $this->getUri(),
-            $this->getServerParams(),
-            $this->getCookieParams(),
-            array_merge($this->getQueryParams(), $query)
-        );
+        $instance = clone $this;
+        $instance->queryParams = array_merge($this->getQueryParams(), $query);
+
+        return $instance;
     }
 
     /**
