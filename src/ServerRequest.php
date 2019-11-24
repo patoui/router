@@ -646,13 +646,15 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withUploadedFiles(array $uploadedFiles)
     {
-        foreach ($uploadedFiles as $uploadedFile) {
-            if (! $uploadedFile instanceof UploadedFileInterface) {
-                throw new InvalidArgumentException(
-                    'Must be an array with instances of '
-                        .UploadedFileInterface::class
-                );
-            }
+        $filteredUploadedFiles = array_filter($uploadedFiles, function ($uploadedFile) {
+            return $uploadedFile instanceof UploadedFileInterface;
+        });
+
+        if (count($filteredUploadedFiles) !== count($uploadedFiles)) {
+            throw new InvalidArgumentException(
+                'Must be an array with instances of '
+                .UploadedFileInterface::class
+            );
         }
 
         $instance = clone $this;
