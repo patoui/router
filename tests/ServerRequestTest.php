@@ -330,10 +330,27 @@ class ServerRequestTest extends TestCase
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest([
-            'cookie_params' => ['my_app_user_session' => 'abc123']
+            'cookie_params' => ['my_app_user_session' => 'abc123'],
         ]);
 
         // Act && Assert
         $this->assertEquals(['my_app_user_session' => 'abc123'], $serverRequest->getCookieParams());
+    }
+
+    /** @test */
+    public function test_with_cookie_params() : void
+    {
+        // Arrange
+        $serverRequest = $this->getStubServerRequest([
+            'cookie_params' => ['foo' => 'bar'],
+        ]);
+
+        // Act
+        $newServerRequestStatic = $serverRequest->withCookieParams([
+            'foo' => 'gibberish',
+        ]);
+
+        // Assert
+        $this->assertEquals(['foo' => 'gibberish'], $newServerRequestStatic->getCookieParams());
     }
 }

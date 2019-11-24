@@ -599,7 +599,16 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withCookieParams(array $cookies)
     {
-        // TODO: Implement withCookieParams() method.
+        return new static(
+            $this->getProtocolVersion(),
+            $this->getHeaders(),
+            $this->getBody(),
+            $this->getRequestTarget(),
+            $this->getMethod(),
+            $this->getUri(),
+            $this->getServerParams(),
+            array_merge($this->getCookieParams(), $cookies)
+        );
     }
 
     /**
