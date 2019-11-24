@@ -34,13 +34,17 @@ class ServerRequest implements ServerRequestInterface
     /** @var UriInterface */
     private $uri;
 
+    /** @var array */
+    private $serverParams;
+
     public function __construct(
         string $version,
         array $headers,
         StreamInterface $body,
         string $requestTarget,
         string $method,
-        UriInterface $uri
+        UriInterface $uri,
+        array $serverParams
     ) {
         $this->validateProtocolVersion($version);
         $this->validateHeaders($headers);
@@ -52,6 +56,7 @@ class ServerRequest implements ServerRequestInterface
         $this->requestTarget = $requestTarget;
         $this->method = $method;
         $this->uri = $uri;
+        $this->serverParams = $serverParams;
     }
 
     /**
@@ -536,7 +541,7 @@ class ServerRequest implements ServerRequestInterface
      */
     public function getServerParams()
     {
-        // TODO: Implement getServerParams() method.
+        return $this->serverParams;
     }
 
     /**

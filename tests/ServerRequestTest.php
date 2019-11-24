@@ -21,6 +21,7 @@ class ServerRequestTest extends TestCase
             'request_target' => '/',
             'method' => 'get',
             'uri' => new Uri('/'),
+            'server_params' => [],
         ], $propertyOverrides);
 
         return new ServerRequest(...array_values($properties));
@@ -309,5 +310,17 @@ class ServerRequestTest extends TestCase
         // Assert
         $this->assertEquals($newUri, $newServerRequestStatic->getUri());
         $this->assertEquals('otherhost.com', $newServerRequestStatic->getHeaderLine('http_host'));
+    }
+
+    /** @test */
+    public function test_get_server_params() : void
+    {
+        // Arrange
+        $serverRequest = $this->getStubServerRequest([
+            'server_params' => ['PATH_INFO' => '/foobar']
+        ]);
+
+        // Act && Assert
+        $this->assertEquals(['PATH_INFO' => '/foobar'], $serverRequest->getServerParams());
     }
 }
