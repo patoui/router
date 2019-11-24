@@ -349,7 +349,6 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withBody(StreamInterface $body)
     {
-
         $instance = clone $this;
         $instance->body = $body;
 
