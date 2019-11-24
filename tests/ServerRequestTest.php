@@ -23,6 +23,7 @@ class ServerRequestTest extends TestCase
             'uri' => new Uri('/'),
             'server_params' => [],
             'cookie_params' => [],
+            'query_params' => [],
         ], $propertyOverrides);
 
         return new ServerRequest(...array_values($properties));
@@ -352,5 +353,17 @@ class ServerRequestTest extends TestCase
 
         // Assert
         $this->assertEquals(['foo' => 'gibberish'], $newServerRequestStatic->getCookieParams());
+    }
+
+    /** @test */
+    public function test_get_query_params() : void
+    {
+        // Arrange
+        $serverRequest = $this->getStubServerRequest([
+            'query_params' => ['search' => 'John'],
+        ]);
+
+        // Act && Assert
+        $this->assertEquals(['search' => 'John'], $serverRequest->getQueryParams());
     }
 }

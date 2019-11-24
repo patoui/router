@@ -40,6 +40,9 @@ class ServerRequest implements ServerRequestInterface
     /** @var array */
     private $cookieParams;
 
+    /** @var array */
+    private $queryParams;
+
     public function __construct(
         string $version,
         array $headers,
@@ -48,7 +51,8 @@ class ServerRequest implements ServerRequestInterface
         string $method,
         UriInterface $uri,
         array $serverParams,
-        array $cookieParams
+        array $cookieParams,
+        array $queryParams
     ) {
         $this->validateProtocolVersion($version);
         $this->validateHeaders($headers);
@@ -62,6 +66,7 @@ class ServerRequest implements ServerRequestInterface
         $this->uri = $uri;
         $this->serverParams = $serverParams;
         $this->cookieParams = $cookieParams;
+        $this->queryParams = $queryParams;
     }
 
     /**
@@ -625,7 +630,7 @@ class ServerRequest implements ServerRequestInterface
      */
     public function getQueryParams()
     {
-        // TODO: Implement getQueryParams() method.
+        return $this->queryParams;
     }
 
     /**
