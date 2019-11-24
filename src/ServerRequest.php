@@ -43,6 +43,9 @@ class ServerRequest implements ServerRequestInterface
     /** @var array */
     private $queryParams;
 
+    /** @var array */
+    private $uploadedFiles;
+
     public function __construct(
         string $version,
         array $headers,
@@ -52,7 +55,8 @@ class ServerRequest implements ServerRequestInterface
         UriInterface $uri,
         array $serverParams,
         array $cookieParams,
-        array $queryParams
+        array $queryParams,
+        array $uploadedFiles
     ) {
         $this->validateProtocolVersion($version);
         $this->validateHeaders($headers);
@@ -67,6 +71,7 @@ class ServerRequest implements ServerRequestInterface
         $this->serverParams = $serverParams;
         $this->cookieParams = $cookieParams;
         $this->queryParams = $queryParams;
+        $this->uploadedFiles = $uploadedFiles;
     }
 
     /**
@@ -624,7 +629,7 @@ class ServerRequest implements ServerRequestInterface
      */
     public function getUploadedFiles()
     {
-        // TODO: Implement getUploadedFiles() method.
+        return $this->uploadedFiles;
     }
 
     /**

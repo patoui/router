@@ -9,6 +9,7 @@ use Patoui\Router\Stream;
 use Patoui\Router\Uri;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UploadedFileInterface;
 
 class ServerRequestTest extends TestCase
 {
@@ -24,6 +25,7 @@ class ServerRequestTest extends TestCase
             'server_params' => [],
             'cookie_params' => [],
             'query_params' => [],
+            'uploaded_files' => [],
         ], $propertyOverrides);
 
         return new ServerRequest(...array_values($properties));
@@ -380,5 +382,48 @@ class ServerRequestTest extends TestCase
 
         // Assert
         $this->assertEquals(['search' => 'Doe'], $newServerRequestStatic->getQueryParams());
+    }
+
+    /** @test */
+    public function test_get_uploaded_files() : void
+    {
+        // Arrange
+        $uploadedFile = new class implements UploadedFileInterface {
+            public function getStream()
+            {
+                // TODO: Implement getStream() method.
+            }
+
+            public function moveTo($targetPath)
+            {
+                // TODO: Implement moveTo() method.
+            }
+
+            public function getSize()
+            {
+                // TODO: Implement getSize() method.
+            }
+
+            public function getError()
+            {
+                // TODO: Implement getError() method.
+            }
+
+            public function getClientFilename()
+            {
+                // TODO: Implement getClientFilename() method.
+            }
+
+            public function getClientMediaType()
+            {
+                // TODO: Implement getClientMediaType() method.
+            }
+        };
+        $serverRequest = $this->getStubServerRequest([
+            'uploaded_files' => [$uploadedFile],
+        ]);
+
+        // Act && Assert
+        $this->assertEquals([$uploadedFile], $serverRequest->getUploadedFiles());
     }
 }
