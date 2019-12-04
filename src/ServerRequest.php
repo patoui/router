@@ -826,7 +826,7 @@ class ServerRequest implements ServerRequestInterface
     }
 
     /**
-     * Determines if the request is a POST request based on content type headers
+     * Determines if the request is a POST request based on content type headers.
      * @return bool
      */
     private function isPostRequest() : bool
