@@ -722,29 +722,20 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withParsedBody($data)
     {
-        if (is_null($data)) {
-            $data = [];
-        }
-
-        if (is_object($data)) {
-            $data = (array) $data;
-        }
-
-        if (! is_array($data)) {
+        if (! is_null($data) && ! is_object($data) && ! is_array($data)) {
             throw new InvalidArgumentException(
                 'Parsed body must be of type: null, array, or object'
             );
         }
 
+        $data = (array) $data;
         $isPost = $this->isPostRequest();
         $instance = clone $this;
-        $instance->parsedBody = array_merge($this->getParsedBody(), $data);
+        $instance->parsedBody = array_merge((array) $this->getParsedBody(), $data);
 
         if ($isPost) {
             // TODO: identify potential risk with assigning values to the super global variable
-            foreach ($data as $key => $value) {
-                $_POST[$key] = $value;
-            }
+            $_POST = array_merge($_POST, $data);
         }
 
         return $instance;
