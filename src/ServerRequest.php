@@ -47,6 +47,9 @@ class ServerRequest implements ServerRequestInterface
     /** @var array */
     private $uploadedFiles;
 
+    /** @var null|array|object */
+    private $parsedBody;
+
     public function __construct(
         string $version,
         array $headers,
@@ -680,21 +683,13 @@ class ServerRequest implements ServerRequestInterface
      */
     public function getParsedBody()
     {
-        $contentTypes = $this->getHeader('content-type');
-        $shouldUsePost = false;
+        $isPost = $this->isPostRequest();
 
-        foreach ($contentTypes as $contentType) {
-            if ($contentType === 'application/x-www-form-urlencoded' ||
-                $contentType === 'multipart/form-data') {
-                $shouldUsePost = true;
-            }
-        }
-
-        if ($shouldUsePost) {
+        if ($isPost) {
             return $_POST;
         }
 
-        return $this->body;
+        return $this->parsedBody;
     }
 
     /**
@@ -727,7 +722,32 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withParsedBody($data)
     {
-        // TODO: Implement withParsedBody() method.
+        if (is_null($data)) {
+            $data = [];
+        }
+
+        if (is_object($data)) {
+            $data = (array) $data;
+        }
+
+        if (! is_array($data)) {
+            throw new InvalidArgumentException(
+                'Parsed body must be of type: null, array, or object'
+            );
+        }
+
+        $isPost = $this->isPostRequest();
+        $instance = clone $this;
+        $instance->parsedBody = array_merge($this->getParsedBody(), $data);
+
+        if ($isPost) {
+            // TODO: identify potential risk with assigning values to the super global variable
+            foreach ($data as $key => $value) {
+                $_POST[$key] = $value;
+            }
+        }
+
+        return $instance;
     }
 
     /**
@@ -803,5 +823,21 @@ class ServerRequest implements ServerRequestInterface
     public function withoutAttribute($name)
     {
         // TODO: Implement withoutAttribute() method.
+    }
+
+    /**
+     * Determines if the request is a POST request based on content type headers
+     * @return bool
+     */
+    private function isPostRequest() : bool
+    {
+        foreach ($this->getHeader('content-type') as $contentType) {
+            if ($contentType === 'application/x-www-form-urlencoded' ||
+                $contentType === 'multipart/form-data') {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

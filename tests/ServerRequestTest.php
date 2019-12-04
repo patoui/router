@@ -492,11 +492,17 @@ class ServerRequestTest extends TestCase
     public function test_get_parsed_body() : void
     {
         // Arrange
-        $request = new Stream('A New Request Body');
-        $serverRequest = $this->getStubServerRequest(['body' => $request]);
+        $serverRequest = $this->getStubServerRequest();
 
-        // Act && Assert
-        $this->assertEquals($request, $serverRequest->getParsedBody());
+        // Act
+        $parsedBody = $serverRequest->getParsedBody();
+
+        // Assert
+        $this->assertTrue(
+            is_null($parsedBody) ||
+            is_array($parsedBody) ||
+            is_object($parsedBody)
+        );
     }
 
     /** @test */
@@ -511,5 +517,29 @@ class ServerRequestTest extends TestCase
 
         // Act && Assert
         $this->assertEquals(['foo' => 'bar'], $serverRequest->getParsedBody());
+    }
+
+    /** @test */
+    public function test_with_parsed_body() : void
+    {
+        // Arrange
+        $_POST['foo'] = 'bar';
+        $serverRequest = $this->getStubServerRequest([
+            'method' => 'post',
+            'headers' => ['content-type' => ['multipart/form-data']],
+            'body' => new Stream(''),
+        ]);
+
+        // Act
+        $newServerRequest = $serverRequest->withParsedBody(['foo' => 'bar']);
+
+        // Assert
+        $parsedBody = $newServerRequest->getParsedBody();
+        $this->assertEquals(['foo' => 'bar'], $parsedBody);
+        $this->assertTrue(
+            is_null($parsedBody) ||
+            is_array($parsedBody) ||
+            is_object($parsedBody)
+        );
     }
 }
