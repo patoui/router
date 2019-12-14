@@ -782,7 +782,7 @@ class ServerRequest implements ServerRequestInterface
      */
     public function getAttribute($name, $default = null)
     {
-        // TODO: Implement getAttribute() method.
+        return $this->attributes[$name] ?? $default;
     }
 
     /**
