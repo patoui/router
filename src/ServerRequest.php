@@ -824,7 +824,11 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withoutAttribute($name)
     {
-        // TODO: Implement withoutAttribute() method.
+        $instance = clone $this;
+
+        unset($instance->attributes[$name]);
+
+        return $instance;
     }
 
     /**
