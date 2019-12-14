@@ -542,4 +542,17 @@ class ServerRequestTest extends TestCase
             is_object($parsedBody)
         );
     }
+
+    /** @test */
+    public function test_get_attributes() : void
+    {
+        // Arrange
+        $serverRequest = $this->getStubServerRequest();
+
+        // Act
+        $attributes = $serverRequest->getAttributes();
+
+        // Assert
+        $this->assertEquals([], $attributes);
+    }
 }

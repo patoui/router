@@ -50,6 +50,9 @@ class ServerRequest implements ServerRequestInterface
     /** @var null|array|object */
     private $parsedBody;
 
+    /** @var array */
+    private $attributes;
+
     public function __construct(
         string $version,
         array $headers,
@@ -76,6 +79,7 @@ class ServerRequest implements ServerRequestInterface
         $this->cookieParams = $cookieParams;
         $this->queryParams = $queryParams;
         $this->uploadedFiles = $uploadedFiles;
+        $this->attributes = [];
     }
 
     /**
@@ -758,7 +762,7 @@ class ServerRequest implements ServerRequestInterface
      */
     public function getAttributes()
     {
-        // TODO: Implement getAttributes() method.
+        return $this->attributes;
     }
 
     /**
