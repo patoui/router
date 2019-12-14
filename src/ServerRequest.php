@@ -802,7 +802,10 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withAttribute($name, $value)
     {
-        // TODO: Implement withAttribute() method.
+        $instance = clone $this;
+        $instance->attributes[$name] = $value;
+
+        return $instance;
     }
 
     /**

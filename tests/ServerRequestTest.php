@@ -568,4 +568,17 @@ class ServerRequestTest extends TestCase
         // Assert
         $this->assertEquals(null, $attribute);
     }
+
+    /** @test */
+    public function test_with_attribute() : void
+    {
+        // Arrange
+        $serverRequest = $this->getStubServerRequest();
+
+        // Act
+        $newServerRequest = $serverRequest->withAttribute('foo', 'bar');
+
+        // Assert
+        $this->assertEquals('bar', $newServerRequest->getAttribute('foo'));
+    }
 }
