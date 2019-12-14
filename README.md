@@ -44,6 +44,7 @@ require 'vendor/autoload.php';
 
 use Patoui\Router\Route;
 use Patoui\Router\Router;
+use Patoui\Router\ServerRequest;
 
 $router = new Router();
 $homeController = new class {
@@ -55,7 +56,7 @@ $homeController = new class {
 
 $router->addRoute(new Route('get', '/foobar', $homeController, 'index'));
 
-$router->resolve($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
+$router->resolve(ServerRequest::makeWithGlobals());
 ```
 
 ### Testing
