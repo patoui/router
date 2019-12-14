@@ -236,7 +236,7 @@ class ServerRequest implements ServerRequestInterface
      * @param  string  $name  Case-insensitive header field name.
      * @param  string|string[]  $value  Header value(s).
      * @return static
-     * @throws \InvalidArgumentException for invalid header names or values.
+     * @throws InvalidArgumentException for invalid header names or values.
      */
     public function withHeader($name, $value)
     {
@@ -262,7 +262,7 @@ class ServerRequest implements ServerRequestInterface
      * @param  string  $name  Case-insensitive header field name to add.
      * @param  string|string[]  $value  Header value(s).
      * @return static
-     * @throws \InvalidArgumentException for invalid header names or values.
+     * @throws InvalidArgumentException for invalid header names or values.
      */
     public function withAddedHeader($name, $value)
     {
@@ -354,7 +354,7 @@ class ServerRequest implements ServerRequestInterface
      *
      * @param  StreamInterface  $body  Body.
      * @return static
-     * @throws \InvalidArgumentException When the body is not valid.
+     * @throws InvalidArgumentException When the body is not valid.
      */
     public function withBody(StreamInterface $body)
     {
@@ -446,7 +446,7 @@ class ServerRequest implements ServerRequestInterface
      *
      * @param  string  $method  Case-sensitive method.
      * @return static
-     * @throws \InvalidArgumentException for invalid HTTP methods.
+     * @throws InvalidArgumentException for invalid HTTP methods.
      */
     public function withMethod($method)
     {
@@ -645,7 +645,7 @@ class ServerRequest implements ServerRequestInterface
      *
      * @param  array  $uploadedFiles  An array tree of UploadedFileInterface instances.
      * @return static
-     * @throws \InvalidArgumentException if an invalid structure is provided.
+     * @throws InvalidArgumentException if an invalid structure is provided.
      */
     public function withUploadedFiles(array $uploadedFiles)
     {
@@ -717,11 +717,15 @@ class ServerRequest implements ServerRequestInterface
      * @param  null|array|object  $data  The deserialized body data. This will
      *     typically be in an array or object.
      * @return static
-     * @throws \InvalidArgumentException if an unsupported argument type is
+     * @throws InvalidArgumentException if an unsupported argument type is
      *     provided.
      */
     public function withParsedBody($data)
     {
+        /**
+         * @psalm-suppress DocblockTypeContradiction
+         * @psalm-suppress TypeDoesNotContainType
+         */
         if (! is_null($data) && ! is_object($data) && ! is_array($data)) {
             throw new InvalidArgumentException(
                 'Parsed body must be of type: null, array, or object'
