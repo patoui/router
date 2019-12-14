@@ -15,7 +15,7 @@ class Headers
     }
 
     /**
-     * Get headers from $_SERVER global
+     * Get headers from $_SERVER global.
      * @return array
      */
     public static function getHeadersArrayFromGlobals(): array

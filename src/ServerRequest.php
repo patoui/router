@@ -83,7 +83,7 @@ class ServerRequest implements ServerRequestInterface
     }
 
     /**
-     * Create instance of server request based on global values
+     * Create instance of server request based on global values.
      * @return static
      */
     public static function makeWithGlobals(): self
