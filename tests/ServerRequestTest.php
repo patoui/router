@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Patoui\Router\Tests;
 
 use InvalidArgumentException;
+use Patoui\Router\ServerRequest;
 use Patoui\Router\Stream;
 use Patoui\Router\Uri;
 use Psr\Http\Message\StreamInterface;
@@ -577,5 +578,17 @@ class ServerRequestTest extends TestCase
 
         // Assert
         $this->assertEquals(null, $withoutServerRequest->getAttribute('foo'));
+    }
+
+    /** @test */
+    public function test_make_with_globals() : void
+    {
+        // Arrange && Act
+        $serverRequest = ServerRequest::makeWithGlobals();
+
+        // Assert
+        $this->assertEquals('1.1', $serverRequest->getProtocolVersion());
+        $this->assertEquals('/', $serverRequest->getRequestTarget());
+        $this->assertEquals([], $serverRequest->getHeaders());
     }
 }

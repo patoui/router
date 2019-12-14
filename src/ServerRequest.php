@@ -83,6 +83,32 @@ class ServerRequest implements ServerRequestInterface
     }
 
     /**
+     * Create instance of server request based on global values
+     * @return static
+     */
+    public static function makeWithGlobals(): self
+    {
+        $headers = Headers::getHeadersArrayFromGlobals();
+        $protocolVersion = str_replace('HTTP/', '', $_SERVER['SERVER_PROTOCOL'] ?? '1.1');
+        $requestTarget = $_SERVER['REQUEST_URI'] ?? '/';
+        $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+
+        // TODO: identify potential risk of using globals
+        return new static (
+            $protocolVersion,
+            $headers,
+            new Stream('body'),
+            $requestTarget,
+            $method,
+            new Uri($requestTarget),
+            $_SERVER,
+            $_COOKIE,
+            $_GET,
+            $_FILES
+        );
+    }
+
+    /**
      * Retrieves the HTTP protocol version as a string.
      *
      * The string MUST contain only the HTTP version number (e.g., "1.1", "1.0").
