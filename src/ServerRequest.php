@@ -89,9 +89,10 @@ class ServerRequest implements ServerRequestInterface
     public static function makeWithGlobals(): self
     {
         $headers = Headers::getHeadersArrayFromGlobals();
-        $protocolVersion = str_replace('HTTP/', '', $_SERVER['SERVER_PROTOCOL'] ?? '1.1');
-        $requestTarget = $_SERVER['REQUEST_URI'] ?? '/';
-        $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+        $protocolVersion = strval($_SERVER['SERVER_PROTOCOL'] ?? '1.1');
+        $protocolVersion = str_replace('HTTP/', '', $protocolVersion);
+        $requestTarget = strval($_SERVER['REQUEST_URI'] ?? '/');
+        $method = strval($_SERVER['REQUEST_METHOD'] ?? 'GET');
 
         // TODO: identify potential risk of using globals
         return new static (
