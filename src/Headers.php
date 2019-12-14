@@ -20,10 +20,10 @@ class Headers
      */
     public static function getHeadersArrayFromGlobals(): array
     {
-        $headers = array_filter($_SERVER, ['self', 'isServerKeyAHeader'], ARRAY_FILTER_USE_KEY);
-        $headers = array_map(['self', 'wrapValuesInArray'], $headers);
+        $headers = array_filter($_SERVER, [__CLASS__, 'isServerKeyAHeader'], ARRAY_FILTER_USE_KEY);
+        $headers = array_map([__CLASS__, 'wrapValuesInArray'], $headers);
         $headerKeys = array_map('strval', array_keys($headers));
-        $headerKeys = array_map(['self', 'stripKeyOfLeadingHttpPrefix'], $headerKeys);
+        $headerKeys = array_map([__CLASS__, 'stripKeyOfLeadingHttpPrefix'], $headerKeys);
         $headerKeys = array_map('strval', array_values($headerKeys));
 
         return array_combine($headerKeys, $headers);
