@@ -5,33 +5,13 @@ declare(strict_types=1);
 namespace Patoui\Router\Tests;
 
 use InvalidArgumentException;
-use Patoui\Router\ServerRequest;
 use Patoui\Router\Stream;
 use Patoui\Router\Uri;
-use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 
 class ServerRequestTest extends TestCase
 {
-    private function getStubServerRequest(array $propertyOverrides = []) : ServerRequest
-    {
-        $properties = array_merge([
-            'protocol' => '1.1',
-            'headers' => ['content-type' => ['application/json']],
-            'body' => new Stream('Request Body'),
-            'request_target' => '/',
-            'method' => 'get',
-            'uri' => new Uri('/'),
-            'server_params' => [],
-            'cookie_params' => [],
-            'query_params' => [],
-            'uploaded_files' => [],
-        ], $propertyOverrides);
-
-        return new ServerRequest(...array_values($properties));
-    }
-
     /** @test */
     public function test_get_protocol_version() : void
     {
