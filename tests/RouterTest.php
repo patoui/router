@@ -6,7 +6,7 @@ namespace Patoui\Router\Tests;
 
 use Patoui\Router\Route;
 use Patoui\Router\Router;
-use PHPUnit\Framework\TestCase;
+use Patoui\Router\Uri;
 
 class RouterTest extends TestCase
 {
@@ -75,9 +75,10 @@ class RouterTest extends TestCase
         $router = new Router();
         $router->addRoute($homeRoute);
         $router->addRoute($aboutRoute);
+        $serverRequest = $this->getStubServerRequest(['request_target' => '/about', new Uri('/about')]);
 
         // Act
-        $resolvedRoute = $router->resolve('get', '/about');
+        $resolvedRoute = $router->resolve($serverRequest);
 
         // Assert
         $routes = $router->getRoutes();
