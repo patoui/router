@@ -21,7 +21,7 @@ class RouterTest extends TestCase
                 //
             }
         };
-        $route = new Route('get', '/', $routeController, 'index');
+        $route = new Route('get', '/', get_class($routeController), 'index');
         $router->addRoute($route);
 
         // Act
@@ -42,7 +42,7 @@ class RouterTest extends TestCase
                 //
             }
         };
-        $route = new Route('get', '/', $routeController, 'index');
+        $route = new Route('get', '/', get_class($routeController), 'index');
         $router = new Router();
 
         // Act
@@ -70,19 +70,20 @@ class RouterTest extends TestCase
                 return 'about';
             }
         };
-        $homeRoute = new Route('get', '/', $homeController, 'index');
-        $aboutRoute = new Route('get', '/about', $aboutController, 'index');
+        $homeRoute = new Route('get', '/', get_class($homeController), 'index');
+        $aboutRoute = new Route('get', '/about', get_class($aboutController), 'index');
         $router = new Router();
         $router->addRoute($homeRoute);
         $router->addRoute($aboutRoute);
         $serverRequest = $this->getStubServerRequest(['request_target' => '/about', new Uri('/about')]);
 
         // Act
-        $resolvedRoute = $router->resolve($serverRequest);
+        [$resolvedController, $resolvedMethod] = $router->resolve($serverRequest);
 
         // Assert
         $routes = $router->getRoutes();
         $this->assertEquals(2, count($routes));
-        $this->assertEquals('about', $resolvedRoute);
+        $this->assertEquals(get_class($aboutController), $resolvedController);
+        $this->assertEquals('index', $resolvedMethod);
     }
 }

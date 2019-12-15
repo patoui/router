@@ -6,7 +6,7 @@ namespace Patoui\Router;
 
 interface Routable
 {
-    public function getClassInstance() : object;
+    public function getClassName() : string;
 
     public function getClassMethodName() : string;
 
@@ -16,6 +16,5 @@ interface Routable
 
     public function getPath() : string;
 
-    /* @return mixed */
-    public function resolve();
+    public function resolve() : array;
 }

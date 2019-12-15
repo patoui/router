@@ -19,9 +19,11 @@ class RouteTest extends TestCase
                 return 'Route Controller';
             }
         };
-        $route = new Route('get', '/', $routeController, 'index');
+        $route = new Route('get', '/', get_class($routeController), 'index');
 
         // Act and Assert
-        $this->assertEquals('Route Controller', $route->resolve());
+        [$controllerName, $methodName] = $route->resolve();
+        $this->assertEquals(get_class($routeController), $controllerName);
+        $this->assertEquals('index', $methodName);
     }
 }

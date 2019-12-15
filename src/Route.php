@@ -15,8 +15,8 @@ class Route implements Routable
     /* @var string */
     private $path;
 
-    /* @var object */
-    private $classInstance;
+    /* @var string */
+    private $className;
 
     /* @var string */
     private $classMethodName;
@@ -24,7 +24,7 @@ class Route implements Routable
     public function __construct(
         string $httpVerb,
         string $path,
-        object $classInstance,
+        string $className,
         string $classMethodName
     ) {
         if (! in_array($httpVerb, ['get', 'post'])) {
@@ -33,23 +33,23 @@ class Route implements Routable
             );
         }
 
-        if (! method_exists($classInstance, $classMethodName)) {
+        if (! method_exists($className, $classMethodName)) {
             throw new MethodNotFoundException(
-                "Method '{$classMethodName}' not found on class '{$classInstance}'",
-                $classInstance,
+                "Method '{$classMethodName}' not found on class '{$className}'",
+                $className,
                 $classMethodName
             );
         }
 
         $this->httpVerb = $httpVerb;
         $this->path = $path;
-        $this->classInstance = $classInstance;
+        $this->className = $className;
         $this->classMethodName = $classMethodName;
     }
 
-    public function getClassInstance() : object
+    public function getClassName() : string
     {
-        return $this->classInstance;
+        return $this->className;
     }
 
     public function getClassMethodName() : string
@@ -75,11 +75,8 @@ class Route implements Routable
         return $this->path;
     }
 
-    /* @return mixed */
-    public function resolve()
+    public function resolve() : array
     {
-        return call_user_func(
-            [$this->getClassInstance(), $this->getClassMethodName()]
-        );
+        return [$this->getClassName(), $this->getClassMethodName()];
     }
 }
