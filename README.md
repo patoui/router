@@ -43,20 +43,101 @@ composer update patoui/router
 require 'vendor/autoload.php';
 
 use Patoui\Router\Route;
+use Patoui\Router\RouteNotFoundException;
 use Patoui\Router\Router;
 use Patoui\Router\ServerRequest;
 
-$router = new Router();
-$homeController = new class {
+class HomeController
+{
     public function index()
     {
-        echo 'Hello World!';
+        echo 'hello';
     }
-};
+}
 
-$router->addRoute(new Route('get', '/foobar', $homeController, 'index'));
+$router = new Router();
+$router->addRoute(new Route('get', '/foobar', HomeController::class, 'index'));
 
-$router->resolve(ServerRequest::makeWithGlobals());
+try {
+    [$controller, $method] = $router->resolve(ServerRequest::makeWithGlobals());
+    call_user_func([$controller, $method]);
+} catch (RouteNotFoundException $notFoundException) {
+    http_response_code(404);
+} catch (Exception $exception) {
+    http_response_code(500);
+}
+```
+
+#### Usage with PHP-DI
+
+Add PHP-DI via composer
+
+```bash
+composer require php-di/php-di
+```
+
+Example
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+use DI\ContainerBuilder;
+use Patoui\Router\Route;
+use Patoui\Router\RouteNotFoundException;
+use Patoui\Router\Router;
+use Patoui\Router\ServerRequest;
+
+$containerBuilder = new ContainerBuilder;
+$container = $containerBuilder->build();
+
+class Mailer
+{
+    public function mail($recipient, $content)
+    {
+        echo "Sent '{$content}' to '{$recipient}'";
+    }
+}
+
+class UserManager
+{
+    private $mailer;
+
+    public function __construct(Mailer $mailer)
+    {
+        $this->mailer = $mailer;
+    }
+
+    public function register($email, $password)
+    {
+        $this->mailer->mail($email, 'Hello and welcome!');
+    }
+}
+
+class HomeController
+{
+    public function __construct(UserManager $user_manager)
+    {
+        $this->user_manager = $user_manager;
+    }
+
+    public function index()
+    {
+        $this->user_manager->register('pat@email.com', 'foobar');
+    }
+}
+
+$router = new Router();
+$router->addRoute(new Route('get', '/foobar', HomeController::class, 'index'));
+
+try {
+    [$controller, $method] = $router->resolve(ServerRequest::makeWithGlobals());
+    $container->call([$controller, $method]);
+} catch (RouteNotFoundException $notFoundException) {
+    http_response_code(404);
+} catch (Exception $exception) {
+    http_response_code(500);
+}
 ```
 
 ### Testing
