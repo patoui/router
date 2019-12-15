@@ -9,16 +9,16 @@ use Prophecy\Exception\Doubler\MethodNotFoundException;
 
 class Route implements Routable
 {
-    /* @var string */
+    /** @var string */
     private $httpVerb;
 
-    /* @var string */
+    /** @var string */
     private $path;
 
-    /* @var string */
+    /** @var string */
     private $className;
 
-    /* @var string */
+    /** @var string */
     private $classMethodName;
 
     public function __construct(
@@ -33,7 +33,7 @@ class Route implements Routable
             );
         }
 
-        if (! method_exists($className, $classMethodName)) {
+        if (! class_exists($className) || ! method_exists($className, $classMethodName)) {
             throw new MethodNotFoundException(
                 "Method '{$classMethodName}' not found on class '{$className}'",
                 $className,
