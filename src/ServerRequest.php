@@ -753,7 +753,7 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withParsedBody($data)
     {
-        /** @psalm-suppress TypeDoesNotContainType */
+        /** @psalm-suppress DocblockTypeContradiction */
         if (! is_null($data) && ! is_object($data) && ! is_array($data)) {
             throw new InvalidArgumentException(
                 'Parsed body must be of type: null, array, or object'
