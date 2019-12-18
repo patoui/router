@@ -18,7 +18,7 @@ class ServerRequest implements ServerRequestInterface
     private $version;
 
     /**
-     * @var array Contains header by key and array.
+     * @var array|array<array-key, array<array-key, string>> Contains header by key and array.
      * e.g. ['content-type' => ['application/json']]
      */
     private $headers;
@@ -145,6 +145,7 @@ class ServerRequest implements ServerRequestInterface
     }
 
     /**
+     * @psalm-suppress MixedReturnTypeCoercion
      * {@inheritdoc}
      */
     public function getHeaders()
@@ -164,6 +165,7 @@ class ServerRequest implements ServerRequestInterface
     }
 
     /**
+     * @psalm-suppress MixedInferredReturnType
      * {@inheritdoc}
      */
     public function getHeader($name)
