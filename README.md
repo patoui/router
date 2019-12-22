@@ -121,18 +121,22 @@ class HomeController
         $this->user_manager = $user_manager;
     }
 
-    public function index()
+    public function show($id)
     {
+        echo $id . PHP_EOL;
         $this->user_manager->register('pat@email.com', 'foobar');
     }
 }
 
 $router = new Router();
-$router->addRoute(new Route('get', '/foobar', HomeController::class, 'index'));
+$router->addRoute(new Route('get', '/foobar/{id}', HomeController::class, 'show'));
 
 try {
-    [$controller, $method] = $router->resolve(ServerRequest::makeWithGlobals());
-    $container->call([$controller, $method]);
+    $resolvedRoute = $router->resolve(ServerRequest::makeWithGlobals());
+    $container->call(
+        [$resolvedRoute->getClassName(), $resolvedRoute->getClassMethodName()],
+        $resolvedRoute->getParameters()
+    );
 } catch (RouteNotFoundException $notFoundException) {
     http_response_code(404);
 } catch (Exception $exception) {
