@@ -78,12 +78,38 @@ class RouterTest extends TestCase
         $serverRequest = $this->getStubServerRequest(['request_target' => '/about', new Uri('/about')]);
 
         // Act
-        [$resolvedController, $resolvedMethod] = $router->resolve($serverRequest);
+        $resolvedRoute = $router->resolve($serverRequest);
 
         // Assert
         $routes = $router->getRoutes();
         $this->assertEquals(2, count($routes));
-        $this->assertEquals(get_class($aboutController), $resolvedController);
-        $this->assertEquals('index', $resolvedMethod);
+        $this->assertEquals(get_class($aboutController), $resolvedRoute->getClassName());
+        $this->assertEquals('index', $resolvedRoute->getClassMethodName());
+    }
+
+    /** @test */
+    public function can_resolve_route_with_parameters()
+    {
+        // Arrange
+        $postController = new class() {
+            public function show($id)
+            {
+                return $id;
+            }
+        };
+        $router = new Router();
+        $route = new Route('get', '/post/{id}', get_class($postController), 'show');
+        $router->addRoute($route);
+        $serverRequest = $this->getStubServerRequest(['request_target' => '/post/123', new Uri('/post/123')]);
+
+        // Act
+        $resolvedRoute = $router->resolve($serverRequest);
+
+        // Assert
+        $routes = $router->getRoutes();
+        $this->assertEquals(1, count($routes));
+        $this->assertEquals(get_class($postController), $resolvedRoute->getClassName());
+        $this->assertEquals('show', $resolvedRoute->getClassMethodName());
+        $this->assertEquals([123], $resolvedRoute->getParameters());
     }
 }

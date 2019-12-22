@@ -10,11 +10,11 @@ interface Routable
 
     public function getClassMethodName() : string;
 
+    public function getParameters() : array;
+
     public function getHttpVerb() : string;
 
     public function isHttpVerbAndPathAMatch(string $httpVerb, string $path) : bool;
 
     public function getPath() : string;
-
-    public function resolve() : array;
 }

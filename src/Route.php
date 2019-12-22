@@ -21,6 +21,9 @@ class Route implements Routable
     /** @var string */
     private $classMethodName;
 
+    /** @var array */
+    private $parameters;
+
     public function __construct(
         string $httpVerb,
         string $path,
@@ -45,6 +48,7 @@ class Route implements Routable
         $this->path = $path;
         $this->className = $className;
         $this->classMethodName = $classMethodName;
+        $this->parameters = [];
     }
 
     public function getClassName() : string
@@ -66,8 +70,20 @@ class Route implements Routable
         string $httpVerb,
         string $path
     ) : bool {
-        return strtolower($this->getHttpVerb()) === strtolower($httpVerb) &&
-            trim($this->getPath(), '/') === trim($path, '/');
+        $pathParts = explode('/', $path);
+        $routePathParts = explode('/', $this->getPath());
+
+        foreach ($routePathParts as $key => $routePathPart) {
+            if (isset($pathParts[$key]) && preg_match('/{.+}/', $routePathPart)) {
+                $this->parameters[] = $pathParts[$key];
+                $routePathParts[$key] = $pathParts[$key];
+            }
+        }
+
+        $routePath = implode('/', $routePathParts);
+
+        return strcasecmp($this->getHttpVerb(), $httpVerb) === 0 &&
+            trim($routePath, '/') === trim($path, '/');
     }
 
     public function getPath() : string
@@ -75,8 +91,8 @@ class Route implements Routable
         return $this->path;
     }
 
-    public function resolve() : array
+    public function getParameters() : array
     {
-        return [$this->getClassName(), $this->getClassMethodName()];
+        return $this->parameters;
     }
 }

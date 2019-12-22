@@ -23,15 +23,15 @@ class Router
 
     /**
      * @param  ServerRequestInterface $serverRequest
-     * @return mixed
+     * @return Route
      * @throws RouteNotFoundException
      */
-    public function resolve(ServerRequestInterface $serverRequest)
+    public function resolve(ServerRequestInterface $serverRequest) : Route
     {
         /* @var $route Routable */
         foreach ($this->routes as $route) {
             if ($route->isHttpVerbAndPathAMatch($serverRequest->getMethod(), $serverRequest->getRequestTarget())) {
-                return $route->resolve();
+                return $route;
             }
         }
 
