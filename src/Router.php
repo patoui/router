@@ -11,11 +11,19 @@ class Router
     /* @var array<Routable> */
     private $routes;
 
+    public function __construct()
+    {
+        $this->routes = [];
+    }
+
     public function addRoute(Routable $routable) : void
     {
         $this->routes[] = $routable;
     }
 
+    /**
+     * @return array
+     */
     public function getRoutes() : array
     {
         return $this->routes;
@@ -23,10 +31,10 @@ class Router
 
     /**
      * @param  ServerRequestInterface $serverRequest
-     * @return Route
+     * @return mixed TODO: should be Routable but php-psalm throwing errors.
      * @throws RouteNotFoundException
      */
-    public function resolve(ServerRequestInterface $serverRequest) : Route
+    public function resolve(ServerRequestInterface $serverRequest)
     {
         /* @var $route Routable */
         foreach ($this->routes as $route) {
