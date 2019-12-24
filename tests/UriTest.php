@@ -26,4 +26,17 @@ class UriTest extends TestCase
         // Assert
         $this->assertEquals('https', $scheme);
     }
+
+    /** @test */
+    public function test_get_authority(): void
+    {
+        // Arrange
+        $uri = $this->getStubUri('root@example.com:8888/foo/bar?q=blah');
+
+        // Act
+        $authority = $uri->getAuthority();
+
+        // Assert
+        $this->assertEquals('root@example.com:8888', $authority);
+    }
 }
