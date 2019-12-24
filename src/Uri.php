@@ -8,25 +8,25 @@ use Psr\Http\Message\UriInterface;
 
 class Uri implements UriInterface
 {
-    /** @var string */
+    /** @var null|string */
     private $scheme;
 
-    /** @var string */
+    /** @var null|string */
     private $host;
 
-    /** @var string */
+    /** @var null|string */
     private $port;
 
-    /** @var string */
+    /** @var null|string */
     private $user;
 
-    /** @var string */
+    /** @var null|string */
     private $path;
 
-    /** @var string */
+    /** @var null|string */
     private $query;
 
-    /** @var string */
+    /** @var null|string */
     private $fragment;
 
     public function __construct(string $uri)
@@ -40,32 +40,21 @@ class Uri implements UriInterface
         $query = parse_url($uri, PHP_URL_QUERY);
         $fragment = parse_url($uri, PHP_URL_FRAGMENT);
 
-        $this->scheme = $scheme ?? null;
-        $this->host = $host ?? null;
+        $this->scheme = $scheme ?: null;
+        $this->host = $host ?: null;
         $this->port = $port;
-        $this->user = $user ?? null;
-        $this->path = $path ?? null;
-        $this->query = $query ?? null;
-        $this->fragment = $fragment ?? null;
+        $this->user = $user ?: null;
+        $this->path = $path ?: null;
+        $this->query = $query ?: null;
+        $this->fragment = $fragment ?: null;
     }
 
     /**
-     * Retrieve the scheme component of the URI.
-     *
-     * If no scheme is present, this method MUST return an empty string.
-     *
-     * The value returned MUST be normalized to lowercase, per RFC 3986
-     * Section 3.1.
-     *
-     * The trailing ":" character is not part of the scheme and MUST NOT be
-     * added.
-     *
-     * @see https://tools.ietf.org/html/rfc3986#section-3.1
-     * @return string The URI scheme.
+     * {@inheritdoc}
      */
     public function getScheme()
     {
-        // TODO: Implement getScheme() method.
+        return $this->scheme;
     }
 
     /**
