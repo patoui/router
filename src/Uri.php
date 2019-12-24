@@ -21,6 +21,9 @@ class Uri implements UriInterface
     private $user;
 
     /** @var null|string */
+    private $password;
+
+    /** @var null|string */
     private $path;
 
     /** @var null|string */
@@ -36,7 +39,8 @@ class Uri implements UriInterface
         $port = parse_url($uri, PHP_URL_PORT);
         $port = $port ? strval($port) : '80';
         $user = parse_url($uri, PHP_URL_USER);
-        $path = parse_url($uri, PHP_URL_PASS);
+        $password = parse_url($uri, PHP_URL_PASS);
+        $path = parse_url($uri, PHP_URL_PATH);
         $query = parse_url($uri, PHP_URL_QUERY);
         $fragment = parse_url($uri, PHP_URL_FRAGMENT);
 
@@ -45,6 +49,7 @@ class Uri implements UriInterface
         $this->port = $port;
         $this->user = $user ?: null;
         $this->path = $path ?: null;
+        $this->password = $password ?: null;
         $this->query = $query ?: null;
         $this->fragment = $fragment ?: null;
     }
@@ -66,23 +71,15 @@ class Uri implements UriInterface
     }
 
     /**
-     * Retrieve the user information component of the URI.
-     *
-     * If no user information is present, this method MUST return an empty
-     * string.
-     *
-     * If a user is present in the URI, this will return that value;
-     * additionally, if the password is also present, it will be appended to the
-     * user value, with a colon (":") separating the values.
-     *
-     * The trailing "@" character is not part of the user information and MUST
-     * NOT be added.
-     *
-     * @return string The URI user information, in "username[:password]" format.
+     * {@inheritdoc}
      */
     public function getUserInfo()
     {
-        // TODO: Implement getUserInfo() method.
+        if (! $this->user) {
+            return '';
+        }
+
+        return $this->user . ($this->password ? ":{$this->password}" : '');
     }
 
     /**

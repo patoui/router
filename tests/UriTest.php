@@ -39,4 +39,30 @@ class UriTest extends TestCase
         // Assert
         $this->assertEquals('root@example.com:8888', $authority);
     }
+
+    /** @test */
+    public function test_get_user_info(): void
+    {
+        // Arrange
+        $uri = $this->getStubUri('https://root:some_password@example.com:8888/foo/bar?q=blah');
+
+        // Act
+        $userInfo = $uri->getUserInfo();
+
+        // Assert
+        $this->assertEquals('root:some_password', $userInfo);
+    }
+
+    /** @test */
+    public function test_get_user_info_empty_when_not_present(): void
+    {
+        // Arrange
+        $uri = $this->getStubUri('https://example.com:8888/foo/bar?q=blah');
+
+        // Act
+        $userInfo = $uri->getUserInfo();
+
+        // Assert
+        $this->assertEquals('', $userInfo);
+    }
 }
