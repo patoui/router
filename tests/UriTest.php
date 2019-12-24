@@ -65,4 +65,17 @@ class UriTest extends TestCase
         // Assert
         $this->assertEquals('', $userInfo);
     }
+
+    /** @test */
+    public function test_get_host(): void
+    {
+        // Arrange
+        $uri = $this->getStubUri('https://example.com:8888/foo/bar?q=blah');
+
+        // Act
+        $host = $uri->getHost();
+
+        // Assert
+        $this->assertEquals('example.com', $host);
+    }
 }
