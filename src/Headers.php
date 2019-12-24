@@ -6,7 +6,7 @@ namespace Patoui\Router;
 
 class Headers
 {
-    /* @var array */
+    /** @var array */
     private $headers;
 
     public function __construct(array $headers = [])

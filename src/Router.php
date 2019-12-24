@@ -8,7 +8,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class Router
 {
-    /* @var array<Routable> */
+    /** @var array<Routable> */
     private $routes;
 
     public function __construct()
@@ -22,7 +22,7 @@ class Router
     }
 
     /**
-     * @return array
+     * @return array<Routable>
      */
     public function getRoutes() : array
     {
@@ -31,12 +31,11 @@ class Router
 
     /**
      * @param  ServerRequestInterface $serverRequest
-     * @return mixed TODO: should be Routable but php-psalm throwing errors.
+     * @return Routable
      * @throws RouteNotFoundException
      */
     public function resolve(ServerRequestInterface $serverRequest)
     {
-        /* @var $route Routable */
         foreach ($this->routes as $route) {
             if ($route->isHttpVerbAndPathAMatch($serverRequest->getMethod(), $serverRequest->getRequestTarget())) {
                 return $route;
