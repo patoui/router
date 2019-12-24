@@ -8,28 +8,28 @@ use Psr\Http\Message\UriInterface;
 
 class Uri implements UriInterface
 {
-    /** @var null|string */
+    /** @var string */
     private $scheme;
 
-    /** @var null|string */
+    /** @var string */
     private $host;
 
-    /** @var null|int */
+    /** @var int */
     private $port;
 
-    /** @var null|string */
+    /** @var string */
     private $user;
 
-    /** @var null|string */
+    /** @var string */
     private $password;
 
-    /** @var null|string */
+    /** @var string */
     private $path;
 
-    /** @var null|string */
+    /** @var string */
     private $query;
 
-    /** @var null|string */
+    /** @var string */
     private $fragment;
 
     public function __construct(string $uri)
@@ -44,14 +44,14 @@ class Uri implements UriInterface
         $query = parse_url($uri, PHP_URL_QUERY);
         $fragment = parse_url($uri, PHP_URL_FRAGMENT);
 
-        $this->scheme = $scheme ?: null;
-        $this->host = $host ?: null;
+        $this->scheme = $scheme ?: '';
+        $this->host = $host ?: '';
         $this->port = $port;
-        $this->user = $user ?: null;
-        $this->path = $path ?: null;
-        $this->password = $password ?: null;
-        $this->query = $query ?: null;
-        $this->fragment = $fragment ?: null;
+        $this->user = $user ?: '';
+        $this->path = $path ?: '';
+        $this->password = $password ?: '';
+        $this->query = $query ?: '';
+        $this->fragment = $fragment ?: '';
     }
 
     /**
