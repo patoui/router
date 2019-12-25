@@ -104,4 +104,17 @@ class UriTest extends TestCase
         // Assert
         $this->assertEquals('/foo/bar', $path);
     }
+
+    /** @test */
+    public function test_get_query(): void
+    {
+        // Arrange
+        $uri = $this->getStubUri('https://root:some_password@example.com:8888/foo/bar?q=blah');
+
+        // Act
+        $path = $uri->getQuery();
+
+        // Assert
+        $this->assertEquals('q=blah', $path);
+    }
 }
