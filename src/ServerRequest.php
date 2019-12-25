@@ -35,10 +35,10 @@ class ServerRequest implements ServerRequestInterface
     /** @var UriInterface */
     private $uri;
 
-    /** @var array */
+    /** @var array<mixed> */
     private $serverParams;
 
-    /** @var array */
+    /** @var array<mixed> */
     private $cookieParams;
 
     /** @var array<mixed> */
