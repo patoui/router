@@ -112,9 +112,22 @@ class UriTest extends TestCase
         $uri = $this->getStubUri('https://root:some_password@example.com:8888/foo/bar?q=blah');
 
         // Act
-        $path = $uri->getQuery();
+        $query = $uri->getQuery();
 
         // Assert
-        $this->assertEquals('q=blah', $path);
+        $this->assertEquals('q=blah', $query);
+    }
+
+    /** @test */
+    public function test_get_fragment(): void
+    {
+        // Arrange
+        $uri = $this->getStubUri('https://root:some_password@example.com:8888/foo/bar?q=blah#section_1');
+
+        // Act
+        $fragment = $uri->getFragment();
+
+        // Assert
+        $this->assertEquals('section_1', $fragment);
     }
 }
