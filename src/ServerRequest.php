@@ -44,7 +44,7 @@ class ServerRequest implements ServerRequestInterface
     /** @var array */
     private $queryParams;
 
-    /** @var array */
+    /** @var array<UploadedFileInterface> */
     private $uploadedFiles;
 
     /** @var null|array|object */
