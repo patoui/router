@@ -50,7 +50,7 @@ class ServerRequest implements ServerRequestInterface
     /** @var null|array|object */
     private $parsedBody;
 
-    /** @var array */
+    /** @var array<mixed> */
     private $attributes;
 
     public function __construct(
