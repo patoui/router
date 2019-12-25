@@ -41,7 +41,7 @@ class ServerRequest implements ServerRequestInterface
     /** @var array */
     private $cookieParams;
 
-    /** @var array */
+    /** @var array<mixed> */
     private $queryParams;
 
     /** @var array<UploadedFileInterface> */
