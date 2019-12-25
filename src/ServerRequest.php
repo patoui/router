@@ -18,7 +18,7 @@ class ServerRequest implements ServerRequestInterface
     private $version;
 
     /**
-     * @var array|array<array-key, array<array-key, string>> Contains header by key and array.
+     * @var array<array> Contains header by key and array.
      * e.g. ['content-type' => ['application/json']]
      */
     private $headers;
