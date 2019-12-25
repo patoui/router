@@ -139,7 +139,16 @@ class Uri implements UriInterface
      */
     public function withScheme($scheme)
     {
-        // TODO: Implement withScheme() method.
+        if (preg_match('/^[a-zA-Z0-9+-.]+$/', $scheme) === 0) {
+            throw new \InvalidArgumentException(
+                "Invalid scheme {$scheme}; please reference RFC3986 for additional details"
+            );
+        }
+
+        $instance = clone $this;
+        $instance->scheme = strtolower($scheme);
+
+        return $instance;
     }
 
     /**

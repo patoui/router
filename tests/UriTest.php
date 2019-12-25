@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Patoui\Router\Tests;
 
+use InvalidArgumentException;
 use Patoui\Router\Uri;
 
 class UriTest extends TestCase
@@ -129,5 +130,32 @@ class UriTest extends TestCase
 
         // Assert
         $this->assertEquals('section_1', $fragment);
+    }
+
+    /** @test */
+    public function test_with_scheme(): void
+    {
+        // Arrange
+        $uri = $this->getStubUri('ftp://example.com');
+
+        // Pre-assert
+        $this->assertEquals('ftp', $uri->getScheme());
+
+        // Act
+        $newUri = $uri->withScheme('https');
+
+        // Assert
+        $this->assertEquals('https', $newUri->getScheme());
+    }
+
+    /** @test */
+    public function test_with_scheme_throws_exception_when_invalid(): void
+    {
+        // Arrange
+        $uri = $this->getStubUri('http://example.com');
+        $this->expectException(InvalidArgumentException::class);
+
+        // Act
+        $uri->withScheme('$@#%^$#^$#&*^%');
     }
 }
