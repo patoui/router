@@ -69,9 +69,9 @@ class Uri implements UriInterface
     {
         $userInfo = $this->getUserInfo();
         $port = $this->getPort();
-        $authority = ($userInfo !== '' ? $userInfo . '@' : '');
+        $authority = ($userInfo !== '' ? $userInfo.'@' : '');
         $authority .=  $this->getHost();
-        $authority .= ($port !== null ? ':' . $port : '');
+        $authority .= ($port !== null ? ':'.$port : '');
 
         return $authority;
     }
@@ -85,7 +85,7 @@ class Uri implements UriInterface
             return '';
         }
 
-        return $this->user . ($this->password ? ":{$this->password}" : '');
+        return $this->user.($this->password ? ":{$this->password}" : '');
     }
 
     /**
@@ -176,7 +176,7 @@ class Uri implements UriInterface
      */
     public function withHost($host)
     {
-        if (!is_string($host)) {
+        if (! is_string($host)) {
             throw new \InvalidArgumentException("Invalid host: {$host}");
         }
 
@@ -195,7 +195,7 @@ class Uri implements UriInterface
      */
     public function withPort($port)
     {
-        if (!is_int($port)) {
+        if (! is_int($port)) {
             throw new \InvalidArgumentException("Invalid port: {$port}");
         }
 
@@ -210,7 +210,7 @@ class Uri implements UriInterface
      */
     public function withPath($path)
     {
-        if (!is_string($path)) {
+        if (! is_string($path)) {
             throw new \InvalidArgumentException("Invalid path: {$path}");
         }
 
@@ -225,7 +225,7 @@ class Uri implements UriInterface
      */
     public function withQuery($query)
     {
-        if (!is_string($query)) {
+        if (! is_string($query)) {
             throw new \InvalidArgumentException("Invalid query: {$query}");
         }
 
@@ -240,7 +240,7 @@ class Uri implements UriInterface
      */
     public function withFragment($fragment)
     {
-        if (!is_string($fragment)) {
+        if (! is_string($fragment)) {
             throw new \InvalidArgumentException("Invalid fragment: {$fragment}");
         }
 
@@ -273,8 +273,8 @@ class Uri implements UriInterface
             }
         }
 
-        $uri .= $query ? '?' . ltrim($query, '?') : '';
-        $uri .= $fragment ? '#' . ltrim($fragment, '#') : '';
+        $uri .= $query ? '?'.ltrim($query, '?') : '';
+        $uri .= $fragment ? '#'.ltrim($fragment, '#') : '';
 
         return $uri;
     }
