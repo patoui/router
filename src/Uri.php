@@ -152,22 +152,17 @@ class Uri implements UriInterface
     }
 
     /**
-     * Return an instance with the specified user information.
-     *
-     * This method MUST retain the state of the current instance, and return
-     * an instance that contains the specified user information.
-     *
-     * Password is optional, but the user information MUST include the
-     * user; an empty string for the user is equivalent to removing user
-     * information.
-     *
-     * @param  string  $user  The user name to use for authority.
-     * @param  null|string  $password  The password associated with $user.
-     * @return static A new instance with the specified user information.
+     * {@inheritdoc}
      */
     public function withUserInfo($user, $password = null)
     {
-        // TODO: Implement withUserInfo() method.
+        $instance = clone $this;
+        $instance->user = $user;
+        if ($password) {
+            $instance->password = $password;
+        }
+
+        return $instance;
     }
 
     /**

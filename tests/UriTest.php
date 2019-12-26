@@ -158,4 +158,17 @@ class UriTest extends TestCase
         // Act
         $uri->withScheme('$@#%^$#^$#&*^%');
     }
+
+    /** @test */
+    public function test_with_user_info(): void
+    {
+        // Arrange
+        $uri = $this->getStubUri('http://example.com');
+
+        // Act
+        $newUri = $uri->withUserInfo('admin', 'password');
+
+        // Assert
+        $this->assertEquals('admin:password', $newUri->getUserInfo());
+    }
 }
