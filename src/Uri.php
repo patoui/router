@@ -230,22 +230,18 @@ class Uri implements UriInterface
     }
 
     /**
-     * Return an instance with the specified URI fragment.
-     *
-     * This method MUST retain the state of the current instance, and return
-     * an instance that contains the specified URI fragment.
-     *
-     * Users can provide both encoded and decoded fragment characters.
-     * Implementations ensure the correct encoding as outlined in getFragment().
-     *
-     * An empty fragment value is equivalent to removing the fragment.
-     *
-     * @param  string  $fragment  The fragment to use with the new instance.
-     * @return static A new instance with the specified fragment.
+     * {@inheritdoc}
      */
     public function withFragment($fragment)
     {
-        // TODO: Implement withFragment() method.
+        if (!is_string($fragment)) {
+            throw new \InvalidArgumentException("Invalid fragment: {$fragment}");
+        }
+
+        $instance = clone $this;
+        $instance->fragment = ltrim($fragment, '#');
+
+        return $instance;
     }
 
     /**

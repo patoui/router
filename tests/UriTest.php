@@ -280,4 +280,28 @@ class UriTest extends TestCase
         // Act
         $uri->withQuery(9999);
     }
+
+    /** @test */
+    public function test_with_fragment(): void
+    {
+        // Arrange
+        $uri = $this->getStubUri('http://example.com/#section_1');
+
+        // Act
+        $newUri = $uri->withFragment('#section_99');
+
+        // Assert
+        $this->assertEquals('section_99', $newUri->getFragment());
+    }
+
+    /** @test */
+    public function test_with_fragment_invalid_value_throws_exception(): void
+    {
+        // Arrange
+        $uri = $this->getStubUri('http://example.com');
+        $this->expectException(InvalidArgumentException::class);
+
+        // Act
+        $uri->withQuery(9999);
+    }
 }
