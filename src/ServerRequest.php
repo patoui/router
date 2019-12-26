@@ -15,43 +15,43 @@ class ServerRequest implements ServerRequestInterface
     /**
      * @var string Represent the HTTP version number (e.g., "1.1", "1.0")
      */
-    private $version;
+    private string $version;
 
     /**
      * @var array<array> Contains header by key and array.
      * e.g. ['content-type' => ['application/json']]
      */
-    private $headers;
+    private array $headers;
 
     /** @var StreamInterface */
-    private $body;
+    private StreamInterface $body;
 
     /** @var string */
-    private $requestTarget;
+    private string $requestTarget;
 
     /** @var string */
-    private $method;
+    private string $method;
 
     /** @var UriInterface */
-    private $uri;
+    private UriInterface $uri;
 
     /** @var array<mixed> */
-    private $serverParams;
+    private array $serverParams;
 
     /** @var array<mixed> */
-    private $cookieParams;
+    private array $cookieParams;
 
     /** @var array<mixed> */
-    private $queryParams;
+    private array $queryParams;
 
     /** @var array<UploadedFileInterface> */
-    private $uploadedFiles;
+    private array $uploadedFiles;
 
     /** @var null|array<mixed>|object */
     private $parsedBody;
 
     /** @var array<mixed> */
-    private $attributes;
+    private array $attributes;
 
     public function __construct(
         string $version,
@@ -68,8 +68,10 @@ class ServerRequest implements ServerRequestInterface
         $this->validateProtocolVersion($version);
         $this->validateHeaders($headers);
         $this->validateMethod($method);
+        $this->validateUploadedFiles($uploadedFiles);
 
         $this->version = $version;
+        /** @psalm-suppress MixedPropertyTypeCoercion */
         $this->headers = $headers;
         $this->body = $body;
         $this->requestTarget = $requestTarget;
@@ -78,6 +80,7 @@ class ServerRequest implements ServerRequestInterface
         $this->serverParams = $serverParams;
         $this->cookieParams = $cookieParams;
         $this->queryParams = $queryParams;
+        /** @psalm-suppress MixedPropertyTypeCoercion */
         $this->uploadedFiles = $uploadedFiles;
         $this->attributes = [];
     }
@@ -165,7 +168,7 @@ class ServerRequest implements ServerRequestInterface
     }
 
     /**
-     * @psalm-suppress MixedInferredReturnType
+     * @psalm-suppress MixedReturnTypeCoercion
      * {@inheritdoc}
      */
     public function getHeader($name)
@@ -422,6 +425,17 @@ class ServerRequest implements ServerRequestInterface
      */
     public function withUploadedFiles(array $uploadedFiles)
     {
+        $uploadedFiles = $this->validateUploadedFiles($uploadedFiles);
+
+        $instance = clone $this;
+        /** @psalm-suppress MixedPropertyTypeCoercion */
+        $instance->uploadedFiles = $uploadedFiles;
+
+        return $instance;
+    }
+
+    private function validateUploadedFiles(array $uploadedFiles) : array
+    {
         $filteredUploadedFiles = array_filter($uploadedFiles, function ($uploadedFile) {
             return $uploadedFile instanceof UploadedFileInterface;
         });
@@ -433,10 +447,7 @@ class ServerRequest implements ServerRequestInterface
             );
         }
 
-        $instance = clone $this;
-        $instance->uploadedFiles = $uploadedFiles;
-
-        return $instance;
+        return $filteredUploadedFiles;
     }
 
     /**

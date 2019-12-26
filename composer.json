@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "php": "^7.3",
+        "php": "^7.4",
         "phpspec/prophecy": "^1.9",
         "psr/http-message": "^1.0"
     },
