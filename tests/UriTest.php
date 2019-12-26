@@ -304,4 +304,14 @@ class UriTest extends TestCase
         // Act
         $uri->withQuery(9999);
     }
+
+    /** @test */
+    public function test_tostring(): void
+    {
+        // Arrange
+        $uri = $this->getStubUri('http://example.com:8888/foo/bar?q=php#section_1');
+
+        // Act & Assert
+        $this->assertEquals('http://example.com:8888/foo/bar?q=php#section_1', $uri->__toString());
+    }
 }
