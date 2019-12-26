@@ -208,4 +208,28 @@ class UriTest extends TestCase
         // Act
         $uri->withHost(111);
     }
+
+    /** @test */
+    public function test_with_port(): void
+    {
+        // Arrange
+        $uri = $this->getStubUri('http://example.com:8888');
+
+        // Act
+        $newUri = $uri->withPort(9999);
+
+        // Assert
+        $this->assertEquals(9999, $newUri->getPort());
+    }
+
+    /** @test */
+    public function test_with_port_invalid_value_throws_exception(): void
+    {
+        // Arrange
+        $uri = $this->getStubUri('http://example.com');
+        $this->expectException(InvalidArgumentException::class);
+
+        // Act
+        $uri->withPort('foobar');
+    }
 }
