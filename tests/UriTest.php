@@ -232,4 +232,28 @@ class UriTest extends TestCase
         // Act
         $uri->withPort('foobar');
     }
+
+    /** @test */
+    public function test_with_path(): void
+    {
+        // Arrange
+        $uri = $this->getStubUri('http://example.com/baz');
+
+        // Act
+        $newUri = $uri->withPath('foo/bar');
+
+        // Assert
+        $this->assertEquals('foo/bar', $newUri->getPath());
+    }
+
+    /** @test */
+    public function test_with_path_invalid_value_throws_exception(): void
+    {
+        // Arrange
+        $uri = $this->getStubUri('http://example.com');
+        $this->expectException(InvalidArgumentException::class);
+
+        // Act
+        $uri->withPath(9999);
+    }
 }

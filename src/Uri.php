@@ -200,30 +200,18 @@ class Uri implements UriInterface
     }
 
     /**
-     * Return an instance with the specified path.
-     *
-     * This method MUST retain the state of the current instance, and return
-     * an instance that contains the specified path.
-     *
-     * The path can either be empty or absolute (starting with a slash) or
-     * rootless (not starting with a slash). Implementations MUST support all
-     * three syntaxes.
-     *
-     * If the path is intended to be domain-relative rather than path relative then
-     * it must begin with a slash ("/"). Paths not starting with a slash ("/")
-     * are assumed to be relative to some base path known to the application or
-     * consumer.
-     *
-     * Users can provide both encoded and decoded path characters.
-     * Implementations ensure the correct encoding as outlined in getPath().
-     *
-     * @param  string  $path  The path to use with the new instance.
-     * @return static A new instance with the specified path.
-     * @throws \InvalidArgumentException for invalid paths.
+     * {@inheritdoc}
      */
     public function withPath($path)
     {
-        // TODO: Implement withPath() method.
+        if (!is_string($path)) {
+            throw new \InvalidArgumentException("Invalid path: {$path}");
+        }
+
+        $instance = clone $this;
+        $instance->path = $path;
+
+        return $instance;
     }
 
     /**
