@@ -166,20 +166,22 @@ class Uri implements UriInterface
     }
 
     /**
-     * Return an instance with the specified host.
-     *
-     * This method MUST retain the state of the current instance, and return
-     * an instance that contains the specified host.
-     *
-     * An empty host value is equivalent to removing the host.
-     *
-     * @param  string  $host  The hostname to use with the new instance.
-     * @return static A new instance with the specified host.
-     * @throws \InvalidArgumentException for invalid hostnames.
+     * {@inheritdoc}
      */
     public function withHost($host)
     {
-        // TODO: Implement withHost() method.
+        if (!is_string($host)) {
+            throw new \InvalidArgumentException("Invalid host: {$host}");
+        }
+
+        if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+            $host = "[{$host}]";
+        }
+
+        $instance = clone $this;
+        $instance->host = $host;
+
+        return $instance;
     }
 
     /**

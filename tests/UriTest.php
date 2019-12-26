@@ -171,4 +171,41 @@ class UriTest extends TestCase
         // Assert
         $this->assertEquals('admin:password', $newUri->getUserInfo());
     }
+
+    /** @test */
+    public function test_with_host(): void
+    {
+        // Arrange
+        $uri = $this->getStubUri('http://example.com');
+
+        // Act
+        $newUri = $uri->withHost('192.168.1.1');
+
+        // Assert
+        $this->assertEquals('192.168.1.1', $newUri->getHost());
+    }
+
+    /** @test */
+    public function test_with_host_ipv6(): void
+    {
+        // Arrange
+        $uri = $this->getStubUri('http://example.com');
+
+        // Act
+        $newUri = $uri->withHost('::1');
+
+        // Assert
+        $this->assertEquals('[::1]', $newUri->getHost());
+    }
+
+    /** @test */
+    public function test_with_host_invalid_value_throws_exception(): void
+    {
+        // Arrange
+        $uri = $this->getStubUri('http://example.com');
+        $this->expectException(InvalidArgumentException::class);
+
+        // Act
+        $uri->withHost(111);
+    }
 }
