@@ -256,4 +256,28 @@ class UriTest extends TestCase
         // Act
         $uri->withPath(9999);
     }
+
+    /** @test */
+    public function test_with_query(): void
+    {
+        // Arrange
+        $uri = $this->getStubUri('http://example.com/?q=php');
+
+        // Act
+        $newUri = $uri->withQuery('?foo=bar');
+
+        // Assert
+        $this->assertEquals('foo=bar', $newUri->getQuery());
+    }
+
+    /** @test */
+    public function test_with_query_invalid_value_throws_exception(): void
+    {
+        // Arrange
+        $uri = $this->getStubUri('http://example.com');
+        $this->expectException(InvalidArgumentException::class);
+
+        // Act
+        $uri->withQuery(9999);
+    }
 }
