@@ -176,6 +176,7 @@ class Uri implements UriInterface
      */
     public function withHost($host)
     {
+        /** @psalm-suppress DocblockTypeContradiction */
         if (! is_string($host)) {
             throw new \InvalidArgumentException("Invalid host: {$host}");
         }
@@ -195,6 +196,7 @@ class Uri implements UriInterface
      */
     public function withPort($port)
     {
+        /** @psalm-suppress DocblockTypeContradiction */
         if (! is_int($port)) {
             throw new \InvalidArgumentException("Invalid port: {$port}");
         }
@@ -210,6 +212,7 @@ class Uri implements UriInterface
      */
     public function withPath($path)
     {
+        /** @psalm-suppress DocblockTypeContradiction */
         if (! is_string($path)) {
             throw new \InvalidArgumentException("Invalid path: {$path}");
         }
@@ -225,6 +228,7 @@ class Uri implements UriInterface
      */
     public function withQuery($query)
     {
+        /** @psalm-suppress DocblockTypeContradiction */
         if (! is_string($query)) {
             throw new \InvalidArgumentException("Invalid query: {$query}");
         }
@@ -240,6 +244,7 @@ class Uri implements UriInterface
      */
     public function withFragment($fragment)
     {
+        /** @psalm-suppress DocblockTypeContradiction */
         if (! is_string($fragment)) {
             throw new \InvalidArgumentException("Invalid fragment: {$fragment}");
         }
