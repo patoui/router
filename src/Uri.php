@@ -70,7 +70,7 @@ class Uri implements UriInterface
         $userInfo = $this->getUserInfo();
         $port = $this->getPort();
         $authority = ($userInfo !== '' ? $userInfo.'@' : '');
-        $authority .=  $this->getHost();
+        $authority .= $this->getHost();
         $authority .= ($port !== null ? ':'.$port : '');
 
         return $authority;
@@ -267,7 +267,7 @@ class Uri implements UriInterface
             if ($authority && strlen(ltrim($path, '/')) === 0) {
                 $uri .= '/';
             } elseif (!$authority && strpos($path, '//') === 0) {
-                $uri .= '/' . ltrim($path, '/');
+                $uri .= '/'.ltrim($path, '/');
             } else {
                 $uri .= $path;
             }
