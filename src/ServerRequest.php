@@ -10,7 +10,7 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriInterface;
 
-class ServerRequest implements ServerRequestInterface
+final class ServerRequest implements ServerRequestInterface
 {
     /**
      * @var string Represent the HTTP version number (e.g., "1.1", "1.0")
@@ -53,6 +53,19 @@ class ServerRequest implements ServerRequestInterface
     /** @var array<mixed> */
     private array $attributes;
 
+    /**
+     * ServerRequest constructor.
+     * @param string                       $version
+     * @param array<array>                 $headers
+     * @param StreamInterface              $body
+     * @param string                       $requestTarget
+     * @param string                       $method
+     * @param UriInterface                 $uri
+     * @param array<mixed>                 $serverParams
+     * @param array<mixed>                 $cookieParams
+     * @param array<string>                $queryParams
+     * @param array<UploadedFileInterface> $uploadedFiles
+     */
     public function __construct(
         string $version,
         array $headers,
@@ -98,7 +111,7 @@ class ServerRequest implements ServerRequestInterface
         $method = strval($_SERVER['REQUEST_METHOD'] ?? 'GET');
 
         // TODO: identify potential risk of using globals
-        return new static (
+        return new static(
             $protocolVersion,
             $headers,
             new Stream('body'),
@@ -238,7 +251,7 @@ class ServerRequest implements ServerRequestInterface
      * Verifies the headers are valid.
      *
      * @throws InvalidArgumentException
-     * @param  array  $headers Headers for the incoming request
+     * @param  array<array> $headers Headers for the incoming request
      */
     private function validateHeaders(array $headers) : void
     {
@@ -367,7 +380,7 @@ class ServerRequest implements ServerRequestInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return array<mixed>
      */
     public function getServerParams()
     {
@@ -375,7 +388,8 @@ class ServerRequest implements ServerRequestInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return array<mixed>
+     * @see ServerRequestInterface::getCookieParams()
      */
     public function getCookieParams()
     {
@@ -383,7 +397,9 @@ class ServerRequest implements ServerRequestInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param array<mixed> $cookies Array of key/value pairs representing cookies.
+     * @return static
+     * @see ServerRequestInterface::withCookieParams()
      */
     public function withCookieParams(array $cookies)
     {
@@ -394,7 +410,8 @@ class ServerRequest implements ServerRequestInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return array<string>
+     * @see ServerRequestInterface::getQueryParams()
      */
     public function getQueryParams()
     {
@@ -402,7 +419,10 @@ class ServerRequest implements ServerRequestInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string[] $query Array of query string arguments, typically from
+     *     $_GET.
+     * @return static
+     * @see ServerRequestInterface::withQueryParams()
      */
     public function withQueryParams(array $query)
     {
@@ -413,7 +433,9 @@ class ServerRequest implements ServerRequestInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return array<UploadedFileInterface> An array tree of UploadedFileInterface instances;
+     * an empty array MUST be returned if no data is present.
+     *@see ServerRequestInterface::getUploadedFiles()
      */
     public function getUploadedFiles()
     {
@@ -421,7 +443,11 @@ class ServerRequest implements ServerRequestInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @psalm-suppress MoreSpecificImplementedParamType
+     * @param array<UploadedFileInterface> $uploadedFiles An array tree of UploadedFileInterface instances.
+     * @return static
+     * @throws \InvalidArgumentException if an invalid structure is provided.
+     * @see ServerRequestInterface::withUploadedFiles()
      */
     public function withUploadedFiles(array $uploadedFiles)
     {
@@ -434,8 +460,13 @@ class ServerRequest implements ServerRequestInterface
         return $instance;
     }
 
+    /**
+     * @param array<UploadedFileInterface> $uploadedFiles
+     * @return array<UploadedFileInterface>
+     */
     private function validateUploadedFiles(array $uploadedFiles) : array
     {
+        /** @psalm-suppress RedundantConditionGivenDocblockType */
         $filteredUploadedFiles = array_filter($uploadedFiles, function ($uploadedFile) {
             return $uploadedFile instanceof UploadedFileInterface;
         });
@@ -451,7 +482,8 @@ class ServerRequest implements ServerRequestInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return null|array<mixed>|object $data
+     * @see ServerRequestInterface::getParsedBody()
      */
     public function getParsedBody()
     {
@@ -465,7 +497,9 @@ class ServerRequest implements ServerRequestInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param null|array<mixed>|object $data
+     * @return static
+     * @see ServerRequestInterface::withParsedBody()
      */
     public function withParsedBody($data)
     {
@@ -490,7 +524,8 @@ class ServerRequest implements ServerRequestInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return array<mixed>
+     * @see ServerRequestInterface::getAttributes()
      */
     public function getAttributes()
     {

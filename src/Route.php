@@ -10,19 +10,19 @@ use Prophecy\Exception\Doubler\MethodNotFoundException;
 class Route implements Routable
 {
     /** @var string */
-    private $httpVerb;
+    private string $httpVerb;
 
     /** @var string */
-    private $path;
+    private string $path;
 
     /** @var string */
-    private $className;
+    private string $className;
 
     /** @var string */
-    private $classMethodName;
+    private string $classMethodName;
 
-    /** @var array */
-    private $parameters;
+    /** @var array<mixed> */
+    private array $parameters;
 
     public function __construct(
         string $httpVerb,
@@ -91,6 +91,9 @@ class Route implements Routable
         return $this->path;
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getParameters() : array
     {
         return $this->parameters;
