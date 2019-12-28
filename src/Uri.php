@@ -9,28 +9,28 @@ use Psr\Http\Message\UriInterface;
 class Uri implements UriInterface
 {
     /** @var string */
-    private $scheme;
+    private string $scheme;
 
     /** @var string */
-    private $host;
+    private string $host;
 
     /** @var int */
-    private $port;
+    private int $port;
 
     /** @var string */
-    private $user;
+    private string $user;
 
     /** @var string */
-    private $password;
+    private string $password;
 
     /** @var string */
-    private $path;
+    private string $path;
 
     /** @var string */
-    private $query;
+    private string $query;
 
     /** @var string */
-    private $fragment;
+    private string $fragment;
 
     public function __construct(string $uri)
     {
