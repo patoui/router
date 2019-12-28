@@ -487,10 +487,20 @@ class ServerRequestTest extends TestCase
         $parsedBody = $newServerRequest->getParsedBody();
         $this->assertEquals(['foo' => 'bar'], $parsedBody);
         $this->assertTrue(
-            is_null($parsedBody) ||
+            $parsedBody === null ||
             is_array($parsedBody) ||
             is_object($parsedBody)
         );
+    }
+
+    public function test_with_parsed_body_invalid_argument_throws_exception() : void
+    {
+        // Arrange
+        $serverRequest = $this->getStubServerRequest();
+        $this->expectException(InvalidArgumentException::class);
+
+        // Act
+        $serverRequest->withParsedBody(12345);
     }
 
     public function test_get_attributes() : void
