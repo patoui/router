@@ -6,7 +6,7 @@ namespace Patoui\Router;
 
 class Headers
 {
-    /** @var array */
+    /** @var array<mixed> */
     private array $headers;
 
     public function __construct(array $headers = [])
@@ -16,7 +16,7 @@ class Headers
 
     /**
      * Get headers from $_SERVER global.
-     * @return array
+     * @return array<array>
      */
     public static function getHeadersArrayFromGlobals(): array
     {
@@ -24,9 +24,22 @@ class Headers
         $headers = array_map([__CLASS__, 'wrapValuesInArray'], $headers);
         $headerKeys = array_map('strval', array_keys($headers));
         $headerKeys = array_map([__CLASS__, 'stripKeyOfLeadingHttpPrefix'], $headerKeys);
-        $headerKeys = array_map('strval', array_values($headerKeys));
 
-        return array_combine($headerKeys, $headers);
+        /** @var array<array> $headers */
+        $headers = array_values($headers);
+
+        /** @var array<string> $headerKeys */
+        $headerKeys = array_map(static function ($headerKey) {
+            return (string) $headerKey;
+        }, array_values($headerKeys));
+
+        $formattedHeaders = array_combine($headerKeys, $headers);
+
+        if ($formattedHeaders === false) {
+            return [];
+        }
+
+        return $formattedHeaders;
     }
 
     /**

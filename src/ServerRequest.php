@@ -84,7 +84,6 @@ final class ServerRequest implements ServerRequestInterface
         $this->validateUploadedFiles($uploadedFiles);
 
         $this->version = $version;
-        /** @psalm-suppress MixedPropertyTypeCoercion */
         $this->headers = $headers;
         $this->body = $body;
         $this->requestTarget = $requestTarget;
@@ -104,23 +103,25 @@ final class ServerRequest implements ServerRequestInterface
      */
     public static function makeWithGlobals(): self
     {
-        $headers = Headers::getHeadersArrayFromGlobals();
-        $protocolVersion = strval($_SERVER['SERVER_PROTOCOL'] ?? '1.1');
+        $protocolVersion = (string) ($_SERVER['SERVER_PROTOCOL'] ?? '1.1');
         $protocolVersion = str_replace('HTTP/', '', $protocolVersion);
-        $requestTarget = strval($_SERVER['REQUEST_URI'] ?? '/');
-        $method = strval($_SERVER['REQUEST_METHOD'] ?? 'GET');
+        $requestTarget = (string) ($_SERVER['REQUEST_URI'] ?? '/');
+        $method = (string) ($_SERVER['REQUEST_METHOD'] ?? 'GET');
+        $queryParameters = array_filter($_GET, static function ($queryParameter) {
+            return is_string($queryParameter);
+        });
 
         // TODO: identify potential risk of using globals
         return new static(
             $protocolVersion,
-            $headers,
+            Headers::getHeadersArrayFromGlobals(),
             new Stream('body'),
             $requestTarget,
             $method,
             new Uri($requestTarget),
             $_SERVER,
             $_COOKIE,
-            $_GET,
+            $queryParameters,
             $_FILES
         );
     }
@@ -261,7 +262,8 @@ final class ServerRequest implements ServerRequestInterface
             return;
         }
 
-        $headersWithArraysOnly = array_filter($headers, function ($header) {
+        /** @psalm-suppress RedundantConditionGivenDocblockType */
+        $headersWithArraysOnly = array_filter($headers, static function ($header) {
             return is_array($header);
         });
 
@@ -270,7 +272,7 @@ final class ServerRequest implements ServerRequestInterface
         }
 
         foreach ($headers as $key => $header) {
-            $headerWithStringValuesOnly = array_filter($header, function ($headerValue) {
+            $headerWithStringValuesOnly = array_filter($header, static function ($headerValue) {
                 return is_string($headerValue);
             });
 
@@ -410,7 +412,7 @@ final class ServerRequest implements ServerRequestInterface
     }
 
     /**
-     * @return array<string>
+     * @return array<mixed>
      * @see ServerRequestInterface::getQueryParams()
      */
     public function getQueryParams()
@@ -419,7 +421,7 @@ final class ServerRequest implements ServerRequestInterface
     }
 
     /**
-     * @param string[] $query Array of query string arguments, typically from
+     * @param array<mixed> $query Array of query string arguments, typically from
      *     $_GET.
      * @return static
      * @see ServerRequestInterface::withQueryParams()
