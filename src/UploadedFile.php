@@ -6,10 +6,15 @@ namespace Patoui\Router;
 
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
+use RuntimeException;
 
 final class UploadedFile implements UploadedFileInterface
 {
     private StreamInterface $stream;
+
+    private bool $hasMoved = false;
+
+    private bool $isSapi;
 
     /**
      * UploadedFile constructor.
@@ -18,6 +23,7 @@ final class UploadedFile implements UploadedFileInterface
     public function __construct(StreamInterface $stream)
     {
         $this->stream = $stream;
+        $this->isSapi = !empty($_FILES);
     }
 
     /**
@@ -31,9 +37,22 @@ final class UploadedFile implements UploadedFileInterface
     /**
      * {@inheritdoc}
      */
-    public function moveTo($targetPath)
+    public function moveTo($targetPath): void
     {
-        // TODO: Implement moveTo() method.
+        if ($this->hasMoved) {
+            throw new RuntimeException('Uploaded file has already been moved');
+        }
+
+        if ($this->isSapi) {
+            if (!is_uploaded_file($this->stream)) {
+                throw new RuntimeException('Invalid uploaded file');
+            }
+            if (!move_uploaded_file($this->stream, $targetPath)) {
+                throw new RuntimeException('Error occurred while moving file');
+            }
+        } elseif (!rename($this->stream, $targetPath)) {
+            throw new RuntimeException('Error occurred while moving file');
+        }
     }
 
     /**

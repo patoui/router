@@ -32,4 +32,20 @@ class UploadedFileTest extends TestCase
         // Assert
         $this->assertEquals($stream, $instanceStream);
     }
+
+    public function test_move_to(): void
+    {
+        // Arrange
+        $stream = new Stream('Hello World');
+        $uploadedFile = $this->getStubUploadedFile([
+            'stream' => $stream,
+        ]);
+        $pathToMoveTo = __DIR__.DIRECTORY_SEPARATOR.'test-file.txt';
+
+        // Act
+        $uploadedFile->moveTo($pathToMoveTo);
+
+        // Assert
+        $this->assertFileExists($pathToMoveTo);
+    }
 }
