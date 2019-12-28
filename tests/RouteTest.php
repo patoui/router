@@ -9,8 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class RouteTest extends TestCase
 {
-    /** @test */
-    public function can_resolve_route()
+    public function test_can_resolve_route(): void
     {
         // Arrange
         $routeController = new class() {
@@ -25,8 +24,7 @@ class RouteTest extends TestCase
         $this->assertTrue($route->isHttpVerbAndPathAMatch('get', '/'));
     }
 
-    /** @test */
-    public function is_match_with_parameters()
+    public function test_is_match_with_parameters(): void
     {
         // Arrange
         $routeController = new class() {

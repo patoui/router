@@ -16,7 +16,6 @@ class UriTest extends TestCase
         return new Uri($uri);
     }
 
-    /** @test */
     public function test_get_scheme(): void
     {
         // Arrange
@@ -29,7 +28,6 @@ class UriTest extends TestCase
         $this->assertEquals('https', $scheme);
     }
 
-    /** @test */
     public function test_get_authority(): void
     {
         // Arrange
@@ -42,7 +40,6 @@ class UriTest extends TestCase
         $this->assertEquals('root@example.com:8888', $authority);
     }
 
-    /** @test */
     public function test_get_user_info(): void
     {
         // Arrange
@@ -55,7 +52,6 @@ class UriTest extends TestCase
         $this->assertEquals('root:some_password', $userInfo);
     }
 
-    /** @test */
     public function test_get_user_info_empty_when_not_present(): void
     {
         // Arrange
@@ -68,7 +64,6 @@ class UriTest extends TestCase
         $this->assertEquals('', $userInfo);
     }
 
-    /** @test */
     public function test_get_host(): void
     {
         // Arrange
@@ -81,7 +76,6 @@ class UriTest extends TestCase
         $this->assertEquals('example.com', $host);
     }
 
-    /** @test */
     public function test_get_port(): void
     {
         // Arrange
@@ -94,7 +88,6 @@ class UriTest extends TestCase
         $this->assertEquals(8888, $port);
     }
 
-    /** @test */
     public function test_get_path(): void
     {
         // Arrange
@@ -107,7 +100,6 @@ class UriTest extends TestCase
         $this->assertEquals('/foo/bar', $path);
     }
 
-    /** @test */
     public function test_get_query(): void
     {
         // Arrange
@@ -120,7 +112,6 @@ class UriTest extends TestCase
         $this->assertEquals('q=blah', $query);
     }
 
-    /** @test */
     public function test_get_fragment(): void
     {
         // Arrange
@@ -133,7 +124,6 @@ class UriTest extends TestCase
         $this->assertEquals('section_1', $fragment);
     }
 
-    /** @test */
     public function test_with_scheme(): void
     {
         // Arrange
@@ -149,7 +139,6 @@ class UriTest extends TestCase
         $this->assertEquals('https', $newUri->getScheme());
     }
 
-    /** @test */
     public function test_with_scheme_throws_exception_when_invalid(): void
     {
         // Arrange
@@ -160,7 +149,6 @@ class UriTest extends TestCase
         $uri->withScheme('$@#%^$#^$#&*^%');
     }
 
-    /** @test */
     public function test_with_user_info(): void
     {
         // Arrange
@@ -173,7 +161,6 @@ class UriTest extends TestCase
         $this->assertEquals('admin:password', $newUri->getUserInfo());
     }
 
-    /** @test */
     public function test_with_host(): void
     {
         // Arrange
@@ -186,7 +173,6 @@ class UriTest extends TestCase
         $this->assertEquals('192.168.1.1', $newUri->getHost());
     }
 
-    /** @test */
     public function test_with_host_ipv6(): void
     {
         // Arrange
@@ -199,7 +185,6 @@ class UriTest extends TestCase
         $this->assertEquals('[::1]', $newUri->getHost());
     }
 
-    /** @test */
     public function test_with_host_invalid_value_throws_exception(): void
     {
         // Arrange
@@ -210,7 +195,6 @@ class UriTest extends TestCase
         $uri->withHost(111);
     }
 
-    /** @test */
     public function test_with_port(): void
     {
         // Arrange
@@ -223,7 +207,6 @@ class UriTest extends TestCase
         $this->assertEquals(9999, $newUri->getPort());
     }
 
-    /** @test */
     public function test_with_port_invalid_value_throws_exception(): void
     {
         // Arrange
@@ -234,7 +217,6 @@ class UriTest extends TestCase
         $uri->withPort('foobar');
     }
 
-    /** @test */
     public function test_with_path(): void
     {
         // Arrange
@@ -247,7 +229,6 @@ class UriTest extends TestCase
         $this->assertEquals('foo/bar', $newUri->getPath());
     }
 
-    /** @test */
     public function test_with_path_invalid_value_throws_exception(): void
     {
         // Arrange
@@ -258,7 +239,6 @@ class UriTest extends TestCase
         $uri->withPath(9999);
     }
 
-    /** @test */
     public function test_with_query(): void
     {
         // Arrange
@@ -271,7 +251,6 @@ class UriTest extends TestCase
         $this->assertEquals('foo=bar', $newUri->getQuery());
     }
 
-    /** @test */
     public function test_with_query_invalid_value_throws_exception(): void
     {
         // Arrange
@@ -282,7 +261,6 @@ class UriTest extends TestCase
         $uri->withQuery(9999);
     }
 
-    /** @test */
     public function test_with_fragment(): void
     {
         // Arrange
@@ -295,7 +273,6 @@ class UriTest extends TestCase
         $this->assertEquals('section_99', $newUri->getFragment());
     }
 
-    /** @test */
     public function test_with_fragment_invalid_value_throws_exception(): void
     {
         // Arrange
@@ -306,7 +283,6 @@ class UriTest extends TestCase
         $uri->withQuery(9999);
     }
 
-    /** @test */
     public function test_tostring(): void
     {
         // Arrange

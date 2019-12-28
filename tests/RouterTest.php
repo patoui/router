@@ -10,8 +10,7 @@ use Patoui\Router\Uri;
 
 class RouterTest extends TestCase
 {
-    /** @test */
-    public function can_get_routes()
+    public function test_can_get_routes(): void
     {
         // Arrange
         $router = new Router();
@@ -32,8 +31,7 @@ class RouterTest extends TestCase
         $this->assertEquals($route, $routes[0]);
     }
 
-    /** @test */
-    public function can_add_route()
+    public function test_can_add_route(): void
     {
         // Arrange
         $routeController = new class() {
@@ -54,8 +52,7 @@ class RouterTest extends TestCase
         $this->assertEquals($route, $routes[0]);
     }
 
-    /** @test */
-    public function can_resolve_route()
+    public function test_can_resolve_route(): void
     {
         // Arrange
         $homeController = new class() {
@@ -87,8 +84,7 @@ class RouterTest extends TestCase
         $this->assertEquals('index', $resolvedRoute->getClassMethodName());
     }
 
-    /** @test */
-    public function can_resolve_route_with_parameters()
+    public function test_can_resolve_route_with_parameters(): void
     {
         // Arrange
         $postController = new class() {
