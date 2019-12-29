@@ -32,7 +32,7 @@ class TestCase extends PHPUnitTestCase
             fwrite($temporaryStream, 'Hello world!');
             rewind($temporaryStream);
             $propertyOverrides['body'] = new Stream($temporaryStream);
-        } elseif (!$propertyOverrides['body'] instanceof StreamInterface) {
+        } elseif (! $propertyOverrides['body'] instanceof StreamInterface) {
             throw new InvalidArgumentException('Body must be an instance of: '.StreamInterface::class);
         }
 

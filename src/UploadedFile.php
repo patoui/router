@@ -97,13 +97,13 @@ final class UploadedFile implements UploadedFileInterface
         }
 
         if ($this->isSapi) {
-            if (!is_uploaded_file($this->file)) {
+            if (! is_uploaded_file($this->file)) {
                 throw new RuntimeException('Invalid uploaded file');
             }
-            if (!move_uploaded_file($this->file, $targetPath)) {
+            if (! move_uploaded_file($this->file, $targetPath)) {
                 throw new RuntimeException('Error occurred while moving file');
             }
-        } elseif (!rename($this->file, $targetPath)) {
+        } elseif (! rename($this->file, $targetPath)) {
             throw new RuntimeException('Error occurred while moving file');
         }
     }
