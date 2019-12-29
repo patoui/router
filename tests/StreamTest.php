@@ -15,14 +15,14 @@ class StreamTest extends TestCase
      */
     protected function getStubStream($stream = null): Stream
     {
-        if (!$stream) {
+        if (! $stream) {
             $temporaryStream = fopen('php://memory', 'rb+');
             fwrite($temporaryStream, 'Hello world!');
             rewind($temporaryStream);
             $stream = $temporaryStream;
         }
 
-        if (!is_resource($stream)) {
+        if (! is_resource($stream)) {
             throw new InvalidArgumentException('Invalid resource for stream');
         }
 

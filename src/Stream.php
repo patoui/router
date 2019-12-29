@@ -21,7 +21,7 @@ class Stream implements StreamInterface
     public function __construct($stream)
     {
         /** @psalm-suppress DocblockTypeContradiction */
-        if (!is_resource($stream)) {
+        if (! is_resource($stream)) {
             throw new InvalidArgumentException('Invalid resource provided.');
         }
 

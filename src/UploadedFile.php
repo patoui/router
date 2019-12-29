@@ -36,7 +36,7 @@ final class UploadedFile implements UploadedFileInterface
         UPLOAD_ERR_NO_FILE,
         UPLOAD_ERR_NO_TMP_DIR,
         UPLOAD_ERR_CANT_WRITE,
-        UPLOAD_ERR_EXTENSION
+        UPLOAD_ERR_EXTENSION,
     ];
 
     /**
@@ -54,14 +54,14 @@ final class UploadedFile implements UploadedFileInterface
         ?int $size = null,
         int $error = UPLOAD_ERR_OK
     ) {
-        if (!in_array($error, self::$validUploadErrorCodes, true)) {
+        if (! in_array($error, self::$validUploadErrorCodes, true)) {
             throw new InvalidArgumentException('Invalid upload error code.');
         }
 
         if ($file instanceof StreamInterface) {
             /** @psalm-suppress MixedAssignment */
             $fileUri = $file->getMetadata('uri');
-            if (!is_string($fileUri)) {
+            if (! is_string($fileUri)) {
                 throw new InvalidArgumentException('URI not available for given stream');
             }
             $this->file = $fileUri;
@@ -76,7 +76,7 @@ final class UploadedFile implements UploadedFileInterface
         $this->error = $error;
         $this->name = $name;
         $this->type = $type;
-        $this->isSapi = !empty($_FILES);
+        $this->isSapi = ! empty($_FILES);
     }
 
     /**

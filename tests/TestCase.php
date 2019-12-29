@@ -27,7 +27,7 @@ class TestCase extends PHPUnitTestCase
 
     protected function getStubServerRequest(array $propertyOverrides = []) : ServerRequest
     {
-        if (!isset($propertyOverrides['body'])) {
+        if (! isset($propertyOverrides['body'])) {
             $temporaryStream = fopen('php://memory', 'rb+');
             fwrite($temporaryStream, 'Hello world!');
             rewind($temporaryStream);

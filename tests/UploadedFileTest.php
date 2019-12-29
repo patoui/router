@@ -12,9 +12,9 @@ class UploadedFileTest extends TestCase
 {
     protected function getStubUploadedFile(array $propertyOverrides = []): UploadedFile
     {
-        $filePath =__DIR__.DIRECTORY_SEPARATOR.'test.txt';
+        $filePath = __DIR__.DIRECTORY_SEPARATOR.'test.txt';
 
-        if (!isset($propertyOverrides['file'])) {
+        if (! isset($propertyOverrides['file'])) {
             file_put_contents($filePath, 'Hello world.');
         } else {
             $filePath = $propertyOverrides['file'];
@@ -36,7 +36,7 @@ class UploadedFileTest extends TestCase
     public function test_get_stream(): void
     {
         // Arrange
-        $filePath =__DIR__.DIRECTORY_SEPARATOR.'test.txt';
+        $filePath = __DIR__.DIRECTORY_SEPARATOR.'test.txt';
         $this->filePaths[] = $filePath;
         file_put_contents($filePath, 'Hello world.');
         $uploadedFile = $this->getStubUploadedFile(['file' => $filePath]);
@@ -51,7 +51,7 @@ class UploadedFileTest extends TestCase
     public function test_move_to(): void
     {
         // Arrange
-        $filePath =__DIR__.DIRECTORY_SEPARATOR.'test.txt';
+        $filePath = __DIR__.DIRECTORY_SEPARATOR.'test.txt';
         $this->filePaths[] = $filePath;
         file_put_contents($filePath, 'Hello world.');
         $uploadedFile = $this->getStubUploadedFile(['file' => $filePath]);

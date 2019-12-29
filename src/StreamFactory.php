@@ -47,7 +47,7 @@ final class StreamFactory implements StreamFactoryInterface
     public function createStreamFromResource($resource): StreamInterface
     {
         /** @psalm-suppress DocblockTypeContradiction */
-        if (!is_resource($resource)) {
+        if (! is_resource($resource)) {
             throw new \InvalidArgumentException('Invalid resource, cannot create stream.');
         }
 
