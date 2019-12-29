@@ -40,4 +40,23 @@ class StreamTest extends TestCase
         // Assert
         $this->assertEquals('Hello world!', $streamString);
     }
+
+    public function test_close(): void
+    {
+        // Arrange
+        $resource = fopen('php://memory', 'rb+');
+        fwrite($resource, 'Foo');
+        rewind($resource);
+        $stream = $this->getStubStream($resource);
+
+        // Pre-assert
+        $this->assertNotEmpty(fstat($resource));
+
+
+        // Act
+        $stream->close();
+
+        // Assert
+        $this->assertFalse(is_resource($resource));
+    }
 }

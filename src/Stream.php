@@ -37,13 +37,11 @@ class Stream implements StreamInterface
     }
 
     /**
-     * Closes the stream and any underlying resources.
-     *
-     * @return void
+     * {@inheritdoc}
      */
-    public function close()
+    public function close(): void
     {
-        // TODO: Implement close() method.
+        fclose($this->stream);
     }
 
     /**
