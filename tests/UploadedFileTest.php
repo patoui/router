@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Patoui\Router\Tests;
 
 use InvalidArgumentException;
-use Patoui\Router\Stream;
 use Patoui\Router\UploadedFile;
 use Psr\Http\Message\StreamInterface;
 
@@ -25,8 +24,9 @@ class UploadedFileTest extends TestCase
 
         $properties = array_merge([
             'file' => $filePath,
-            'size' => random_int(1, 100),
             'name' => uniqid('', true).'.txt',
+            'type' => 'text/plain',
+            'size' => random_int(1, 100),
             'error' => UPLOAD_ERR_OK,
         ], $propertyOverrides);
 
@@ -106,5 +106,20 @@ class UploadedFileTest extends TestCase
 
         // Assert
         $this->assertEquals('my-file.txt', $fileName);
+    }
+
+    public function test_get_client_media_type(): void
+    {
+        // Arrange
+        $uploadedFile = $this->getStubUploadedFile([
+            'name' => 'index.html',
+            'type' => 'text/html',
+        ]);
+
+        // Act
+        $mediaType = $uploadedFile->getClientMediaType();
+
+        // Assert
+        $this->assertEquals('text/html', $mediaType);
     }
 }

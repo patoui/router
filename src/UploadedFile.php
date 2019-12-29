@@ -23,6 +23,8 @@ final class UploadedFile implements UploadedFileInterface
 
     private ?string $name;
 
+    private ?string $type;
+
     private bool $isSapi;
 
     /** @var array<int> */
@@ -40,14 +42,16 @@ final class UploadedFile implements UploadedFileInterface
     /**
      * UploadedFile constructor.
      * @param string|StreamInterface $file
-     * @param null|int               $size
      * @param string|null            $name
+     * @param string|null            $type
+     * @param int|null               $size
      * @param int                    $error
      */
     public function __construct(
         $file,
-        ?int $size = null,
         ?string $name = null,
+        ?string $type = null,
+        ?int $size = null,
         int $error = UPLOAD_ERR_OK
     ) {
         if (!in_array($error, self::$validUploadErrorCodes, true)) {
@@ -71,6 +75,7 @@ final class UploadedFile implements UploadedFileInterface
         $this->size = $size;
         $this->error = $error;
         $this->name = $name;
+        $this->type = $type;
         $this->isSapi = !empty($_FILES);
     }
 
@@ -130,8 +135,8 @@ final class UploadedFile implements UploadedFileInterface
     /**
      * {@inheritdoc}
      */
-    public function getClientMediaType()
+    public function getClientMediaType(): ?string
     {
-        // TODO: Implement getClientMediaType() method.
+        return $this->type;
     }
 }
