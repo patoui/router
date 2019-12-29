@@ -15,11 +15,16 @@ final class StreamFactory implements StreamFactoryInterface
      */
     public function createStream(string $content = ''): StreamInterface
     {
-        $stream = fopen(Stream::TEMPORARY_STREAM, 'rb+');
-        fwrite($stream, $content);
-        rewind($stream);
+        $resource = fopen(Stream::TEMPORARY_STREAM, 'rb+');
 
-        return new Stream($stream);
+        if ($resource === false) {
+            throw new RuntimeException('Unabled to open temporary resource');
+        }
+
+        fwrite($resource, $content);
+        rewind($resource);
+
+        return new Stream($resource);
     }
 
     /**

@@ -6,14 +6,6 @@ namespace Patoui\Router;
 
 class Headers
 {
-    /** @var array<mixed> */
-    private array $headers;
-
-    public function __construct(array $headers = [])
-    {
-        $this->headers = $headers;
-    }
-
     /**
      * Get headers from $_SERVER global.
      * @return array<array>
@@ -53,7 +45,7 @@ class Headers
 
     /**
      * @param mixed $header
-     * @return array
+     * @return array<mixed>
      */
     private static function wrapValuesInArray($header): array
     {

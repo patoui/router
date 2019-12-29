@@ -9,6 +9,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriInterface;
+use RuntimeException;
 
 final class ServerRequest implements ServerRequestInterface
 {
@@ -110,12 +111,17 @@ final class ServerRequest implements ServerRequestInterface
         $queryParameters = array_filter($_GET, static function ($queryParameter) {
             return is_string($queryParameter);
         });
+        $resource = fopen('php://memory', 'rb+');
+
+        if ($resource === false) {
+            throw new RuntimeException('Unabled to open memory resource');
+        }
 
         // TODO: identify potential risk of using globals
         return new static(
             $protocolVersion,
             Headers::getHeadersArrayFromGlobals(),
-            new Stream(fopen('php://memory', 'rb+')),
+            new Stream($resource),
             $requestTarget,
             $method,
             new Uri($requestTarget),
