@@ -46,6 +46,7 @@ final class UploadedFile implements UploadedFileInterface
      * @param string|null            $type
      * @param int|null               $size
      * @param int                    $error
+     * @psalm-suppress RedundantConditionGivenDocblockType Used for is_string check.
      */
     public function __construct(
         $file,
@@ -66,7 +67,7 @@ final class UploadedFile implements UploadedFileInterface
             }
             $this->file = $fileUri;
             $this->stream = $file;
-        } elseif (file_exists($file)) {
+        } elseif (is_string($file)) {
             $this->file = $file;
             $this->stream = (new StreamFactory())->createStreamFromFile($file);
         } else {
