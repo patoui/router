@@ -115,7 +115,7 @@ final class ServerRequest implements ServerRequestInterface
         return new static(
             $protocolVersion,
             Headers::getHeadersArrayFromGlobals(),
-            new Stream('body'),
+            new Stream(fopen('php://memory', 'rb+')),
             $requestTarget,
             $method,
             new Uri($requestTarget),

@@ -4,35 +4,36 @@ declare(strict_types=1);
 
 namespace Patoui\Router;
 
+use InvalidArgumentException;
 use Psr\Http\Message\StreamInterface;
 
 class Stream implements StreamInterface
 {
-    /** @var string */
-    private $body;
+    public const TEMPORARY_STREAM = 'php://temp';
 
-    public function __construct(string $body)
+    /** @var resource */
+    private $stream;
+
+    /**
+     * Stream constructor.
+     * @param resource $stream
+     */
+    public function __construct($stream)
     {
-        $this->body = $body;
+        /** @psalm-suppress DocblockTypeContradiction */
+        if (!is_resource($stream)) {
+            throw new InvalidArgumentException('Invalid resource provided.');
+        }
+
+        $this->stream = $stream;
     }
 
     /**
-     * Reads all data from the stream into a string, from the beginning to end.
-     *
-     * This method MUST attempt to seek to the beginning of the stream before
-     * reading data and read the stream until the end is reached.
-     *
-     * Warning: This could attempt to load a large amount of data into memory.
-     *
-     * This method MUST NOT raise an exception in order to conform with PHP's
-     * string casting operations.
-     *
-     * @see http://php.net/manual/en/language.oop5.magic.php#object.tostring
-     * @return string
+     * {@inheritdoc}
      */
     public function __toString()
     {
-        // TODO: Implement __toString() method.
+        return $this->getContents();
     }
 
     /**
@@ -186,7 +187,7 @@ class Stream implements StreamInterface
      */
     public function getContents()
     {
-        // TODO: Implement getContents() method.
+        return stream_get_contents($this->stream);
     }
 
     /**

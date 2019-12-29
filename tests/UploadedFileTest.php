@@ -6,13 +6,24 @@ namespace Patoui\Router\Tests;
 
 use Patoui\Router\Stream;
 use Patoui\Router\UploadedFile;
+use Psr\Http\Message\StreamInterface;
 
 class UploadedFileTest extends TestCase
 {
     protected function getStubUploadedFile(array $propertyOverrides = []): UploadedFile
     {
+        $filePath =__DIR__.DIRECTORY_SEPARATOR.'test.txt';
+
+        if (!isset($propertyOverrides['file'])) {
+            file_put_contents($filePath, 'Hello world.');
+        } else {
+            $filePath = $propertyOverrides['file'];
+            unset($propertyOverrides['file']);
+        }
+        $this->filePaths[] = $filePath;
+
         $properties = array_merge([
-            'stream' => new Stream('Foobar'),
+            'file' => $filePath,
         ], $propertyOverrides);
 
         return new UploadedFile(...array_values($properties));
@@ -21,26 +32,27 @@ class UploadedFileTest extends TestCase
     public function test_get_stream(): void
     {
         // Arrange
-        $stream = new Stream('Hello World');
-        $uploadedFile = $this->getStubUploadedFile([
-            'stream' => $stream,
-        ]);
+        $filePath =__DIR__.DIRECTORY_SEPARATOR.'test.txt';
+        $this->filePaths[] = $filePath;
+        file_put_contents($filePath, 'Hello world.');
+        $uploadedFile = $this->getStubUploadedFile(['file' => $filePath]);
 
         // Act
         $instanceStream = $uploadedFile->getStream();
 
         // Assert
-        $this->assertEquals($stream, $instanceStream);
+        $this->assertContains(StreamInterface::class, class_implements($instanceStream));
     }
 
     public function test_move_to(): void
     {
         // Arrange
-        $stream = new Stream('Hello World');
-        $uploadedFile = $this->getStubUploadedFile([
-            'stream' => $stream,
-        ]);
+        $filePath =__DIR__.DIRECTORY_SEPARATOR.'test.txt';
+        $this->filePaths[] = $filePath;
+        file_put_contents($filePath, 'Hello world.');
+        $uploadedFile = $this->getStubUploadedFile(['file' => $filePath]);
         $pathToMoveTo = __DIR__.DIRECTORY_SEPARATOR.'test-file.txt';
+        $this->filePaths[] = $pathToMoveTo;
 
         // Act
         $uploadedFile->moveTo($pathToMoveTo);

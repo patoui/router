@@ -172,10 +172,11 @@ class ServerRequestTest extends TestCase
     public function test_with_body() : void
     {
         // Arrange
-        $serverRequest = $this->getStubServerRequest([
-            'body' => new Stream('Request Body'),
-        ]);
-        $newStream = new Stream('New Body');
+        $serverRequest = $this->getStubServerRequest();
+        $temporaryStream = fopen('php://memory', 'rb+');
+        fwrite($temporaryStream, 'Another stream');
+        rewind($temporaryStream);
+        $newStream = new Stream($temporaryStream);
 
         // Act
         $newServerRequestStatic = $serverRequest->withBody($newStream);
@@ -477,7 +478,6 @@ class ServerRequestTest extends TestCase
         $serverRequest = $this->getStubServerRequest([
             'method' => 'post',
             'headers' => ['content-type' => ['multipart/form-data']],
-            'body' => new Stream(''),
         ]);
 
         // Act
