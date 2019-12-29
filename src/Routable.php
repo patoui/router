@@ -10,6 +10,7 @@ interface Routable
 
     public function getClassMethodName() : string;
 
+    /** @return array<mixed> */
     public function getParameters() : array;
 
     public function getHttpVerb() : string;
