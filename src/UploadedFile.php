@@ -21,6 +21,8 @@ final class UploadedFile implements UploadedFileInterface
 
     private int $error;
 
+    private ?string $name;
+
     private bool $isSapi;
 
     /** @var array<int> */
@@ -39,12 +41,13 @@ final class UploadedFile implements UploadedFileInterface
      * UploadedFile constructor.
      * @param string|StreamInterface $file
      * @param null|int               $size
+     * @param string|null            $name
      * @param int                    $error
-     * @throws InvalidArgumentException
      */
     public function __construct(
         $file,
         ?int $size = null,
+        ?string $name = null,
         int $error = UPLOAD_ERR_OK
     ) {
         if (!in_array($error, self::$validUploadErrorCodes, true)) {
@@ -67,6 +70,7 @@ final class UploadedFile implements UploadedFileInterface
         }
         $this->size = $size;
         $this->error = $error;
+        $this->name = $name;
         $this->isSapi = !empty($_FILES);
     }
 
@@ -118,9 +122,9 @@ final class UploadedFile implements UploadedFileInterface
     /**
      * {@inheritdoc}
      */
-    public function getClientFilename()
+    public function getClientFilename(): ?string
     {
-        // TODO: Implement getClientFilename() method.
+        return $this->name;
     }
 
     /**

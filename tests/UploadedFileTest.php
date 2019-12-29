@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Patoui\Router\Tests;
 
+use InvalidArgumentException;
 use Patoui\Router\Stream;
 use Patoui\Router\UploadedFile;
 use Psr\Http\Message\StreamInterface;
@@ -25,6 +26,7 @@ class UploadedFileTest extends TestCase
         $properties = array_merge([
             'file' => $filePath,
             'size' => random_int(1, 100),
+            'name' => uniqid('', true).'.txt',
             'error' => UPLOAD_ERR_OK,
         ], $propertyOverrides);
 
@@ -90,7 +92,19 @@ class UploadedFileTest extends TestCase
     public function test_setting_invalid_error_code_throws_exception(): void
     {
         // Arrange & Act & Assert
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->getStubUploadedFile(['error' => 999]);
+    }
+
+    public function test_get_client_filename(): void
+    {
+        // Arrange
+        $uploadedFile = $this->getStubUploadedFile(['name' => 'my-file.txt']);
+
+        // Act
+        $fileName = $uploadedFile->getClientFilename();
+
+        // Assert
+        $this->assertEquals('my-file.txt', $fileName);
     }
 }
