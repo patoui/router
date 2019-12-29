@@ -24,6 +24,7 @@ class UploadedFileTest extends TestCase
 
         $properties = array_merge([
             'file' => $filePath,
+            'size' => random_int(1, 100),
         ], $propertyOverrides);
 
         return new UploadedFile(...array_values($properties));
@@ -59,5 +60,17 @@ class UploadedFileTest extends TestCase
 
         // Assert
         $this->assertFileExists($pathToMoveTo);
+    }
+
+    public function test_get_size(): void
+    {
+        // Arrange
+        $uploadedFile = $this->getStubUploadedFile(['size' => 99999]);
+
+        // Act
+        $size = $uploadedFile->getSize();
+
+        // Assert
+        $this->assertEquals(99999, $size);
     }
 }

@@ -17,14 +17,19 @@ final class UploadedFile implements UploadedFileInterface
 
     private bool $hasMoved = false;
 
+    private ?int $size;
+
     private bool $isSapi;
 
     /**
      * UploadedFile constructor.
      * @param string|StreamInterface $file
+     * @param null|int $size
      */
-    public function __construct($file)
-    {
+    public function __construct(
+        $file,
+        ?int $size = null
+    ) {
         if ($file instanceof StreamInterface) {
             /** @psalm-suppress MixedAssignment */
             $fileUri = $file->getMetadata('uri');
@@ -39,6 +44,7 @@ final class UploadedFile implements UploadedFileInterface
         } else {
             throw new InvalidArgumentException('Invalid type for file, must be string or implement StreamInterface.');
         }
+        $this->size = $size;
         $this->isSapi = !empty($_FILES);
     }
 
@@ -74,9 +80,9 @@ final class UploadedFile implements UploadedFileInterface
     /**
      * {@inheritdoc}
      */
-    public function getSize()
+    public function getSize(): ?int
     {
-        // TODO: Implement getSize() method.
+        return $this->size;
     }
 
     /**
