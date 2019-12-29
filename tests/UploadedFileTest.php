@@ -25,6 +25,7 @@ class UploadedFileTest extends TestCase
         $properties = array_merge([
             'file' => $filePath,
             'size' => random_int(1, 100),
+            'error' => UPLOAD_ERR_OK,
         ], $propertyOverrides);
 
         return new UploadedFile(...array_values($properties));
@@ -72,5 +73,24 @@ class UploadedFileTest extends TestCase
 
         // Assert
         $this->assertEquals(99999, $size);
+    }
+
+    public function test_get_error(): void
+    {
+        // Arrange
+        $uploadedFile = $this->getStubUploadedFile();
+
+        // Act
+        $error = $uploadedFile->getError();
+
+        // Assert
+        $this->assertEquals(UPLOAD_ERR_OK, $error);
+    }
+
+    public function test_setting_invalid_error_code_throws_exception(): void
+    {
+        // Arrange & Act & Assert
+        $this->expectException(\InvalidArgumentException::class);
+        $this->getStubUploadedFile(['error' => 999]);
     }
 }

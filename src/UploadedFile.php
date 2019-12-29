@@ -19,17 +19,38 @@ final class UploadedFile implements UploadedFileInterface
 
     private ?int $size;
 
+    private int $error;
+
     private bool $isSapi;
+
+    /** @var array<int> */
+    private static array $validUploadErrorCodes = [
+        UPLOAD_ERR_OK,
+        UPLOAD_ERR_INI_SIZE,
+        UPLOAD_ERR_FORM_SIZE,
+        UPLOAD_ERR_PARTIAL,
+        UPLOAD_ERR_NO_FILE,
+        UPLOAD_ERR_NO_TMP_DIR,
+        UPLOAD_ERR_CANT_WRITE,
+        UPLOAD_ERR_EXTENSION
+    ];
 
     /**
      * UploadedFile constructor.
      * @param string|StreamInterface $file
-     * @param null|int $size
+     * @param null|int               $size
+     * @param int                    $error
+     * @throws InvalidArgumentException
      */
     public function __construct(
         $file,
-        ?int $size = null
+        ?int $size = null,
+        int $error = UPLOAD_ERR_OK
     ) {
+        if (!in_array($error, self::$validUploadErrorCodes, true)) {
+            throw new InvalidArgumentException('Invalid upload error code.');
+        }
+
         if ($file instanceof StreamInterface) {
             /** @psalm-suppress MixedAssignment */
             $fileUri = $file->getMetadata('uri');
@@ -45,6 +66,7 @@ final class UploadedFile implements UploadedFileInterface
             throw new InvalidArgumentException('Invalid type for file, must be string or implement StreamInterface.');
         }
         $this->size = $size;
+        $this->error = $error;
         $this->isSapi = !empty($_FILES);
     }
 
@@ -88,9 +110,9 @@ final class UploadedFile implements UploadedFileInterface
     /**
      * {@inheritdoc}
      */
-    public function getError()
+    public function getError(): int
     {
-        // TODO: Implement getError() method.
+        return $this->error;
     }
 
     /**
