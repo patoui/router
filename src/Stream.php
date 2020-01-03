@@ -24,7 +24,7 @@ class Stream implements StreamInterface
          * @psalm-suppress DocblockTypeContradiction
          * @psalm-suppress RedundantConditionGivenDocblockType
          */
-        if ($stream !== null || !is_resource($stream)) {
+        if ($stream !== null && !is_resource($stream)) {
             throw new InvalidArgumentException('Invalid resource provided.');
         }
 

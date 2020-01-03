@@ -81,6 +81,31 @@ final class UploadedFile implements UploadedFileInterface
     }
 
     /**
+     * @return array<UploadedFile>
+     * @psalm-suppress MixedAssignment
+     * @psalm-suppress MixedArrayAccess
+     * @psalm-suppress MixedArgument
+     */
+    public static function makeWithGlobals(): array
+    {
+        $uploadedFiles = [];
+
+        foreach ($_FILES as $field => $file) {
+            if (is_string($file['tmp_name']) || (is_object($file['tmp_name']) && $file['tmp_name'] instanceof StreamInterface)) {
+                $uploadedFiles[] = new static(
+                    $file['tmp_name'],
+                    isset($file['name']) ? (string) $file['name'] : null,
+                    isset($file['type']) ? (string) $file['type'] : null,
+                    isset($file['size']) ? (int) $file['size'] : null,
+                    (int) ($file['error'] ?? UPLOAD_ERR_OK),
+                );
+            }
+        }
+
+        return $uploadedFiles;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getStream(): StreamInterface

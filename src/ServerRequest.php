@@ -128,7 +128,7 @@ final class ServerRequest implements ServerRequestInterface
             $_SERVER,
             $_COOKIE,
             $queryParameters,
-            $_FILES
+            UploadedFile::makeWithGlobals()
         );
     }
 
