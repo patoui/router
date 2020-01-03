@@ -51,6 +51,7 @@ class Stream implements StreamInterface
     {
         $stream = $this->stream;
         $this->stream = null;
+
         return $stream;
     }
 

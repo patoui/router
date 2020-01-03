@@ -6,16 +6,16 @@ namespace Patoui\Router;
 
 interface Routable
 {
-    public function getClassName() : string;
+    public function getClassName(): string;
 
-    public function getClassMethodName() : string;
+    public function getClassMethodName(): string;
 
     /** @return array<mixed> */
-    public function getParameters() : array;
+    public function getParameters(): array;
 
-    public function getHttpVerb() : string;
+    public function getHttpVerb(): string;
 
-    public function isHttpVerbAndPathAMatch(string $httpVerb, string $path) : bool;
+    public function isHttpVerbAndPathAMatch(string $httpVerb, string $path): bool;
 
-    public function getPath() : string;
+    public function getPath(): string;
 }

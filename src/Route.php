@@ -51,17 +51,17 @@ class Route implements Routable
         $this->parameters = [];
     }
 
-    public function getClassName() : string
+    public function getClassName(): string
     {
         return $this->className;
     }
 
-    public function getClassMethodName() : string
+    public function getClassMethodName(): string
     {
         return $this->classMethodName;
     }
 
-    public function getHttpVerb() : string
+    public function getHttpVerb(): string
     {
         return $this->httpVerb;
     }
@@ -69,7 +69,7 @@ class Route implements Routable
     public function isHttpVerbAndPathAMatch(
         string $httpVerb,
         string $path
-    ) : bool {
+    ): bool {
         $pathParts = explode('/', $path);
         $routePathParts = explode('/', $this->getPath());
 
@@ -86,7 +86,7 @@ class Route implements Routable
             trim($routePath, '/') === trim($path, '/');
     }
 
-    public function getPath() : string
+    public function getPath(): string
     {
         return $this->path;
     }
@@ -94,7 +94,7 @@ class Route implements Routable
     /**
      * @return array<mixed>
      */
-    public function getParameters() : array
+    public function getParameters(): array
     {
         return $this->parameters;
     }

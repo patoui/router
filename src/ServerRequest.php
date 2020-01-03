@@ -143,7 +143,7 @@ final class ServerRequest implements ServerRequestInterface
     /**
      * {@inheritdoc}
      */
-    public function withProtocolVersion($version) : self
+    public function withProtocolVersion($version): self
     {
         $this->validateProtocolVersion($version);
 
@@ -160,7 +160,7 @@ final class ServerRequest implements ServerRequestInterface
      * @param  string  $version The version string MUST contain only the HTTP
      * version number (e.g., "1.1", "1.0").
      */
-    private function validateProtocolVersion(string $version) : void
+    private function validateProtocolVersion(string $version): void
     {
         if (! in_array($version, ['1.1', '2.0'])) {
             throw new InvalidArgumentException("Invalid HTTP version: {$version}");
@@ -260,7 +260,7 @@ final class ServerRequest implements ServerRequestInterface
      * @throws InvalidArgumentException
      * @param  array<array> $headers Headers for the incoming request
      */
-    private function validateHeaders(array $headers) : void
+    private function validateHeaders(array $headers): void
     {
         $exceptionMessage = 'Invalid headers: '.json_encode($headers);
 
@@ -332,7 +332,7 @@ final class ServerRequest implements ServerRequestInterface
      * @throws InvalidArgumentException
      * @param  string  $method HTTP method for the incoming request
      */
-    private function validateMethod(string $method) : void
+    private function validateMethod(string $method): void
     {
         if (! in_array(strtoupper($method), ['POST', 'GET', 'OPTIONS'])) {
             throw new InvalidArgumentException("Invalid HTTP method: {$method}");
@@ -472,7 +472,7 @@ final class ServerRequest implements ServerRequestInterface
      * @param array<UploadedFileInterface> $uploadedFiles
      * @return array<UploadedFileInterface>
      */
-    private function validateUploadedFiles(array $uploadedFiles) : array
+    private function validateUploadedFiles(array $uploadedFiles): array
     {
         /** @psalm-suppress RedundantConditionGivenDocblockType */
         $filteredUploadedFiles = array_filter($uploadedFiles, function ($uploadedFile) {
@@ -575,7 +575,7 @@ final class ServerRequest implements ServerRequestInterface
      * Determines if the request is a POST request based on content type headers.
      * @return bool
      */
-    private function isPostRequest() : bool
+    private function isPostRequest(): bool
     {
         foreach ($this->getHeader('content-type') as $contentType) {
             if ($contentType === 'application/x-www-form-urlencoded' ||

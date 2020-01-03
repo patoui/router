@@ -9,7 +9,7 @@ use Patoui\Router\Uri;
 
 class UriTest extends TestCase
 {
-    protected function getStubUri(?string $uriOverride = null) : Uri
+    protected function getStubUri(?string $uriOverride = null): Uri
     {
         $uri = $uriOverride ?: 'https://example.com:8080/foo/bar?q=php';
 

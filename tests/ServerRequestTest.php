@@ -13,7 +13,7 @@ use Psr\Http\Message\UploadedFileInterface;
 
 class ServerRequestTest extends TestCase
 {
-    public function test_get_protocol_version() : void
+    public function test_get_protocol_version(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest();
@@ -25,7 +25,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals('1.1', $protocolVersion);
     }
 
-    public function test_with_protocol_version() : void
+    public function test_with_protocol_version(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest([
@@ -41,7 +41,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals('text/html', $serverRequest->getHeaderLine('content-type'));
     }
 
-    public function test_invalid_headers_throws_exception() : void
+    public function test_invalid_headers_throws_exception(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -50,7 +50,7 @@ class ServerRequestTest extends TestCase
         ]);
     }
 
-    public function test_get_headers() : void
+    public function test_get_headers(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest([
@@ -64,7 +64,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals(['content-type' => ['application/json']], $headers);
     }
 
-    public function test_has_header() : void
+    public function test_has_header(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest([
@@ -78,7 +78,7 @@ class ServerRequestTest extends TestCase
         $this->assertTrue($hasHeader);
     }
 
-    public function test_get_header() : void
+    public function test_get_header(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest([
@@ -92,7 +92,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals(['application/json'], $header);
     }
 
-    public function test_get_header_line() : void
+    public function test_get_header_line(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest([
@@ -106,7 +106,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals('text/csv,application/json', $headerLine);
     }
 
-    public function test_with_header() : void
+    public function test_with_header(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest([
@@ -120,7 +120,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals('text/html', $newServerRequestStatic->getHeaderLine('content-type'));
     }
 
-    public function test_with_added_header() : void
+    public function test_with_added_header(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest([
@@ -137,7 +137,7 @@ class ServerRequestTest extends TestCase
         );
     }
 
-    public function test_without_header() : void
+    public function test_without_header(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest([
@@ -157,7 +157,7 @@ class ServerRequestTest extends TestCase
         );
     }
 
-    public function test_get_body() : void
+    public function test_get_body(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest();
@@ -169,7 +169,7 @@ class ServerRequestTest extends TestCase
         );
     }
 
-    public function test_with_body() : void
+    public function test_with_body(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest();
@@ -185,7 +185,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals($newStream, $newServerRequestStatic->getBody());
     }
 
-    public function test_get_request_target() : void
+    public function test_get_request_target(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest([
@@ -196,7 +196,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals('/blog', $serverRequest->getRequestTarget());
     }
 
-    public function test_with_request_target() : void
+    public function test_with_request_target(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest([
@@ -210,7 +210,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals('/post', $newServerRequestStatic->getRequestTarget());
     }
 
-    public function test_get_method() : void
+    public function test_get_method(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest([
@@ -221,14 +221,14 @@ class ServerRequestTest extends TestCase
         $this->assertEquals('post', $serverRequest->getMethod());
     }
 
-    public function test_invalid_method_throws_exception() : void
+    public function test_invalid_method_throws_exception(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
         $this->getStubServerRequest(['method' => 'foobar']);
     }
 
-    public function test_with_method() : void
+    public function test_with_method(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest(['method' => 'get']);
@@ -240,7 +240,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals('post', $newServerRequestStatic->getMethod());
     }
 
-    public function test_get_uri() : void
+    public function test_get_uri(): void
     {
         // Arrange
         $uri = new Uri('/blog?q=new');
@@ -250,7 +250,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals($uri, $serverRequest->getUri());
     }
 
-    public function test_with_uri() : void
+    public function test_with_uri(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest();
@@ -263,7 +263,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals($newUri, $newServerRequestStatic->getUri());
     }
 
-    public function test_with_uri_with_preserve_host() : void
+    public function test_with_uri_with_preserve_host(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest([
@@ -279,7 +279,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals('otherhost.com', $newServerRequestStatic->getHeaderLine('http_host'));
     }
 
-    public function test_get_server_params() : void
+    public function test_get_server_params(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest([
@@ -290,7 +290,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals(['PATH_INFO' => '/foobar'], $serverRequest->getServerParams());
     }
 
-    public function test_get_cookie_params() : void
+    public function test_get_cookie_params(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest([
@@ -301,7 +301,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals(['my_app_user_session' => 'abc123'], $serverRequest->getCookieParams());
     }
 
-    public function test_with_cookie_params() : void
+    public function test_with_cookie_params(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest([
@@ -317,7 +317,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals(['foo' => 'gibberish'], $newServerRequestStatic->getCookieParams());
     }
 
-    public function test_get_query_params() : void
+    public function test_get_query_params(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest([
@@ -328,7 +328,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals(['search' => 'John'], $serverRequest->getQueryParams());
     }
 
-    public function test_with_query_params() : void
+    public function test_with_query_params(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest();
@@ -342,7 +342,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals(['search' => 'Doe'], $newServerRequestStatic->getQueryParams());
     }
 
-    public function test_get_uploaded_files() : void
+    public function test_get_uploaded_files(): void
     {
         // Arrange
         $uploadedFile = new class implements UploadedFileInterface {
@@ -384,7 +384,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals([$uploadedFile], $serverRequest->getUploadedFiles());
     }
 
-    public function test_with_uploaded_files() : void
+    public function test_with_uploaded_files(): void
     {
         // Arrange
         $uploadedFile = new class implements UploadedFileInterface {
@@ -432,7 +432,7 @@ class ServerRequestTest extends TestCase
         );
     }
 
-    public function test_with_uploaded_files_invalid_type_throws_exception() : void
+    public function test_with_uploaded_files_invalid_type_throws_exception(): void
     {
         // Arrange
         $this->expectException(InvalidArgumentException::class);
@@ -442,7 +442,7 @@ class ServerRequestTest extends TestCase
         $serverRequest->withUploadedFiles(['not an uploaded file']);
     }
 
-    public function test_get_parsed_body() : void
+    public function test_get_parsed_body(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest();
@@ -458,7 +458,7 @@ class ServerRequestTest extends TestCase
         );
     }
 
-    public function test_get_parsed_body_with_content_type_multipart() : void
+    public function test_get_parsed_body_with_content_type_multipart(): void
     {
         // Arrange
         $_POST['foo'] = 'bar';
@@ -471,7 +471,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals(['foo' => 'bar'], $serverRequest->getParsedBody());
     }
 
-    public function test_with_parsed_body() : void
+    public function test_with_parsed_body(): void
     {
         // Arrange
         $_POST['foo'] = 'bar';
@@ -493,7 +493,7 @@ class ServerRequestTest extends TestCase
         );
     }
 
-    public function test_with_parsed_body_invalid_argument_throws_exception() : void
+    public function test_with_parsed_body_invalid_argument_throws_exception(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest();
@@ -503,7 +503,7 @@ class ServerRequestTest extends TestCase
         $serverRequest->withParsedBody(12345);
     }
 
-    public function test_get_attributes() : void
+    public function test_get_attributes(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest();
@@ -515,7 +515,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals([], $attributes);
     }
 
-    public function test_get_attribute() : void
+    public function test_get_attribute(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest();
@@ -527,7 +527,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals(null, $attribute);
     }
 
-    public function test_with_attribute() : void
+    public function test_with_attribute(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest();
@@ -539,7 +539,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals('bar', $newServerRequest->getAttribute('foo'));
     }
 
-    public function test_without_attribute() : void
+    public function test_without_attribute(): void
     {
         // Arrange
         $serverRequest = $this->getStubServerRequest();
@@ -555,7 +555,7 @@ class ServerRequestTest extends TestCase
         $this->assertEquals(null, $withoutServerRequest->getAttribute('foo'));
     }
 
-    public function test_make_with_globals() : void
+    public function test_make_with_globals(): void
     {
         // Arrange && Act
         $serverRequest = ServerRequest::makeWithGlobals();
