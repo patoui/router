@@ -9,14 +9,14 @@ use Psr\Http\Message\ServerRequestInterface;
 class Router
 {
     /** @var array<Routable> */
-    private $routes;
+    private array $routes;
 
     public function __construct()
     {
         $this->routes = [];
     }
 
-    public function addRoute(Routable $routable) : void
+    public function addRoute(Routable $routable): void
     {
         $this->routes[] = $routable;
     }
@@ -24,7 +24,7 @@ class Router
     /**
      * @return array<Routable>
      */
-    public function getRoutes() : array
+    public function getRoutes(): array
     {
         return $this->routes;
     }
