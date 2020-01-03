@@ -11,7 +11,7 @@ class Stream implements StreamInterface
 {
     public const TEMPORARY_STREAM = 'php://temp';
 
-    /** @var resource */
+    /** @var null|resource */
     private $stream;
 
     /**
@@ -20,8 +20,11 @@ class Stream implements StreamInterface
      */
     public function __construct($stream)
     {
-        /** @psalm-suppress DocblockTypeContradiction */
-        if (! is_resource($stream)) {
+        /**
+         * @psalm-suppress DocblockTypeContradiction
+         * @psalm-suppress RedundantConditionGivenDocblockType
+         */
+        if ($stream !== null || !is_resource($stream)) {
             throw new InvalidArgumentException('Invalid resource provided.');
         }
 
@@ -41,7 +44,9 @@ class Stream implements StreamInterface
      */
     public function close(): void
     {
-        fclose($this->stream);
+        if (is_resource($this->stream)) {
+            fclose($this->stream);
+        }
     }
 
     /**
