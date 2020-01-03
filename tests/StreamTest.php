@@ -52,11 +52,30 @@ class StreamTest extends TestCase
         // Pre-assert
         $this->assertNotEmpty(fstat($resource));
 
-
         // Act
         $stream->close();
 
         // Assert
         $this->assertFalse(is_resource($resource));
+    }
+
+    public function test_detach(): void
+    {
+        // Arrange
+        $resource = fopen('php://memory', 'rb+');
+        fwrite($resource, 'Foo');
+        rewind($resource);
+        $stream = $this->getStubStream($resource);
+
+        // Pre-assert
+        $this->assertTrue(is_resource($resource));
+        $this->assertEquals(3, strlen($stream->getContents()));
+
+        // Act
+        $detachedResource = $stream->detach();
+
+        // Assert
+        $this->assertTrue(is_resource($detachedResource));
+        $this->assertEquals(0, strlen($stream->getContents()));
     }
 }

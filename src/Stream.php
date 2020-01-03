@@ -45,15 +45,13 @@ class Stream implements StreamInterface
     }
 
     /**
-     * Separates any underlying resources from the stream.
-     *
-     * After the stream has been detached, the stream is in an unusable state.
-     *
-     * @return resource|null Underlying PHP stream, if any
+     * {@inheritdoc}
      */
     public function detach()
     {
-        // TODO: Implement detach() method.
+        $stream = $this->stream;
+        $this->stream = null;
+        return $stream;
     }
 
     /**
@@ -177,15 +175,13 @@ class Stream implements StreamInterface
     }
 
     /**
-     * Returns the remaining contents in a string.
-     *
-     * @return string
-     * @throws \RuntimeException if unable to read or an error occurs while
-     *     reading.
+     * {@inheritdoc}
      */
     public function getContents()
     {
-        return stream_get_contents($this->stream);
+        return $this->stream ?
+            stream_get_contents($this->stream) :
+            '';
     }
 
     /**
