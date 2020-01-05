@@ -233,4 +233,20 @@ class StreamTest extends TestCase
         // Assert
         $this->assertEquals('Foo', $readData);
     }
+
+    public function test_get_metadata(): void
+    {
+        // Arrange
+        $resource = fopen('php://memory', 'rb+');
+        fwrite($resource, 'Foobar');
+        rewind($resource);
+        $stream = $this->getStubStream($resource);
+
+        // Act
+        $metadata = $stream->getMetadata();
+
+        // Assert
+        $this->assertTrue(is_array($metadata));
+        $this->assertEquals('php://memory', $metadata['uri']);
+    }
 }
