@@ -219,6 +219,7 @@ final class ServerRequest implements ServerRequestInterface
         $newHeaders = array_merge($this->getHeaders(), [$name => [$value]]);
 
         $instance = clone $this;
+        /** @psalm-suppress MixedPropertyTypeCoercion */
         $instance->headers = $newHeaders;
 
         return $instance;
@@ -235,6 +236,7 @@ final class ServerRequest implements ServerRequestInterface
         $newHeaders[$name] = $headerToUpdate;
 
         $instance = clone $this;
+        /** @psalm-suppress MixedPropertyTypeCoercion */
         $instance->headers = $newHeaders;
 
         return $instance;
@@ -249,6 +251,7 @@ final class ServerRequest implements ServerRequestInterface
         unset($newHeaders[$name]);
 
         $instance = clone $this;
+        /** @psalm-suppress MixedPropertyTypeCoercion */
         $instance->headers = $newHeaders;
 
         return $instance;
@@ -381,6 +384,7 @@ final class ServerRequest implements ServerRequestInterface
         }
 
         $instance = clone $this;
+        /** @psalm-suppress MixedPropertyTypeCoercion */
         $instance->headers = $headers;
         $instance->uri = $uri;
 
