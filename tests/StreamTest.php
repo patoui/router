@@ -93,4 +93,19 @@ class StreamTest extends TestCase
         // Assert
         $this->assertEquals(3, $streamSize);
     }
+
+    public function test_tell(): void
+    {
+        // Arrange
+        $resource = fopen('php://memory', 'rb+');
+        fwrite($resource, 'Foo');
+        fseek($resource, 2);
+        $stream = $this->getStubStream($resource);
+
+        // Act
+        $streamTell = $stream->tell();
+
+        // Assert
+        $this->assertEquals(2, $streamTell);
+    }
 }

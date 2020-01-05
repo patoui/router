@@ -6,6 +6,7 @@ namespace Patoui\Router;
 
 use InvalidArgumentException;
 use Psr\Http\Message\StreamInterface;
+use RuntimeException;
 
 class Stream implements StreamInterface
 {
@@ -74,14 +75,15 @@ class Stream implements StreamInterface
     }
 
     /**
-     * Returns the current position of the file read/write pointer.
-     *
-     * @return int Position of the file pointer
-     * @throws \RuntimeException on error.
+     * {@inheritdoc}
      */
-    public function tell()
+    public function tell(): int
     {
-        // TODO: Implement tell() method.
+        if ($this->stream) {
+            return ftell($this->stream);
+        }
+
+        throw new RuntimeException('Unable to find position of the current position of the file read/write pointer');
     }
 
     /**
@@ -114,7 +116,7 @@ class Stream implements StreamInterface
      *     PHP $whence values for `fseek()`.  SEEK_SET: Set position equal to
      *     offset bytes SEEK_CUR: Set position to current location plus offset
      *     SEEK_END: Set position to end-of-stream plus offset.
-     * @throws \RuntimeException on failure.
+     * @throws RuntimeException on failure.
      */
     public function seek($offset, $whence = SEEK_SET)
     {
@@ -127,7 +129,7 @@ class Stream implements StreamInterface
      * If the stream is not seekable, this method will raise an exception;
      * otherwise, it will perform a seek(0).
      *
-     * @throws \RuntimeException on failure.
+     * @throws RuntimeException on failure.
      * @link http://www.php.net/manual/en/function.fseek.php
      * @see seek()
      */
@@ -151,7 +153,7 @@ class Stream implements StreamInterface
      *
      * @param  string  $string  The string that is to be written.
      * @return int Returns the number of bytes written to the stream.
-     * @throws \RuntimeException on failure.
+     * @throws RuntimeException on failure.
      */
     public function write($string)
     {
@@ -176,7 +178,7 @@ class Stream implements StreamInterface
      *     call returns fewer bytes.
      * @return string Returns the data read from the stream, or an empty string
      *     if no bytes are available.
-     * @throws \RuntimeException if an error occurs.
+     * @throws RuntimeException if an error occurs.
      */
     public function read($length)
     {
