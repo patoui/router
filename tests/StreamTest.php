@@ -108,4 +108,19 @@ class StreamTest extends TestCase
         // Assert
         $this->assertEquals(2, $streamTell);
     }
+
+    public function test_eof(): void
+    {
+        // Arrange
+        $resource = fopen('php://memory', 'rb+');
+        fwrite($resource, 'Foo');
+        rewind($resource);
+        $stream = $this->getStubStream($resource);
+
+        // Act
+        $streamEndOfFile = $stream->eof();
+
+        // Assert
+        $this->assertFalse($streamEndOfFile);
+    }
 }

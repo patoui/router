@@ -87,13 +87,11 @@ class Stream implements StreamInterface
     }
 
     /**
-     * Returns true if the stream is at the end of the stream.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function eof()
     {
-        // TODO: Implement eof() method.
+        return $this->stream ? feof($this->stream) : true;
     }
 
     /**
