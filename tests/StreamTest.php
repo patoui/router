@@ -234,6 +234,21 @@ class StreamTest extends TestCase
         $this->assertEquals('Foo', $readData);
     }
 
+    public function test_get_contents(): void
+    {
+        // Arrange
+        $resource = fopen('php://memory', 'rb+');
+        fwrite($resource, 'Foobar');
+        fseek($resource, 3);
+        $stream = $this->getStubStream($resource);
+
+        // Act
+        $contents = $stream->getContents();
+
+        // Assert
+        $this->assertEquals('bar', $contents);
+    }
+
     public function test_get_metadata(): void
     {
         // Arrange
