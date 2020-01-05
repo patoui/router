@@ -68,7 +68,9 @@ class Stream implements StreamInterface
     {
         if ($this->stream) {
             $stats = fstat($this->stream);
-            return $stats['size'] ?? null;
+            if (is_array($stats)) {
+                return $stats['size'] ?? null;
+            }
         }
 
         return null;
