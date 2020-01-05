@@ -210,9 +210,13 @@ class Stream implements StreamInterface
      */
     public function getContents()
     {
-        return $this->stream ?
-            stream_get_contents($this->stream) :
-            '';
+        if (! $this->stream) {
+            return '';
+        }
+
+        $contents = stream_get_contents($this->stream);
+
+        return $contents === false ? '' : $contents;
     }
 
     /**
