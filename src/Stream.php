@@ -134,13 +134,21 @@ class Stream implements StreamInterface
     }
 
     /**
-     * Returns whether or not the stream is writable.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function isWritable()
+    public function isWritable(): bool
     {
-        // TODO: Implement isWritable() method.
+        if (! $this->stream) {
+            return false;
+        }
+
+        $mode = $this->getMetadata('mode');
+
+        if ($mode === null) {
+            return false;
+        }
+
+        return strpos($mode, 'w') !== false || strpos($mode, '+') !== false;
     }
 
     /**
