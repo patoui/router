@@ -123,4 +123,37 @@ class StreamTest extends TestCase
         // Assert
         $this->assertFalse($streamEndOfFile);
     }
+
+    public function test_isseekable(): void
+    {
+        // Arrange
+        $resource = fopen('php://memory', 'rb+');
+        fwrite($resource, 'Foo');
+        rewind($resource);
+        $stream = $this->getStubStream($resource);
+
+        // Act
+        $isSeekable = $stream->isSeekable();
+
+        // Assert
+        $this->assertTrue($isSeekable);
+    }
+
+    public function test_seek(): void
+    {
+        // Arrange
+        $resource = fopen('php://memory', 'rb+');
+        fwrite($resource, 'Foo');
+        rewind($resource);
+        $stream = $this->getStubStream($resource);
+
+        // Pre-assert
+        $this->assertEquals(0, ftell($resource));
+
+        // Act
+        $stream->seek(2);
+
+        // Assert
+        $this->assertEquals(2, ftell($resource));
+    }
 }

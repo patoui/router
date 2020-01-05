@@ -100,30 +100,27 @@ class Stream implements StreamInterface
     }
 
     /**
-     * Returns whether or not the stream is seekable.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function isSeekable()
+    public function isSeekable(): bool
     {
-        // TODO: Implement isSeekable() method.
+        if (!$this->stream) {
+            return false;
+        }
+
+        $seekable = $this->getMetadata('seekable');
+
+        return $seekable !== null ? (bool) $seekable : false;
     }
 
     /**
-     * Seek to a position in the stream.
-     *
-     * @link http://www.php.net/manual/en/function.fseek.php
-     * @param  int  $offset  Stream offset
-     * @param  int  $whence  Specifies how the cursor position will be calculated
-     *     based on the seek offset. Valid values are identical to the built-in
-     *     PHP $whence values for `fseek()`.  SEEK_SET: Set position equal to
-     *     offset bytes SEEK_CUR: Set position to current location plus offset
-     *     SEEK_END: Set position to end-of-stream plus offset.
-     * @throws RuntimeException on failure.
+     * {@inheritdoc}
      */
-    public function seek($offset, $whence = SEEK_SET)
+    public function seek($offset, $whence = SEEK_SET): void
     {
-        // TODO: Implement seek() method.
+        if (! $this->isSeekable() || ($this->stream && fseek($this->stream, $offset, $whence) === -1)) {
+            throw new RuntimeException('Unable to seek stream/resource');
+        }
     }
 
     /**
@@ -212,6 +209,12 @@ class Stream implements StreamInterface
      */
     public function getMetadata($key = null)
     {
-        // TODO: Implement getMetadata() method.
+        if (! $this->stream) {
+            return null;
+        }
+
+        $metadata = stream_get_meta_data($this->stream);
+
+        return $metadata[$key] ?? null;
     }
 }
