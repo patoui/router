@@ -169,9 +169,10 @@ final class ServerRequest implements ServerRequestInterface
 
     /**
      * @psalm-suppress MixedReturnTypeCoercion
-     * {@inheritdoc}
+     * @see ServerRequestInterface::getHeaders()
+     * @return array<array-key, array<array-key, string>>
      */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->headers;
     }
