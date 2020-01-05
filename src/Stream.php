@@ -188,18 +188,21 @@ class Stream implements StreamInterface
     }
 
     /**
-     * Read data from the stream.
-     *
-     * @param  int  $length  Read up to $length bytes from the object and return
-     *     them. Fewer than $length bytes may be returned if underlying stream
-     *     call returns fewer bytes.
-     * @return string Returns the data read from the stream, or an empty string
-     *     if no bytes are available.
-     * @throws RuntimeException if an error occurs.
+     * {@inheritdoc}
      */
-    public function read($length)
+    public function read($length): string
     {
-        // TODO: Implement read() method.
+        $dataRead = false;
+
+        if ($this->stream && $this->isReadable()) {
+            $dataRead = fread($this->stream, $length);
+        }
+
+        if (is_string($dataRead)) {
+            return $dataRead;
+        }
+
+        throw new RuntimeException('Unable to read from stream/resource');
     }
 
     /**

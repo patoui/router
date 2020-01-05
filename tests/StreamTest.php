@@ -218,4 +218,19 @@ class StreamTest extends TestCase
         // Assert
         $this->assertTrue($isWritable);
     }
+
+    public function test_read(): void
+    {
+        // Arrange
+        $resource = fopen('php://memory', 'rb+');
+        fwrite($resource, 'Foobar');
+        rewind($resource);
+        $stream = $this->getStubStream($resource);
+
+        // Act
+        $readData = $stream->read(3);
+
+        // Assert
+        $this->assertEquals('Foo', $readData);
+    }
 }
