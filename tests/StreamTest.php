@@ -78,4 +78,19 @@ class StreamTest extends TestCase
         $this->assertTrue(is_resource($detachedResource));
         $this->assertEquals(0, strlen($stream->getContents()));
     }
+
+    public function test_get_size(): void
+    {
+        // Arrange
+        $resource = fopen('php://memory', 'rb+');
+        fwrite($resource, 'Foo');
+        rewind($resource);
+        $stream = $this->getStubStream($resource);
+
+        // Act
+        $streamSize = $stream->getSize();
+
+        // Assert
+        $this->assertEquals(3, $streamSize);
+    }
 }
