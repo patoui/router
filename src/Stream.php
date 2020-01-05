@@ -124,18 +124,13 @@ class Stream implements StreamInterface
     }
 
     /**
-     * Seek to the beginning of the stream.
-     *
-     * If the stream is not seekable, this method will raise an exception;
-     * otherwise, it will perform a seek(0).
-     *
-     * @throws RuntimeException on failure.
-     * @link http://www.php.net/manual/en/function.fseek.php
-     * @see seek()
+     * {@inheritdoc}
      */
-    public function rewind()
+    public function rewind(): void
     {
-        // TODO: Implement rewind() method.
+        if (! $this->isSeekable() || ($this->stream && rewind($this->stream) === false)) {
+            throw new RuntimeException('Unable to rewind stream/resource');
+        }
     }
 
     /**

@@ -156,4 +156,22 @@ class StreamTest extends TestCase
         // Assert
         $this->assertEquals(2, ftell($resource));
     }
+
+    public function test_rewind(): void
+    {
+        // Arrange
+        $resource = fopen('php://memory', 'rb+');
+        fwrite($resource, 'Foo');
+        fseek($resource, 2);
+        $stream = $this->getStubStream($resource);
+
+        // Pre-assert
+        $this->assertEquals(2, ftell($resource));
+
+        // Act
+        $stream->rewind();
+
+        // Assert
+        $this->assertEquals(0, ftell($resource));
+    }
 }
