@@ -82,7 +82,10 @@ class Stream implements StreamInterface
     public function tell(): int
     {
         if ($this->stream) {
-            return ftell($this->stream);
+            $position = ftell($this->stream);
+            if ($position !== false) {
+                return $position;
+            }
         }
 
         throw new RuntimeException('Unable to find position of the current position of the file read/write pointer');
