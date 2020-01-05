@@ -152,15 +152,21 @@ class Stream implements StreamInterface
     }
 
     /**
-     * Write data to the stream.
-     *
-     * @param  string  $string  The string that is to be written.
-     * @return int Returns the number of bytes written to the stream.
-     * @throws RuntimeException on failure.
+     * {@inheritdoc}
      */
-    public function write($string)
+    public function write($string): int
     {
-        // TODO: Implement write() method.
+        $bytesWritten = false;
+
+        if ($this->stream && $this->isWritable()) {
+            $bytesWritten = fwrite($this->stream, $string);
+        }
+
+        if ($bytesWritten !== false) {
+            return $bytesWritten;
+        }
+
+        throw new RuntimeException('Unable to write to stream/resource');
     }
 
     /**
