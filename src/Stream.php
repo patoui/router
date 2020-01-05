@@ -69,6 +69,7 @@ class Stream implements StreamInterface
         if ($this->stream) {
             $stats = fstat($this->stream);
             if (is_array($stats)) {
+                /** @var mixed $size */
                 $size = $stats['size'] ?? null;
                 return $size !== null ? (int) $size : null;
             }
@@ -109,9 +110,14 @@ class Stream implements StreamInterface
             return false;
         }
 
+        /** @var mixed $seekable */
         $seekable = $this->getMetadata('seekable');
 
-        return $seekable !== null ? (bool) $seekable : false;
+        if (! is_bool($seekable)) {
+            return false;
+        }
+
+        return $seekable;
     }
 
     /**
@@ -143,9 +149,10 @@ class Stream implements StreamInterface
             return false;
         }
 
+        /** @var mixed $mode */
         $mode = $this->getMetadata('mode');
 
-        if ($mode === null) {
+        if (! is_string($mode)) {
             return false;
         }
 
@@ -179,9 +186,10 @@ class Stream implements StreamInterface
             return false;
         }
 
+        /** @var mixed $mode */
         $mode = $this->getMetadata('mode');
 
-        if ($mode === null) {
+        if (! is_string($mode)) {
             return false;
         }
 
