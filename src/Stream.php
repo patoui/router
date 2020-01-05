@@ -170,13 +170,21 @@ class Stream implements StreamInterface
     }
 
     /**
-     * Returns whether or not the stream is readable.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function isReadable()
+    public function isReadable(): bool
     {
-        // TODO: Implement isReadable() method.
+        if (! $this->stream) {
+            return false;
+        }
+
+        $mode = $this->getMetadata('mode');
+
+        if ($mode === null) {
+            return false;
+        }
+
+        return strpos($mode, 'r') !== false || strpos($mode, '+') !== false;
     }
 
     /**
