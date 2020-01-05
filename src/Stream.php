@@ -94,7 +94,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function eof()
+    public function eof(): bool
     {
         return $this->stream ? feof($this->stream) : true;
     }
