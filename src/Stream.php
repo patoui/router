@@ -106,7 +106,7 @@ class Stream implements StreamInterface
      */
     public function isSeekable(): bool
     {
-        if (!$this->stream) {
+        if (! $this->stream) {
             return false;
         }
 
