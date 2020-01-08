@@ -103,9 +103,34 @@ class RouterTest extends TestCase
 
         // Assert
         $routes = $router->getRoutes();
-        $this->assertEquals(1, count($routes));
+        $this->assertCount(1, $routes);
         $this->assertEquals(get_class($postController), $resolvedRoute->getClassName());
         $this->assertEquals('show', $resolvedRoute->getClassMethodName());
-        $this->assertEquals([123], $resolvedRoute->getParameters());
+        $this->assertEquals(['id' => '123'], $resolvedRoute->getParameters());
+    }
+
+    public function test_can_resolve_route_with_casted_parameters(): void
+    {
+        // Arrange
+        $postController = new class() {
+            public function show($id)
+            {
+                return $id;
+            }
+        };
+        $router = new Router();
+        $route = new Route('get', '/post/{int|id}', get_class($postController), 'show');
+        $router->addRoute($route);
+        $serverRequest = $this->getStubServerRequest(['request_target' => '/post/123', new Uri('/post/123')]);
+
+        // Act
+        $resolvedRoute = $router->resolve($serverRequest);
+
+        // Assert
+        $routes = $router->getRoutes();
+        $this->assertCount(1, $routes);
+        $this->assertEquals(get_class($postController), $resolvedRoute->getClassName());
+        $this->assertEquals('show', $resolvedRoute->getClassMethodName());
+        $this->assertSame(123, $resolvedRoute->getParameters()['id']);
     }
 }

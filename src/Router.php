@@ -34,7 +34,7 @@ class Router
      * @return Routable
      * @throws RouteNotFoundException
      */
-    public function resolve(ServerRequestInterface $serverRequest)
+    public function resolve(ServerRequestInterface $serverRequest): Routable
     {
         foreach ($this->routes as $route) {
             if ($route->isHttpVerbAndPathAMatch($serverRequest->getMethod(), $serverRequest->getRequestTarget())) {

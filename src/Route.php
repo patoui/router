@@ -74,9 +74,18 @@ class Route implements Routable
         $routePathParts = explode('/', $this->getPath());
 
         foreach ($routePathParts as $key => $routePathPart) {
+            $segmentParts = explode('|', trim($routePathPart, '{}'));
+            $castToType = count($segmentParts) === 2 ? (string) $segmentParts[0] : null;
+            $parameterName = count($segmentParts) === 2 ? $segmentParts[1] : $segmentParts[0];
             if (isset($pathParts[$key]) && preg_match('/{.+}/', $routePathPart)) {
-                $this->parameters[] = $pathParts[$key];
-                $routePathParts[$key] = $pathParts[$key];
+                $parameterValue = $pathParts[$key];
+                if ($castToType && Type::isValidType($castToType)) {
+                    /** @var mixed $parameterValue */
+                    $parameterValue = Type::cast($castToType, $parameterValue);
+                }
+                $this->parameters[$parameterName] = $parameterValue;
+                /** @psalm-suppress MixedAssignment */
+                $routePathParts[$key] = $parameterValue;
             }
         }
 
