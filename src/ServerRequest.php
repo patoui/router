@@ -183,7 +183,7 @@ final class ServerRequest implements ServerRequestInterface
     public function hasHeader($name)
     {
         return array_key_exists(
-            mb_strtoupper($name),
+            str_replace('-', '_', mb_strtoupper($name)),
             array_change_key_case($this->headers, CASE_UPPER)
         );
     }
@@ -194,7 +194,7 @@ final class ServerRequest implements ServerRequestInterface
      */
     public function getHeader($name)
     {
-        $name = mb_strtoupper($name);
+        $name = str_replace('-', '_', mb_strtoupper($name));
         $headers = array_change_key_case($this->headers, CASE_UPPER);
 
         if (array_key_exists($name, $headers) === false) {
@@ -583,8 +583,8 @@ final class ServerRequest implements ServerRequestInterface
     private function isPostRequest(): bool
     {
         foreach ($this->getHeader('content-type') as $contentType) {
-            if ($contentType === 'application/x-www-form-urlencoded' ||
-                $contentType === 'multipart/form-data') {
+            if (stripos($contentType, 'application/x-www-form-urlencoded') === 0 ||
+                stripos($contentType, 'multipart/form-data') === 0) {
                 return true;
             }
         }
