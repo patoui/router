@@ -266,7 +266,7 @@ final class ServerRequest implements ServerRequestInterface
      */
     private function validateHeaders(array $headers): void
     {
-        $exceptionMessage = 'Invalid headers: '.json_encode($headers);
+        $exceptionMessage = 'Invalid headers: ' . json_encode($headers);
 
         if (empty($headers)) {
             return;
@@ -487,7 +487,7 @@ final class ServerRequest implements ServerRequestInterface
         if (count($filteredUploadedFiles) !== count($uploadedFiles)) {
             throw new InvalidArgumentException(
                 'Must be an array with instances of '
-                .UploadedFileInterface::class
+                . UploadedFileInterface::class
             );
         }
 
@@ -583,8 +583,10 @@ final class ServerRequest implements ServerRequestInterface
     private function isPostRequest(): bool
     {
         foreach ($this->getHeader('content-type') as $contentType) {
-            if (stripos($contentType, 'application/x-www-form-urlencoded') === 0 ||
-                stripos($contentType, 'multipart/form-data') === 0) {
+            if (
+                stripos($contentType, 'application/x-www-form-urlencoded') === 0 ||
+                stripos($contentType, 'multipart/form-data') === 0
+            ) {
                 return true;
             }
         }

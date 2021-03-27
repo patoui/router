@@ -69,9 +69,9 @@ class Uri implements UriInterface
     {
         $userInfo = $this->getUserInfo();
         $port = $this->getPort();
-        $authority = ($userInfo !== '' ? $userInfo.'@' : '');
+        $authority = ($userInfo !== '' ? $userInfo . '@' : '');
         $authority .= $this->getHost();
-        $authority .= ($port !== null ? ':'.$port : '');
+        $authority .= ($port !== null ? ':' . $port : '');
 
         return $authority;
     }
@@ -85,7 +85,7 @@ class Uri implements UriInterface
             return '';
         }
 
-        return $this->user.($this->password ? ":{$this->password}" : '');
+        return $this->user . ($this->password ? ":{$this->password}" : '');
     }
 
     /**
@@ -272,14 +272,14 @@ class Uri implements UriInterface
             if ($authority && strlen(ltrim($path, '/')) === 0) {
                 $uri .= '/';
             } elseif (! $authority && strpos($path, '//') === 0) {
-                $uri .= '/'.ltrim($path, '/');
+                $uri .= '/' . ltrim($path, '/');
             } else {
                 $uri .= $path;
             }
         }
 
-        $uri .= $query ? '?'.ltrim($query, '?') : '';
-        $uri .= $fragment ? '#'.ltrim($fragment, '#') : '';
+        $uri .= $query ? '?' . ltrim($query, '?') : '';
+        $uri .= $fragment ? '#' . ltrim($fragment, '#') : '';
 
         return $uri;
     }

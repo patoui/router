@@ -91,7 +91,10 @@ final class UploadedFile implements UploadedFileInterface
         $uploadedFiles = [];
 
         foreach ($_FILES as $file) {
-            if (is_string($file['tmp_name']) || (is_object($file['tmp_name']) && $file['tmp_name'] instanceof StreamInterface)) {
+            if (
+                is_string($file['tmp_name']) ||
+                (is_object($file['tmp_name']) && $file['tmp_name'] instanceof StreamInterface)
+            ) {
                 $uploadedFiles[] = new static(
                     $file['tmp_name'],
                     isset($file['name']) ? (string) $file['name'] : null,
