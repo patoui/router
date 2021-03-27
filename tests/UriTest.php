@@ -291,4 +291,24 @@ class UriTest extends TestCase
         // Act & Assert
         $this->assertEquals('http://example.com:8888/foo/bar?q=php#section_1', $uri->__toString());
     }
+
+    public function test_tostring_with_authority(): void
+    {
+        // Arrange
+        $uri = $this->getStubUri('https://my_user:mypass@example.com/');
+
+        // Act & Assert
+        self::assertEquals('https://my_user:mypass@example.com/', $uri->__toString());
+    }
+
+    public function test_tostring_without_authority_path_double_slash(): void
+    {
+        // Arrange
+        $uri = $this->getStubUri('https://example.com//foobar')
+                    ->withHost('')
+                    ->withScheme('');
+
+        // Act & Assert
+        self::assertEquals('/foobar', $uri->__toString());
+    }
 }

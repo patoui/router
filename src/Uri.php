@@ -15,8 +15,8 @@ class Uri implements UriInterface
     /** @var string */
     private string $host;
 
-    /** @var int */
-    private int $port;
+    /** @var null|int */
+    private ?int $port;
 
     /** @var string */
     private string $user;
@@ -38,7 +38,6 @@ class Uri implements UriInterface
         $scheme = parse_url($uri, PHP_URL_SCHEME);
         $host = parse_url($uri, PHP_URL_HOST);
         $port = parse_url($uri, PHP_URL_PORT);
-        $port = $port ?: 80;
         $user = parse_url($uri, PHP_URL_USER);
         $password = parse_url($uri, PHP_URL_PASS);
         $path = parse_url($uri, PHP_URL_PATH);
@@ -66,7 +65,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function getAuthority()
+    public function getAuthority(): string
     {
         $userInfo = $this->getUserInfo();
         $port = $this->getPort();
@@ -98,7 +97,7 @@ class Uri implements UriInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdosc}
      */
     public function getPort()
     {
@@ -146,7 +145,7 @@ class Uri implements UriInterface
      */
     public function withScheme($scheme)
     {
-        if (preg_match('/^[a-zA-Z0-9+-.]+$/', $scheme) === 0) {
+        if ($scheme && preg_match('/^[a-zA-Z0-9+-.]+$/', $scheme) === 0) {
             throw new InvalidArgumentException(
                 "Invalid scheme {$scheme}; please reference RFC3986 for additional details"
             );
