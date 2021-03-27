@@ -9,6 +9,19 @@ use Prophecy\Exception\Doubler\MethodNotFoundException;
 
 class Route implements Routable
 {
+    /** @var string[] */
+    private const HTTP_VERBS = [
+        'get',
+        'post',
+        'put',
+        'patch',
+        'options',
+        'head',
+        'delete',
+        'connect',
+        'trace',
+    ];
+
     /** @var string */
     private string $httpVerb;
 
@@ -30,9 +43,9 @@ class Route implements Routable
         string $className,
         string $classMethodName
     ) {
-        if (! in_array($httpVerb, ['get', 'post'])) {
+        if (! in_array($httpVerb, self::HTTP_VERBS, true)) {
             throw new InvalidArgumentException(
-                'Invalid http verb, must be: get or post'
+                'Invalid http verb, must be: ' . implode(', ', self::HTTP_VERBS)
             );
         }
 
