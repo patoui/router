@@ -143,7 +143,7 @@ final class ServerRequest implements ServerRequestInterface
     /**
      * {@inheritdoc}
      */
-    public function withProtocolVersion($version): self
+    public function withProtocolVersion($version)
     {
         $this->validateProtocolVersion($version);
 
@@ -281,7 +281,7 @@ final class ServerRequest implements ServerRequestInterface
             throw new InvalidArgumentException($exceptionMessage);
         }
 
-        foreach ($headers as $key => $header) {
+        foreach ($headers as $header) {
             $headerWithStringValuesOnly = array_filter($header, static function ($headerValue) {
                 return is_string($headerValue);
             });

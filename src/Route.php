@@ -75,7 +75,7 @@ class Route implements Routable
 
         foreach ($routePathParts as $key => $routePathPart) {
             $segmentParts = explode('|', trim($routePathPart, '{}'));
-            $castToType = count($segmentParts) === 2 ? (string) $segmentParts[0] : null;
+            $castToType = count($segmentParts) === 2 ? $segmentParts[0] : null;
             $parameterName = count($segmentParts) === 2 ? $segmentParts[1] : $segmentParts[0];
             if (isset($pathParts[$key]) && preg_match('/{.+}/', $routePathPart)) {
                 $parameterValue = $pathParts[$key];

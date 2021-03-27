@@ -12,7 +12,10 @@ class Stream implements StreamInterface
 {
     public const TEMPORARY_STREAM = 'php://temp';
 
-    /** @var null|resource */
+    /**
+     * @var null|resource
+     * @psalm-var null|resource|closed-resource
+     */
     private $stream;
 
     /**
@@ -25,7 +28,7 @@ class Stream implements StreamInterface
          * @psalm-suppress DocblockTypeContradiction
          * @psalm-suppress RedundantConditionGivenDocblockType
          */
-        if ($stream !== null && ! is_resource($stream)) {
+        if (!is_resource($stream)) {
             throw new InvalidArgumentException('Invalid resource provided.');
         }
 
@@ -58,7 +61,7 @@ class Stream implements StreamInterface
         $stream = $this->stream;
         $this->stream = null;
 
-        return $stream;
+        return is_resource($stream) ? $stream : null;
     }
 
     /**
@@ -66,7 +69,7 @@ class Stream implements StreamInterface
      */
     public function getSize(): ?int
     {
-        if ($this->stream) {
+        if ($this->stream && is_resource($this->stream)) {
             $stats = fstat($this->stream);
             if (is_array($stats)) {
                 /** @var mixed $size */
@@ -83,7 +86,7 @@ class Stream implements StreamInterface
      */
     public function tell(): int
     {
-        if ($this->stream) {
+        if ($this->stream && is_resource($this->stream)) {
             $position = ftell($this->stream);
             if ($position !== false) {
                 return $position;
@@ -98,7 +101,11 @@ class Stream implements StreamInterface
      */
     public function eof(): bool
     {
-        return $this->stream ? feof($this->stream) : true;
+        if ($this->stream && is_resource($this->stream)) {
+            return feof($this->stream);
+        }
+
+        return true;
     }
 
     /**
@@ -125,7 +132,14 @@ class Stream implements StreamInterface
      */
     public function seek($offset, $whence = SEEK_SET): void
     {
-        if (! $this->isSeekable() || ($this->stream && fseek($this->stream, $offset, $whence) === -1)) {
+        if (! $this->isSeekable()) {
+            throw new RuntimeException('Unable to seek stream/resource');
+        }
+        if (
+            $this->stream
+            && is_resource($this->stream)
+            && fseek($this->stream, $offset, $whence) === -1
+        ) {
             throw new RuntimeException('Unable to seek stream/resource');
         }
     }
@@ -135,7 +149,15 @@ class Stream implements StreamInterface
      */
     public function rewind(): void
     {
-        if (! $this->isSeekable() || ($this->stream && rewind($this->stream) === false)) {
+        if (! $this->isSeekable()) {
+            throw new RuntimeException('Unable to rewind stream/resource');
+        }
+
+        if (
+            $this->stream
+            && is_resource($this->stream)
+            && rewind($this->stream) === false
+        ) {
             throw new RuntimeException('Unable to rewind stream/resource');
         }
     }
@@ -166,7 +188,7 @@ class Stream implements StreamInterface
     {
         $bytesWritten = false;
 
-        if ($this->stream && $this->isWritable()) {
+        if ($this->stream && is_resource($this->stream) && $this->isWritable()) {
             $bytesWritten = fwrite($this->stream, $string);
         }
 
@@ -203,7 +225,7 @@ class Stream implements StreamInterface
     {
         $dataRead = false;
 
-        if ($this->stream && $this->isReadable()) {
+        if ($this->stream && is_resource($this->stream) && $this->isReadable()) {
             $dataRead = fread($this->stream, $length);
         }
 
@@ -219,7 +241,7 @@ class Stream implements StreamInterface
      */
     public function getContents()
     {
-        if (! $this->stream) {
+        if (!$this->stream || !is_resource($this->stream)) {
             return '';
         }
 
@@ -233,7 +255,7 @@ class Stream implements StreamInterface
      */
     public function getMetadata($key = null)
     {
-        if (! $this->stream) {
+        if (!$this->stream || !is_resource($this->stream)) {
             return null;
         }
 

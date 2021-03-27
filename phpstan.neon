@@ -1,8 +1,8 @@
 parameters:
-	ignoreErrors:
-		-
-			message: '#Result of && is always false.#'
-			path: src/ServerRequest.php
-		-
-			message: '#Result of && is always false.#'
-			path: src/Stream.php
+    level: 5
+    paths:
+        - src
+    ignoreErrors:
+        -
+            message: '#Result of && is always false.#'
+            path: src/ServerRequest.php

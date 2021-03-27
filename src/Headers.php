@@ -25,13 +25,7 @@ class Headers
             return (string) $headerKey;
         }, array_values($headerKeys));
 
-        $formattedHeaders = array_combine($headerKeys, $headers);
-
-        if ($formattedHeaders === false) {
-            return [];
-        }
-
-        return $formattedHeaders;
+        return array_combine($headerKeys, $headers);
     }
 
     /**
