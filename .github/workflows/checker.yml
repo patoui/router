@@ -1,0 +1,28 @@
+name: Checker
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  checker-tests:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.0'
+    - uses: actions/checkout@v2
+    - name: Install Dependencies
+      run: composer install
+    - name: Execute tests via PHPUnit
+      run: vendor/bin/phpunit
+    - name: Run Code Sniffer Syntax Checker
+      run: vendor/bin/phpcs --standard=PSR12 src
+    - name: PHPStan Static Analysis
+      run: vendor/bin/phpstan analyse
+    - name: PHP Psalm Static Analysis
+      run: vendor/bin/psalm
