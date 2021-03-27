@@ -345,7 +345,7 @@ class ServerRequestTest extends TestCase
     public function test_get_uploaded_files(): void
     {
         // Arrange
-        $uploadedFile = new class implements UploadedFileInterface {
+        $uploadedFile = new class() implements UploadedFileInterface {
             public function getStream()
             {
                 // TODO: Implement getStream() method.
@@ -387,7 +387,7 @@ class ServerRequestTest extends TestCase
     public function test_with_uploaded_files(): void
     {
         // Arrange
-        $uploadedFile = new class implements UploadedFileInterface {
+        $uploadedFile = new class() implements UploadedFileInterface {
             public function getStream()
             {
                 // TODO: Implement getStream() method.
