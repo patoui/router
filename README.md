@@ -6,7 +6,6 @@
 
 [![Build Status](https://img.shields.io/travis/patoui/router/master.svg?style=flat-square)](https://travis-ci.org/patoui/router)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/patoui/router/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/patoui/router/?branch=master)
-[![StyleCI](https://github.styleci.io/repos/222272762/shield?branch=master)](https://github.styleci.io/repos/222272762)
 
 
 A simple HTTP router
