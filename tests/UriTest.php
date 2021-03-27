@@ -270,7 +270,7 @@ class UriTest extends TestCase
         $newUri = $uri->withFragment('#section_99');
 
         // Assert
-        $this->assertEquals('section_99', $newUri->getFragment());
+        self::assertEquals('section_99', $newUri->getFragment());
     }
 
     public function test_with_fragment_invalid_value_throws_exception(): void
@@ -280,7 +280,7 @@ class UriTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         // Act
-        $uri->withQuery(9999);
+        $uri->withFragment(9999);
     }
 
     public function test_tostring(): void

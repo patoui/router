@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Patoui\Router;
 
+use InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
 
 class Uri implements UriInterface
@@ -141,12 +142,12 @@ class Uri implements UriInterface
      *
      * @param  string  $scheme  The scheme to use with the new instance.
      * @return static A new instance with the specified scheme.
-     * @throws \InvalidArgumentException for invalid or unsupported schemes.
+     * @throws InvalidArgumentException for invalid or unsupported schemes.
      */
     public function withScheme($scheme)
     {
         if (preg_match('/^[a-zA-Z0-9+-.]+$/', $scheme) === 0) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 "Invalid scheme {$scheme}; please reference RFC3986 for additional details"
             );
         }
@@ -178,7 +179,7 @@ class Uri implements UriInterface
     {
         /** @psalm-suppress DocblockTypeContradiction */
         if (! is_string($host)) {
-            throw new \InvalidArgumentException("Invalid host: {$host}");
+            throw new InvalidArgumentException("Invalid host: {$host}");
         }
 
         if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
@@ -198,7 +199,7 @@ class Uri implements UriInterface
     {
         /** @psalm-suppress DocblockTypeContradiction */
         if (! is_int($port)) {
-            throw new \InvalidArgumentException("Invalid port: {$port}");
+            throw new InvalidArgumentException("Invalid port: {$port}");
         }
 
         $instance = clone $this;
@@ -214,7 +215,7 @@ class Uri implements UriInterface
     {
         /** @psalm-suppress DocblockTypeContradiction */
         if (! is_string($path)) {
-            throw new \InvalidArgumentException("Invalid path: {$path}");
+            throw new InvalidArgumentException("Invalid path: {$path}");
         }
 
         $instance = clone $this;
@@ -230,7 +231,7 @@ class Uri implements UriInterface
     {
         /** @psalm-suppress DocblockTypeContradiction */
         if (! is_string($query)) {
-            throw new \InvalidArgumentException("Invalid query: {$query}");
+            throw new InvalidArgumentException("Invalid query: {$query}");
         }
 
         $instance = clone $this;
@@ -246,7 +247,7 @@ class Uri implements UriInterface
     {
         /** @psalm-suppress DocblockTypeContradiction */
         if (! is_string($fragment)) {
-            throw new \InvalidArgumentException("Invalid fragment: {$fragment}");
+            throw new InvalidArgumentException("Invalid fragment: {$fragment}");
         }
 
         $instance = clone $this;
