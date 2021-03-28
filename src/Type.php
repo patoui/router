@@ -40,6 +40,8 @@ class Type
      */
     public static function cast(string $type, $value)
     {
+        $type = strtolower($type);
+
         if (in_array($type, self::INTEGER_TYPES, true)) {
             return (int) $value;
         }
