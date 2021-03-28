@@ -6,6 +6,7 @@ namespace Patoui\Router\Tests;
 
 use InvalidArgumentException;
 use Patoui\Router\Stream;
+use RuntimeException;
 
 class StreamTest extends TestCase
 {
@@ -38,7 +39,7 @@ class StreamTest extends TestCase
         $streamString = (string) $stream;
 
         // Assert
-        $this->assertEquals('Hello world!', $streamString);
+        self::assertEquals('Hello world!', $streamString);
     }
 
     public function test_close(): void
@@ -50,13 +51,13 @@ class StreamTest extends TestCase
         $stream = $this->getStubStream($resource);
 
         // Pre-assert
-        $this->assertNotEmpty(fstat($resource));
+        self::assertNotEmpty(fstat($resource));
 
         // Act
         $stream->close();
 
         // Assert
-        $this->assertFalse(is_resource($resource));
+        self::assertFalse(is_resource($resource));
     }
 
     public function test_detach(): void
@@ -68,15 +69,15 @@ class StreamTest extends TestCase
         $stream = $this->getStubStream($resource);
 
         // Pre-assert
-        $this->assertTrue(is_resource($resource));
-        $this->assertEquals(3, strlen($stream->getContents()));
+        self::assertIsResource($resource);
+        self::assertEquals(3, strlen($stream->getContents()));
 
         // Act
         $detachedResource = $stream->detach();
 
         // Assert
-        $this->assertTrue(is_resource($detachedResource));
-        $this->assertEquals(0, strlen($stream->getContents()));
+        self::assertIsResource($detachedResource);
+        self::assertEquals(0, strlen($stream->getContents()));
     }
 
     public function test_get_size(): void
@@ -91,7 +92,23 @@ class StreamTest extends TestCase
         $streamSize = $stream->getSize();
 
         // Assert
-        $this->assertEquals(3, $streamSize);
+        self::assertEquals(3, $streamSize);
+    }
+
+    public function test_get_size_closed(): void
+    {
+        // Arrange
+        $resource = fopen('php://memory', 'rb+');
+        fwrite($resource, 'Foo');
+        rewind($resource);
+        $stream = $this->getStubStream($resource);
+        $stream->detach();
+
+        // Act
+        $streamSize = $stream->getSize();
+
+        // Assert
+        self::assertEquals(null, $streamSize);
     }
 
     public function test_tell(): void
@@ -106,7 +123,21 @@ class StreamTest extends TestCase
         $streamTell = $stream->tell();
 
         // Assert
-        $this->assertEquals(2, $streamTell);
+        self::assertEquals(2, $streamTell);
+    }
+
+    public function test_tell_no_stream_throw_exception(): void
+    {
+        // Arrange
+        $resource = fopen('php://memory', 'rb+');
+        fwrite($resource, 'Foo');
+        fseek($resource, 2);
+        $stream = $this->getStubStream($resource);
+        $stream->detach();
+        $this->expectException(RuntimeException::class);
+
+        // Act && Assert
+        $stream->tell();
     }
 
     public function test_eof(): void
@@ -121,7 +152,20 @@ class StreamTest extends TestCase
         $streamEndOfFile = $stream->eof();
 
         // Assert
-        $this->assertFalse($streamEndOfFile);
+        self::assertFalse($streamEndOfFile);
+    }
+
+    public function test_eof_no_stream_true(): void
+    {
+        // Arrange
+        $resource = fopen('php://memory', 'rb+');
+        fwrite($resource, 'Foo');
+        rewind($resource);
+        $stream = $this->getStubStream($resource);
+        $stream->detach();
+
+        // Act && Assert
+        self::assertTrue($stream->eof());
     }
 
     public function test_isseekable(): void
@@ -136,7 +180,30 @@ class StreamTest extends TestCase
         $isSeekable = $stream->isSeekable();
 
         // Assert
-        $this->assertTrue($isSeekable);
+        self::assertTrue($isSeekable);
+    }
+
+    public function test_isseekable_no_stream(): void
+    {
+        // Arrange
+        $resource = fopen('php://memory', 'rb+');
+        fwrite($resource, 'Foo');
+        rewind($resource);
+        $stream = $this->getStubStream($resource);
+        $stream->detach();
+
+        // Act && Assert
+        self::assertFalse($stream->isSeekable());
+    }
+
+    public function test_isseekable_no_metadata_seekable(): void
+    {
+        // Arrange
+        $resource = fopen('php://output', 'wb');
+        $stream = $this->getStubStream($resource);
+
+        // Act && Assert
+        self::assertFalse($stream->isSeekable());
     }
 
     public function test_seek(): void
@@ -148,13 +215,40 @@ class StreamTest extends TestCase
         $stream = $this->getStubStream($resource);
 
         // Pre-assert
-        $this->assertEquals(0, ftell($resource));
+        self::assertEquals(0, ftell($resource));
 
         // Act
         $stream->seek(2);
 
         // Assert
-        $this->assertEquals(2, ftell($resource));
+        self::assertEquals(2, ftell($resource));
+    }
+
+    public function test_seek_not_seekable_throws_exception(): void
+    {
+        // Arrange
+        $resource = fopen('php://output', 'wb');
+        $stream = $this->getStubStream($resource);
+        $this->expectException(RuntimeException::class);
+
+        // Act && Assert
+        $stream->seek(111);
+    }
+
+    public function test_seek_fail_throw_exception(): void
+    {
+        // Arrange
+        $resource = fopen('php://memory', 'rb+');
+        fwrite($resource, 'Foo');
+        rewind($resource);
+        $stream = $this->getStubStream($resource);
+
+        // Pre-assert
+        self::assertEquals(0, ftell($resource));
+        $this->expectException(RuntimeException::class);
+
+        // Act && Assert
+        $stream->seek(11111);
     }
 
     public function test_rewind(): void
@@ -165,14 +259,22 @@ class StreamTest extends TestCase
         fseek($resource, 2);
         $stream = $this->getStubStream($resource);
 
-        // Pre-assert
-        $this->assertEquals(2, ftell($resource));
-
         // Act
         $stream->rewind();
 
         // Assert
-        $this->assertEquals(0, ftell($resource));
+        self::assertEquals(0, ftell($resource));
+    }
+
+    public function test_rewind_not_seekable_throws_exception(): void
+    {
+        // Arrange
+        $resource = fopen('php://output', 'wb');
+        $stream = $this->getStubStream($resource);
+        $this->expectException(RuntimeException::class);
+
+        // Act && Assert
+        $stream->rewind();
     }
 
     public function test_iswritable(): void
@@ -187,7 +289,30 @@ class StreamTest extends TestCase
         $isWritable = $stream->isWritable();
 
         // Assert
-        $this->assertTrue($isWritable);
+        self::assertTrue($isWritable);
+    }
+
+    public function test_iswritable_no_stream(): void
+    {
+        // Arrange
+        $resource = fopen('php://memory', 'rb+');
+        fwrite($resource, 'Foo');
+        rewind($resource);
+        $stream = $this->getStubStream($resource);
+        $stream->detach();
+
+        // Act && Assert
+        self::assertFalse($stream->isWritable());
+    }
+
+    public function test_iswritable_no_writable(): void
+    {
+        // Arrange
+        $resource = fopen('php://input', 'rb');
+        $stream = $this->getStubStream($resource);
+
+        // Act && Assert
+        self::assertFalse($stream->isWritable());
     }
 
     public function test_write(): void
@@ -202,7 +327,18 @@ class StreamTest extends TestCase
         $bytesWritten = $stream->write('Foobar');
 
         // Assert
-        $this->assertEquals(6, $bytesWritten);
+        self::assertEquals(6, $bytesWritten);
+    }
+
+    public function test_write_not_writeable(): void
+    {
+        // Arrange
+        $resource = fopen('php://input', 'rb');
+        $stream = $this->getStubStream($resource);
+        $this->expectException(RuntimeException::class);
+
+        // Act && Assert
+        $stream->write('Foobar');
     }
 
     public function test_isreadable(): void
@@ -216,7 +352,7 @@ class StreamTest extends TestCase
         $isWritable = $stream->isReadable();
 
         // Assert
-        $this->assertTrue($isWritable);
+        self::assertTrue($isWritable);
     }
 
     public function test_read(): void
@@ -231,7 +367,7 @@ class StreamTest extends TestCase
         $readData = $stream->read(3);
 
         // Assert
-        $this->assertEquals('Foo', $readData);
+        self::assertEquals('Foo', $readData);
     }
 
     public function test_get_contents(): void
@@ -246,7 +382,7 @@ class StreamTest extends TestCase
         $contents = $stream->getContents();
 
         // Assert
-        $this->assertEquals('bar', $contents);
+        self::assertEquals('bar', $contents);
     }
 
     public function test_get_metadata(): void
@@ -261,7 +397,7 @@ class StreamTest extends TestCase
         $metadata = $stream->getMetadata();
 
         // Assert
-        $this->assertTrue(is_array($metadata));
-        $this->assertEquals('php://memory', $metadata['uri']);
+        self::assertTrue(is_array($metadata));
+        self::assertEquals('php://memory', $metadata['uri']);
     }
 }

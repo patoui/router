@@ -113,18 +113,7 @@ class Stream implements StreamInterface
      */
     public function isSeekable(): bool
     {
-        if (! $this->stream) {
-            return false;
-        }
-
-        /** @var mixed $seekable */
-        $seekable = $this->getMetadata('seekable');
-
-        if (! is_bool($seekable)) {
-            return false;
-        }
-
-        return $seekable;
+        return (bool) $this->getMetadata('seekable');
     }
 
     /**
@@ -149,14 +138,13 @@ class Stream implements StreamInterface
      */
     public function rewind(): void
     {
-        if (! $this->isSeekable()) {
-            throw new RuntimeException('Unable to rewind stream/resource');
-        }
-
         if (
-            $this->stream
-            && is_resource($this->stream)
-            && rewind($this->stream) === false
+            !$this->isSeekable()
+            || (
+                $this->stream
+                && is_resource($this->stream)
+                && rewind($this->stream) === false
+            )
         ) {
             throw new RuntimeException('Unable to rewind stream/resource');
         }
@@ -173,10 +161,7 @@ class Stream implements StreamInterface
 
         /** @var mixed $mode */
         $mode = $this->getMetadata('mode');
-
-        if (! is_string($mode)) {
-            return false;
-        }
+        $mode = is_scalar($mode) ? (string) $mode : '';
 
         return strpos($mode, 'w') !== false || strpos($mode, '+') !== false;
     }
