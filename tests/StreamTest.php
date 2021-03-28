@@ -355,6 +355,27 @@ class StreamTest extends TestCase
         self::assertTrue($isWritable);
     }
 
+    public function test_isreadable_no_stream(): void
+    {
+        // Arrange
+        $resource = fopen('php://memory', 'rb+');
+        $stream = $this->getStubStream($resource);
+        $stream->detach();
+
+        // Act && Assert
+        self::assertFalse($stream->isReadable());
+    }
+
+    public function test_isreadable_not_readable(): void
+    {
+        // Arrange
+        $resource = fopen('php://output', 'wb');
+        $stream = $this->getStubStream($resource);
+
+        // Act && Assert
+        self::assertFalse($stream->isReadable());
+    }
+
     public function test_read(): void
     {
         // Arrange
@@ -368,6 +389,20 @@ class StreamTest extends TestCase
 
         // Assert
         self::assertEquals('Foo', $readData);
+    }
+
+    public function test_read_no_stream_throws_exception(): void
+    {
+        // Arrange
+        $resource = fopen('php://memory', 'rb+');
+        fwrite($resource, 'Foobar');
+        rewind($resource);
+        $stream = $this->getStubStream($resource);
+        $stream->detach();
+        $this->expectException(RuntimeException::class);
+
+        // Act && Assert
+        $stream->read(3);
     }
 
     public function test_get_contents(): void

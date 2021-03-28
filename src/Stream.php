@@ -195,10 +195,7 @@ class Stream implements StreamInterface
 
         /** @var mixed $mode */
         $mode = $this->getMetadata('mode');
-
-        if (! is_string($mode)) {
-            return false;
-        }
+        $mode = is_scalar($mode) ? (string) $mode : '';
 
         return strpos($mode, 'r') !== false || strpos($mode, '+') !== false;
     }
