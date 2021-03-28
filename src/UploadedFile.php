@@ -130,6 +130,10 @@ final class UploadedFile implements UploadedFileInterface
         $this->hasMoved = $this->isSapi
             ? move_uploaded_file($this->file, $targetPath)
             : rename($this->file, $targetPath);
+
+        if ($this->hasMoved === false) {
+            throw new RuntimeException('Unable to move file');
+        }
     }
 
     /**
