@@ -8,12 +8,6 @@ use Patoui\Router\Headers;
 
 class HeadersTest extends TestCase
 {
-    public function __construct()
-    {
-        parent::__construct();
-        $this->backupGlobals = true;
-    }
-
     public function test_get_headers_from_globals(): void
     {
         // Arrange

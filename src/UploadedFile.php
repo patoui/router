@@ -69,7 +69,6 @@ final class UploadedFile implements UploadedFileInterface
             $this->stream = $file;
         } elseif (is_string($file)) {
             $this->file = $file;
-            $this->stream = (new StreamFactory())->createStreamFromFile($file);
         } else {
             throw new InvalidArgumentException('Invalid type for file, must be string or implement StreamInterface.');
         }
@@ -113,7 +112,10 @@ final class UploadedFile implements UploadedFileInterface
      */
     public function getStream(): StreamInterface
     {
-        return $this->stream;
+        if ($this->hasMoved) {
+            throw new RuntimeException('Stream/file already moved');
+        }
+        return $this->stream ?? (new StreamFactory())->createStreamFromFile($this->file);
     }
 
     /**
@@ -125,16 +127,9 @@ final class UploadedFile implements UploadedFileInterface
             throw new RuntimeException('Uploaded file has already been moved');
         }
 
-        if ($this->isSapi) {
-            if (! is_uploaded_file($this->file)) {
-                throw new RuntimeException('Invalid uploaded file');
-            }
-            if (! move_uploaded_file($this->file, $targetPath)) {
-                throw new RuntimeException('Error occurred while moving file');
-            }
-        } elseif (! rename($this->file, $targetPath)) {
-            throw new RuntimeException('Error occurred while moving file');
-        }
+        $this->hasMoved = $this->isSapi
+            ? move_uploaded_file($this->file, $targetPath)
+            : rename($this->file, $targetPath);
     }
 
     /**

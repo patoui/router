@@ -30,6 +30,15 @@ class StreamTest extends TestCase
         return new Stream($stream);
     }
 
+    public function test_construct_invalid_type(): void
+    {
+        // Arrange
+        $this->expectException(InvalidArgumentException::class);
+
+        // Act && Assert
+        new Stream('12345');
+    }
+
     public function test_tostring(): void
     {
         // Arrange

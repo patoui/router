@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Patoui\Router\Tests;
 
 use InvalidArgumentException;
+use Patoui\Router\StreamFactory;
 use Patoui\Router\UploadedFile;
 use Psr\Http\Message\StreamInterface;
+use RuntimeException;
 
 class UploadedFileTest extends TestCase
 {
@@ -33,6 +35,50 @@ class UploadedFileTest extends TestCase
         return new UploadedFile(...array_values($properties));
     }
 
+    public function test_construct_with_stream_interface(): void
+    {
+        // Arrange
+        $stream = (new StreamFactory())->createStreamFromResource(fopen('php://temp', 'rb'));
+        $this->expectNotToPerformAssertions();
+
+        // Act && Assert
+        new UploadedFile($stream);
+    }
+
+    public function test_construct_with_invalid_type(): void
+    {
+        // Arrange
+        $this->expectException(InvalidArgumentException::class);
+
+        // Act && Assert
+        new UploadedFile(12345);
+    }
+
+    public function test_make_with_globals(): void
+    {
+        // Arrange
+        $file = tmpfile();
+        fwrite($file, 'foobar');
+        rewind($file);
+        $meta = stream_get_meta_data($file);
+        $this->filePaths[] = $meta['uri'];
+        $pathToMoveTo = __DIR__.DIRECTORY_SEPARATOR.'test-file.txt';
+        $this->filePaths[] = $pathToMoveTo;
+        $_FILES['upload'] = [
+            'name'     => str_replace('/tmp/', '', $meta['uri']),
+            'type'     => 'text/plain',
+            'tmp_name' => $meta['uri'],
+            'error'    => 0,
+            'size'     => filesize($meta['uri']),
+        ];
+
+        // Act
+        $uploadedFiles = UploadedFile::makeWithGlobals();
+
+        // Assert
+        self::assertCount(1, $uploadedFiles);
+    }
+
     public function test_get_stream(): void
     {
         // Arrange
@@ -45,7 +91,23 @@ class UploadedFileTest extends TestCase
         $instanceStream = $uploadedFile->getStream();
 
         // Assert
-        $this->assertContains(StreamInterface::class, class_implements($instanceStream));
+        self::assertContains(StreamInterface::class, class_implements($instanceStream));
+    }
+
+    public function test_get_stream_already_moved_raise_exception(): void
+    {
+        // Arrange
+        $filePath = __DIR__.DIRECTORY_SEPARATOR.'test.txt';
+        $this->filePaths[] = $filePath;
+        file_put_contents($filePath, 'Hello world.');
+        $uploadedFile = $this->getStubUploadedFile(['file' => $filePath]);
+        $pathToMoveTo = __DIR__.DIRECTORY_SEPARATOR.'test-file.txt';
+        $this->filePaths[] = $pathToMoveTo;
+        $this->expectException(RuntimeException::class);
+
+        // Act && Assert
+        $uploadedFile->moveTo($pathToMoveTo);
+        $uploadedFile->getStream();
     }
 
     public function test_move_to(): void
@@ -62,7 +124,50 @@ class UploadedFileTest extends TestCase
         $uploadedFile->moveTo($pathToMoveTo);
 
         // Assert
-        $this->assertFileExists($pathToMoveTo);
+        self::assertFileExists($pathToMoveTo);
+    }
+
+    public function test_move_to_already_moved_raise_exception(): void
+    {
+        // Arrange
+        $filePath = __DIR__.DIRECTORY_SEPARATOR.'test.txt';
+        $this->filePaths[] = $filePath;
+        file_put_contents($filePath, 'Hello world.');
+        $uploadedFile = $this->getStubUploadedFile(['file' => $filePath]);
+        $pathToMoveTo = __DIR__.DIRECTORY_SEPARATOR.'test-file.txt';
+        $this->filePaths[] = $pathToMoveTo;
+        $this->expectException(RuntimeException::class);
+
+        // Act && Assert
+        $uploadedFile->moveTo($pathToMoveTo);
+        $uploadedFile->moveTo($pathToMoveTo);
+    }
+
+    public function test_move_to_sapi(): void
+    {
+        self::markTestSkipped('Determine how to test file upload and move via sapi');
+        // Arrange
+        $file = tmpfile();
+        fwrite($file, 'foobar');
+        rewind($file);
+        $meta = stream_get_meta_data($file);
+        $this->filePaths[] = $meta['uri'];
+        $pathToMoveTo = __DIR__.DIRECTORY_SEPARATOR.'test-file.txt';
+        $this->filePaths[] = $pathToMoveTo;
+        $_FILES['upload'] = [
+            'name'     => str_replace('/tmp/', '', $meta['uri']),
+            'type'     => 'text/plain',
+            'tmp_name' => $meta['uri'],
+            'error'    => 0,
+            'size'     => filesize($meta['uri']),
+        ];
+        $uploadedFile = UploadedFile::makeWithGlobals()[0];
+
+        // Act
+        $uploadedFile->moveTo($pathToMoveTo);
+
+        // Assert
+        self::assertFileExists($pathToMoveTo);
     }
 
     public function test_get_size(): void
@@ -74,7 +179,7 @@ class UploadedFileTest extends TestCase
         $size = $uploadedFile->getSize();
 
         // Assert
-        $this->assertEquals(99999, $size);
+        self::assertEquals(99999, $size);
     }
 
     public function test_get_error(): void
@@ -86,7 +191,7 @@ class UploadedFileTest extends TestCase
         $error = $uploadedFile->getError();
 
         // Assert
-        $this->assertEquals(UPLOAD_ERR_OK, $error);
+        self::assertEquals(UPLOAD_ERR_OK, $error);
     }
 
     public function test_setting_invalid_error_code_throws_exception(): void
@@ -105,7 +210,7 @@ class UploadedFileTest extends TestCase
         $fileName = $uploadedFile->getClientFilename();
 
         // Assert
-        $this->assertEquals('my-file.txt', $fileName);
+        self::assertEquals('my-file.txt', $fileName);
     }
 
     public function test_get_client_media_type(): void
@@ -120,6 +225,6 @@ class UploadedFileTest extends TestCase
         $mediaType = $uploadedFile->getClientMediaType();
 
         // Assert
-        $this->assertEquals('text/html', $mediaType);
+        self::assertEquals('text/html', $mediaType);
     }
 }
