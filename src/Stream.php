@@ -10,8 +10,6 @@ use RuntimeException;
 
 class Stream implements StreamInterface
 {
-    public const TEMPORARY_STREAM = 'php://temp';
-
     /**
      * @var null|resource
      * @psalm-var null|resource|closed-resource

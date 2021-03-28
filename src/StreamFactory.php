@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Patoui\Router;
 
+use InvalidArgumentException;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException;
@@ -15,12 +16,7 @@ final class StreamFactory implements StreamFactoryInterface
      */
     public function createStream(string $content = ''): StreamInterface
     {
-        $resource = fopen(Stream::TEMPORARY_STREAM, 'rb+');
-
-        if ($resource === false) {
-            throw new RuntimeException('Unabled to open temporary resource');
-        }
-
+        $resource = fopen('php://temp', 'rb+');
         fwrite($resource, $content);
         rewind($resource);
 
@@ -32,10 +28,16 @@ final class StreamFactory implements StreamFactoryInterface
      */
     public function createStreamFromFile(string $filename, string $mode = 'rb'): StreamInterface
     {
-        $stream = fopen($filename, $mode);
+        if (!preg_match('/[rwaxcebt]+\+?/', $mode, $matches) || $matches[0] !== $mode) {
+            throw new InvalidArgumentException('Invalid stream mode provided');
+        }
 
-        if ($stream === false) {
-            throw new RuntimeException("Unable to open file: {$filename}");
+        if (
+            !file_exists($filename)
+            || !is_readable($filename)
+            || !$stream = fopen($filename, $mode)
+        ) {
+            throw new RuntimeException("Unable to open/read file: {$filename}");
         }
 
         return new Stream($stream);
@@ -48,7 +50,7 @@ final class StreamFactory implements StreamFactoryInterface
     {
         /** @psalm-suppress DocblockTypeContradiction */
         if (! is_resource($resource)) {
-            throw new \InvalidArgumentException('Invalid resource, cannot create stream.');
+            throw new InvalidArgumentException('Invalid resource, cannot create stream.');
         }
 
         return new Stream($resource);
