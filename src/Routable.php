@@ -10,12 +10,14 @@ interface Routable
 
     public function getClassMethodName(): string;
 
+    public function addParameters(array $parameters): void;
+
+    public function addParameter(string $key, mixed $value): void;
+
     /** @return array<mixed> */
     public function getParameters(): array;
 
     public function getHttpVerb(): string;
-
-    public function isHttpVerbAndPathAMatch(string $httpVerb, string $path): bool;
 
     public function getPath(): string;
 }

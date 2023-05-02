@@ -79,38 +79,19 @@ class Route implements Routable
         return $this->httpVerb;
     }
 
-    public function isHttpVerbAndPathAMatch(
-        string $httpVerb,
-        string $path
-    ): bool {
-        $pathParts = explode('/', $path);
-        $routePathParts = explode('/', $this->getPath());
-
-        foreach ($routePathParts as $key => $routePathPart) {
-            $segmentParts = explode('|', trim($routePathPart, '{}'));
-            $castToType = count($segmentParts) === 2 ? $segmentParts[0] : null;
-            $parameterName = count($segmentParts) === 2 ? $segmentParts[1] : $segmentParts[0];
-            if (isset($pathParts[$key]) && preg_match('/{.+}/', $routePathPart)) {
-                $parameterValue = $pathParts[$key];
-                if ($castToType && Type::isValidType($castToType)) {
-                    /** @var mixed $parameterValue */
-                    $parameterValue = Type::cast($castToType, $parameterValue);
-                }
-                $this->parameters[$parameterName] = $parameterValue;
-                /** @psalm-suppress MixedAssignment */
-                $routePathParts[$key] = $parameterValue;
-            }
-        }
-
-        $routePath = implode('/', $routePathParts);
-
-        return strcasecmp($this->getHttpVerb(), $httpVerb) === 0 &&
-            trim($routePath, '/') === trim($path, '/');
-    }
-
     public function getPath(): string
     {
         return $this->path;
+    }
+
+    public function addParameters(array $parameters): void
+    {
+        $this->parameters = $parameters;
+    }
+
+    public function addParameter(string $key, mixed $value): void
+    {
+        $this->parameters[$key] = $value;
     }
 
     /**

@@ -36,52 +36,39 @@ class Type
     /**
      * @param string $type
      * @param mixed $value
-     * @return mixed
      */
-    public static function cast(string $type, $value)
+    public static function cast(string $type, $value): void
     {
         $type = strtolower($type);
 
         if (in_array($type, self::INTEGER_TYPES, true)) {
-            return (int) $value;
+            settype($value, $type);
+            return;
         }
 
         if (in_array($type, self::BOOLEAN_TYPES, true)) {
-            return (bool) $value;
+            settype($value, $type);
+            return;
         }
 
         if (in_array($type, self::FLOAT_TYPES, true)) {
-            return (float) $value;
+            settype($value, $type);
+            return;
         }
 
         if ($type === self::TYPE_STRING) {
-            return (string) $value;
+            settype($value, $type);
+            return;
         }
 
         if ($type === self::TYPE_ARRAY) {
-            return (array) $value;
+            settype($value, $type);
+            return;
         }
 
         if ($type === self::TYPE_OBJECT) {
-            return (object) $value;
+            settype($value, $type);
+            return;
         }
-
-        return $value;
-    }
-
-    public static function isValidType(string $type): bool
-    {
-        return in_array($type, [
-            self::TYPE_INT,
-            self::TYPE_INTEGER,
-            self::TYPE_BOOL,
-            self::TYPE_BOOLEAN,
-            self::TYPE_FLOAT,
-            self::TYPE_DOUBLE,
-            self::TYPE_REAL,
-            self::TYPE_STRING,
-            self::TYPE_ARRAY,
-            self::TYPE_OBJECT,
-        ], true);
     }
 }
