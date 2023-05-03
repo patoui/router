@@ -11,15 +11,15 @@ class Route implements Routable
 {
     /** @var string[] */
     private const HTTP_VERBS = [
-        'get',
-        'post',
-        'put',
-        'patch',
-        'options',
-        'head',
-        'delete',
-        'connect',
-        'trace',
+        'GET',
+        'POST',
+        'PUT',
+        'PATCH',
+        'OPTIONS',
+        'HEAD',
+        'DELETE',
+        'CONNECT',
+        'TRACE',
     ];
 
     /** @var string */

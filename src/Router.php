@@ -20,20 +20,20 @@ class Router
     {
         $parts = explode('/', $routable->getPath());
 
-        // remove first item if it's an empty string
-        if (isset($parts[0]) && $parts[0] === '') {
-            unset($parts[0]);
-        }
-
-        // add the http verb as the first item in the array
-        array_unshift($parts, strtoupper($routable->getHttpVerb()));
-
         $routes = &$this->routes;
 
+        $routes[$routable->getHttpVerb()] = isset($routes[$routable->getHttpVerb()])
+            ? $routes[$routable->getHttpVerb()]
+            : [];
+        $routes = &$routes[$routable->getHttpVerb()];
+
         // build nested assoc array [hash map] from the URL path
-        for ($i = 0; $i < count($parts); $i++) {
-            $routes[$parts[$i]] = isset($routes[$parts[$i]]) ? $routes[$parts[$i]] : [];
-            $routes = &$routes[$parts[$i]];
+        foreach ($parts as $part) {
+            if ($part === '') {
+                continue;
+            }
+            $routes[$part] = isset($routes[$part]) ? $routes[$part] : [];
+            $routes = &$routes[$part];
         }
 
         // add routable to the last routes path
@@ -57,21 +57,19 @@ class Router
     {
         $parts = explode('/', $serverRequest->getRequestTarget());
 
-        // remove first item if it's an empty string
-        if (isset($parts[0]) && $parts[0] === '') {
-            unset($parts[0]);
-        }
-
-        // TODO: move to better data structure
-        // add the http verb as the first item in the array
-        array_unshift($parts, strtoupper($serverRequest->getMethod()));
-
         $routes = &$this->routes;
 
-        $part = array_shift($parts);
+        if (!isset($routes[$serverRequest->getMethod()])) {
+            throw new RouteNotFoundException('Route not found');
+        }
+
+        $routes = &$routes[$serverRequest->getMethod()];
         $params = [];
 
-        while ($part) {
+        foreach ($parts as $part) {
+            if ($part === '') {
+                continue;
+            }
             if (!isset($routes[$part])) {
                 foreach (array_keys($routes) as $key) {
                     if (isset($key[0]) && $key[0] === '{') {
@@ -90,12 +88,12 @@ class Router
                         }
 
                         $params[$paramName] = $paramValue;
+                        $part = $key;
                     }
                 }
             }
 
             $routes = &$routes[$part];
-            $part = array_shift($parts);
         }
 
         if ($routes instanceof Routable) {
