@@ -59,10 +59,13 @@ $router->addRoute(new Route('get', '/foobar', HomeController::class, 'index'));
 
 try {
     $resolvedRoute = $router->resolve(ServerRequest::makeWithGlobals());
-    call_user_func([$resolvedRoute->getClassName(), $resolvedRoute->getClassMethodName()]);
+    $controllerInstance = new ($resolvedRoute->getClassName());
+    $controllerMethod = $resolvedRoute->getClassMethodName();
+    $controllerMethodParameters = $resolvedRoute->getParameters();
+    $controllerInstance->{$controllerMethod}(...$controllerMethodParameters);
 } catch (RouteNotFoundException $notFoundException) {
     http_response_code(404);
-} catch (Exception $exception) {
+} catch (\Exception $exception) {
     http_response_code(500);
 }
 ```
